@@ -1,11 +1,15 @@
-// sync.js — JSONbin.io sync for Lokale Hub
-// NOTE: This key is visible in source code — acceptable for a private brainstorm board.
+// sync.js — Supabase sync for Lokale Hub Centre de Commandes
 
-var JSONBIN_KEY = '$2a$10$W495IgqkukRyqI2IqWBuY.KgTMl2IIN2Jhjn1SZDbFadvy/FBPTj2';
-var JSONBIN_BIN = '69ab12f443b1c97be9bacaab';
-var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN;
+var SB_URL = 'https://nrgiwajszuhmekpfmxsj.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yZ2l3YWpzenVobWVrcGZteHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MzYzNzEsImV4cCI6MjA4ODQxMjM3MX0.obZuPO_0xctGQkVmdvVRbqh2-gPPiRMeguvXOQkOz8Y';
+var SB_HEADERS = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=minimal'
+};
 
-// Default data — used as fallback if JSONbin is inaccessible or empty
+// Default data — shown on first load before sync, and as fallback
 var DEFAULT_DATA = {
   tasks: [
     { id: 1, text: "Appel avec le partenaire \u2014 valider la vision", cat: "partenariat", done: false },
@@ -44,12 +48,11 @@ var DEFAULT_DATA = {
   notes: {}
 };
 
-// In-memory cache — starts with defaults, overwritten by JSONbin if accessible
+// In-memory — starts with defaults, overwritten on fetch
 var hubData = JSON.parse(JSON.stringify(DEFAULT_DATA));
 
 function showSyncStatus(msg, color) {
-  var els = document.querySelectorAll('#syncStatus');
-  els.forEach(function(el) {
+  document.querySelectorAll('#syncStatus').forEach(function(el) {
     el.textContent = msg;
     el.style.color = color || '#94a3b8';
     el.style.opacity = 1;
@@ -59,60 +62,60 @@ function showSyncStatus(msg, color) {
   });
 }
 
-// Merge fetched data — keeps defaults if bin returns empty arrays
-function mergeData(fetched) {
-  var result = JSON.parse(JSON.stringify(DEFAULT_DATA));
-  if (fetched.tasks && fetched.tasks.length > 0) result.tasks = fetched.tasks;
-  if (fetched.ideas && fetched.ideas.length > 0) result.ideas = fetched.ideas;
-  if (fetched.voted) result.voted = fetched.voted;
-  if (fetched.notes) result.notes = fetched.notes;
-  return result;
-}
-
-// Fetch full data from JSONbin
+// Fetch from Supabase
 function fetchData(callback) {
   showSyncStatus('Chargement...', '#94a3b8');
-  fetch(JSONBIN_URL + '/latest', {
-    headers: { 'X-Master-Key': JSONBIN_KEY }
+  fetch(SB_URL + '/rest/v1/hub_data?id=eq.main', {
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
   })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return r.json();
   })
-  .then(function(json) {
-    hubData = mergeData(json.record || {});
+  .then(function(rows) {
+    var row = rows[0];
+    if (row) {
+      // Merge: use DB data if non-empty, else keep defaults
+      if (row.tasks && row.tasks.length > 0) hubData.tasks = row.tasks;
+      if (row.ideas && row.ideas.length > 0) hubData.ideas = row.ideas;
+      if (row.voted) hubData.voted = row.voted;
+      if (row.notes) hubData.notes = row.notes;
+
+      // First time: DB has empty arrays — save defaults into DB
+      if ((!row.tasks || row.tasks.length === 0) && (!row.ideas || row.ideas.length === 0)) {
+        saveData();
+      }
+    }
     showSyncStatus('Synchronise', '#2D6A4F');
     if (callback) callback(hubData);
   })
   .catch(function(e) {
-    console.warn('JSONbin inaccessible, mode local:', e.message);
+    console.warn('Supabase fetch error:', e.message);
     showSyncStatus('Mode local', '#F4A261');
-    // Keep default data — don't wipe anything
     if (callback) callback(hubData);
   });
 }
 
-// Save full data to JSONbin
+// Save to Supabase
 function saveData(callback) {
   showSyncStatus('Sauvegarde...', '#F4A261');
-  fetch(JSONBIN_URL, {
-    method: 'PUT',
-    headers: {
-      'X-Master-Key': JSONBIN_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(hubData)
+  fetch(SB_URL + '/rest/v1/hub_data?id=eq.main', {
+    method: 'PATCH',
+    headers: SB_HEADERS,
+    body: JSON.stringify({
+      tasks: hubData.tasks,
+      ideas: hubData.ideas,
+      voted: hubData.voted,
+      notes: hubData.notes
+    })
   })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function() {
     showSyncStatus('Sauvegarde', '#2D6A4F');
     if (callback) callback();
   })
   .catch(function(e) {
-    console.warn('Sauvegarde JSONbin echouee:', e.message);
+    console.warn('Supabase save error:', e.message);
     showSyncStatus('Non synchronise', '#E76F51');
   });
 }
