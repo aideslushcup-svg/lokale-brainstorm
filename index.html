@@ -101,21 +101,27 @@ tailwind.config = {
     display: flex;
   }
   .modal-phone {
-    width: min(390px, 85vw);
-    height: min(780px, 72vh);
+    width: min(390px, 88vw);
+    height: min(780px, 70vh);
     border-radius: 36px;
     border: 6px solid #1a1a1a;
     overflow: hidden;
     box-shadow: 0 40px 100px rgba(0,0,0,0.5);
     position: relative;
     background: white;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
   }
   .modal-phone iframe {
     width: 430px;
     height: 932px;
     border: none;
     display: block;
-    transform-origin: top left;
+    transform-origin: top center;
+    position: absolute;
+    top: 0;
+    left: 50%;
   }
   .modal-nav {
     display: flex;
@@ -1382,19 +1388,25 @@ function closeModal() {
   document.getElementById('modalIframe').src = '';
 }
 
+function scaleModalIframe() {
+  var iframe = document.getElementById('modalIframe');
+  var container = document.querySelector('.modal-phone');
+  if (!container || !iframe) return;
+  var cw = container.clientWidth;
+  var ch = container.clientHeight;
+  var scale = Math.min(cw / 430, ch / 932);
+  iframe.style.transform = 'translate(-50%, 0) scale(' + scale + ')';
+}
+
 function updateModal() {
   const m = mockups[currentIndex];
   var iframe = document.getElementById('modalIframe');
   iframe.src = m.src;
-  // Scale iframe to fit modal-phone container
-  var container = document.querySelector('.modal-phone');
-  var scaleX = container.clientWidth / 430;
-  var scaleY = container.clientHeight / 932;
-  var scale = Math.min(scaleX, scaleY);
-  iframe.style.transform = 'scale(' + scale + ')';
-  iframe.style.width = '430px';
-  iframe.style.height = '932px';
   document.getElementById('modalLabel').textContent = m.label;
+  // Scale after layout is ready
+  requestAnimationFrame(function() {
+    requestAnimationFrame(scaleModalIframe);
+  });
 
   const dots = document.getElementById('modalDots');
   dots.innerHTML = mockups.map((_, i) =>
@@ -1431,6 +1443,13 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Click handlers are inline on .phone-overlay divs
+
+// Re-scale on resize/orientation change
+window.addEventListener('resize', function() {
+  if (document.getElementById('mockupModal').classList.contains('open')) {
+    scaleModalIframe();
+  }
+});
 </script>
 
 </body>
