@@ -940,7 +940,8 @@ function toggleMenu() {
       <p class="text-slate-500 mt-2">Le minimum pour mettre l'app sur les stores</p>
     </div>
 
-    <div class="bg-slate-50 rounded-2xl overflow-hidden budget-table-wrap">
+    <!-- Desktop: table -->
+    <div class="hidden sm:block bg-slate-50 rounded-2xl overflow-hidden">
       <table class="w-full">
         <thead>
           <tr class="bg-primary text-white">
@@ -1003,6 +1004,74 @@ function toggleMenu() {
       <div class="bg-primary/5 px-6 py-4 flex items-center justify-between">
         <span class="font-bold text-dark">Total pour lancer</span>
         <span class="text-2xl font-black text-primary">~140 USD</span>
+      </div>
+    </div>
+
+    <!-- Mobile: cards -->
+    <div class="sm:hidden space-y-3">
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Supabase</div>
+          <div class="text-slate-400 text-xs">DB + auth + storage</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-primary text-sm">Gratuit</div>
+          <div class="text-xs text-slate-400">Plan free</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Apple Developer</div>
+          <div class="text-slate-400 text-xs">Publier sur App Store</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-secondary text-sm">99 USD</div>
+          <div class="text-xs text-slate-400">/ annee</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Google Play</div>
+          <div class="text-slate-400 text-xs">Publier sur Play Store</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-secondary text-sm">25 USD</div>
+          <div class="text-xs text-slate-400">une fois</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Nom de domaine</div>
+          <div class="text-slate-400 text-xs">.ca ou .com</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-secondary text-sm">~15 USD</div>
+          <div class="text-xs text-slate-400">/ annee</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Expo / React Native</div>
+          <div class="text-slate-400 text-xs">Framework de dev</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-primary text-sm">Gratuit</div>
+          <div class="text-xs text-slate-400">open source</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="font-medium text-dark text-sm">Google Maps API</div>
+          <div class="text-slate-400 text-xs">Carte interactive</div>
+        </div>
+        <div class="text-right">
+          <div class="font-bold text-primary text-sm">Gratuit*</div>
+          <div class="text-xs text-slate-400">200$/mois credit</div>
+        </div>
+      </div>
+      <div class="bg-primary/5 rounded-xl p-4 flex items-center justify-between border-2 border-primary/20">
+        <span class="font-bold text-dark">Total pour lancer</span>
+        <span class="text-xl font-black text-primary">~140 USD</span>
       </div>
     </div>
   </div>
