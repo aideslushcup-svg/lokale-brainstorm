@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="fr-CA"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#2d6a4f",
+                "background-light": "#fefae0",
+                "background-dark": "#151d19",
+                "dark-blue": "#264653",
+                "harvest-orange": "#e76f51",
+                "sun-yellow": "#f4a261",
+                "soft-sage": "#95d5b2",
+                "muted-slate": "#94a3b8",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-32">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 pt-8 pb-4">
+<h1 class="text-[22px] font-bold text-dark-blue dark:text-slate-100">Recettes</h1>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white/50 dark:bg-white/10 shadow-sm">
+<span class="material-symbols-outlined text-dark-blue dark:text-slate-100">tune</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="px-6 space-y-6">
+<!-- Hero Card -->
+<section class="relative h-[200px] w-full rounded-xl overflow-hidden shadow-lg group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Salade de ferme aux légumes grillés colorée" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDewyn7DDOgvy6582AdlbxUdw_dHTdvFsLWcX7XIGsHtv0PIJnprdTsk14qPk-8B4rU6w3DmLDsaP2Bm_1khDQ9dm3QJEMBhN7UiFIEuUUlyMLhrfaM5smuf2YykBCy5L6YeuHxO1WqxWiyen89oEup6NZe5Nn-xhGz76rB6mg1cPWMz-AbDxwHAkdrf4-rYJSv5190OzHg0DnpQEqf-hEG-vaJK6lLs8Dl8J_u35jvaoYDZo9QgY6eqSwryiJM0cSHCYi4DoWJX8Y')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-5 w-full">
+<div class="flex gap-2 mb-2">
+<span class="px-3 py-1 bg-sun-yellow text-white text-xs font-bold rounded-full">15 min</span>
+<span class="px-3 py-1 bg-soft-sage text-primary text-xs font-bold rounded-full">Facile</span>
+</div>
+<h2 class="text-[17px] font-bold text-white leading-tight">Salade de ferme aux légumes grillés</h2>
+</div>
+</section>
+<!-- Section List 1 -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-[17px] font-semibold text-dark-blue dark:text-slate-200">Recettes de la semaine</h3>
+<a class="text-[13px] font-medium text-primary" href="#">Voir tout</a>
+</div>
+<div class="space-y-4">
+<!-- Recipe Card 1 -->
+<div class="flex gap-4 p-3 bg-white dark:bg-white/5 rounded-xl shadow-sm border border-primary/5">
+<div class="w-20 h-20 rounded-lg bg-cover bg-center shrink-0" data-alt="Potage de courge butternut onctueux" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfri37opWQ0vgi2wUQaMPsrh-JulWx98jLtjHsoCbJhb8oZMjEcXQNyteaGNem7KZiV60vIFkPYOSnl4H6hDTISUB8sjZ7FfuPoKHeBJ12LPfSnslXRth7QahlD5pP6Hoe5dGEnwht12zMFOr4I_yOQV4QCL_grM7mqG3QrwXRWI6qD5QHdNca8GXxNQ9EhPrCqi1VJwCG268zQT655wSrk-2VMLj7Cl6-wpbNurR6aJ29DA9VwZy-3x904QE281zhfpx62AY_LgQ')"></div>
+<div class="flex flex-col justify-between py-0.5 flex-1">
+<div>
+<h4 class="text-sm font-bold text-dark-blue dark:text-slate-100">Potage de courge butternut</h4>
+<p class="text-xs text-muted-slate line-clamp-1 mt-0.5">Un potage onctueux et réconfortant...</p>
+</div>
+<div class="flex gap-2">
+<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-background-light text-primary border border-primary/10">20 min</span>
+<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-background-light text-primary border border-primary/10">Moyen</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="flex gap-4 p-3 bg-white dark:bg-white/5 rounded-xl shadow-sm border border-primary/5">
+<div class="w-20 h-20 rounded-lg bg-cover bg-center shrink-0" data-alt="Salade de betteraves et pommes fraîches" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYYY3T546RqsHrVrdd3CfxAnPWyPMr0_d3xBppXYwijf9ovnVZejR2CmvMq1IRcal2GxhKP54sFBqpjYJPosLuUm2TwfstlkQhQ-tADqXKoKbcVl-7CBVaTin9ypbNGZdB2IKqduDZ5SLDuL_w8gfvFcXwBJU19grl7FXL1ObKkfwwJPWnDTDgz5ftY7OvsZcKhQjqUuOc7KNb881OdOiLz4kwPG1QNn7lvrdaWjVOn_70NT4Jgatp6NPNoGOofPpg0o12hZPO5e8')"></div>
+<div class="flex flex-col justify-between py-0.5 flex-1">
+<div>
+<h4 class="text-sm font-bold text-dark-blue dark:text-slate-100">Salade de betteraves et pommes</h4>
+<p class="text-xs text-muted-slate line-clamp-1 mt-0.5">Mélange sucré-salé...</p>
+</div>
+<div class="flex gap-2">
+<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-background-light text-primary border border-primary/10">10 min</span>
+<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-background-light text-primary border border-primary/10">Facile</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Extra Section for scrolling -->
+<section class="pb-8">
+<h3 class="text-[17px] font-semibold text-dark-blue dark:text-slate-200 mb-4">Populaire au Québec</h3>
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 no-scrollbar">
+<div class="min-w-[140px] space-y-2">
+<div class="w-full aspect-square rounded-xl bg-cover bg-center" data-alt="Poutine santé aux légumes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrXzDWucg-4PSfHGii09SSdHOEwkHSMpHSjDmTamonH6BhbJXwUfctJsYzhEqzNXXQi_v5H6oxtgdcVP2JbSsX3c3AW8ObjOnRbKmw3qi2lPSa0mbyPPdZxfl-fQ5bncK4Ivz4rlVdOR27ECfIS_XSWipileDJv5564FjfKOFODywpt2ya3cf43Y4l08MP0PzJBdkirodipe8avFF_ApswgI4vUERhqcvl_jNDDYWC8QRNi2Ge1sbElnTdGydRRojPptkxptqIb9Y')"></div>
+<p class="text-xs font-bold px-1">Poutine santé</p>
+</div>
+<div class="min-w-[140px] space-y-2">
+<div class="w-full aspect-square rounded-xl bg-cover bg-center" data-alt="Tarte aux bleuets du Lac-Saint-Jean" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBbM6QlSabLyOhaOlR-iAceiGsh0X7V0QkhBA2yiRSWnVsM91KwlyqwnmM316Jg4rkoyYKsrnHGFXWGXdmTQCft-pCoptfERP1HRK9jqUAUvNUHFaCC2J-hc2yLGxl4WmDGCICfzB9favCxLFeGRR3XpJq95Bog_3sH3nqmj53xSWH8u63e5upJ7Dt7gL0KzFqRCXu2sv-VXhHdgZ0wfqt84CwGVUTxuBNCmWV-H3Vvmu_HPv0z3ckHILoUkO8PCjEc3KXUfe6b5lI')"></div>
+<p class="text-xs font-bold px-1">Tarte aux bleuets</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-2 pb-6 pt-2 z-50">
+<div class="max-w-md mx-auto flex items-end justify-between relative">
+<!-- Tab 1: Carte -->
+<a class="flex flex-col items-center flex-1 py-1 group" href="#">
+<span class="material-symbols-outlined text-muted-slate group-hover:text-primary transition-colors">map</span>
+<span class="text-[10px] font-medium text-muted-slate mt-1">Carte</span>
+</a>
+<!-- Tab 2: Recettes (ACTIVE) -->
+<a class="flex flex-col items-center flex-1 py-1 relative" href="#">
+<div class="absolute -top-1 w-1 h-1 rounded-full bg-primary"></div>
+<span class="material-symbols-outlined text-primary fill">restaurant_menu</span>
+<span class="text-[10px] font-bold text-primary mt-1">Recettes</span>
+</a>
+<!-- Tab 3: Scanner (CENTER RAISED) -->
+<div class="flex flex-col items-center flex-1 -mt-8">
+<button class="w-14 h-14 rounded-full bg-harvest-orange shadow-lg shadow-harvest-orange/30 flex items-center justify-center mb-1 ring-4 ring-background-light dark:ring-background-dark">
+<span class="material-symbols-outlined text-white text-3xl">barcode_scanner</span>
+</button>
+<span class="text-[10px] font-medium text-muted-slate">Scanner</span>
+</div>
+<!-- Tab 4: Deals -->
+<a class="flex flex-col items-center flex-1 py-1 group" href="#">
+<span class="material-symbols-outlined text-muted-slate group-hover:text-primary transition-colors">local_offer</span>
+<span class="text-[10px] font-medium text-muted-slate mt-1">Deals</span>
+</a>
+<!-- Tab 5: Profil -->
+<a class="flex flex-col items-center flex-1 py-1 group" href="#">
+<span class="material-symbols-outlined text-muted-slate group-hover:text-primary transition-colors">person</span>
+<span class="text-[10px] font-medium text-muted-slate mt-1">Profil</span>
+</a>
+</div>
+</nav>
+<!-- Map hidden data for requested attribute -->
+<div data-location="Montreal, Quebec" style="display:none"></div>
+</body></html>

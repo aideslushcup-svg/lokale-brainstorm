@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>App Orga - Brainstorm Board</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D6A4F',
+        secondary: '#E76F51',
+        accent: '#F4A261',
+        cream: '#FEFAE0',
+        dark: '#264653',
+        sage: '#95D5B2',
+      },
+      fontFamily: {
+        display: ['Inter', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+
+  /* Smooth scrolling */
+  html { scroll-behavior: smooth; }
+
+  /* Phone mockup */
+  .phone-frame {
+    width: 280px;
+    height: 560px;
+    border-radius: 36px;
+    border: 6px solid #1a1a1a;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 0 2px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .phone-frame:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 35px 70px rgba(0,0,0,0.22), 0 0 0 2px rgba(45,106,79,0.3);
+  }
+  /* Overlay transparent pour capturer les clics par-dessus l'iframe */
+  .phone-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background 0.2s;
+  }
+  .phone-overlay:hover {
+    background: rgba(45,106,79,0.08);
+  }
+  .phone-overlay::after {
+    content: '⛶  Plein écran';
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(45,106,79,0.92);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .phone-overlay:hover::after {
+    opacity: 1;
+  }
+
+  /* Modal plein écran */
+  #mockupModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  #mockupModal.open {
+    display: flex;
+  }
+  .modal-phone {
+    width: 390px;
+    height: 780px;
+    border-radius: 50px;
+    border: 8px solid #1a1a1a;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    position: relative;
+    background: white;
+  }
+  .modal-phone iframe {
+    width: 390px;
+    height: 780px;
+    border: none;
+    display: block;
+  }
+  .modal-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .modal-nav button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-nav button:hover {
+    background: rgba(255,255,255,0.25);
+  }
+  .modal-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
+  .modal-label {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 160px;
+  }
+  .modal-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .modal-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .modal-dots span.active {
+    background: white;
+    width: 20px;
+    border-radius: 4px;
+  }
+
+  .phone-frame iframe {
+    width: 430px;
+    height: 932px;
+    border: none;
+    transform: scale(0.6);
+    transform-origin: top left;
+  }
+
+  /* Roadmap */
+  .roadmap-line {
+    position: absolute;
+    left: 28px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #2D6A4F, #E76F51, #F4A261);
+    border-radius: 2px;
+  }
+
+  .phase-card {
+    transition: all 0.3s ease;
+  }
+  .phase-card:hover {
+    transform: translateX(8px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  /* Feature cards */
+  .feature-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+
+  /* Nav active state */
+  .nav-link {
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: #2D6A4F;
+    border-radius: 2px;
+  }
+
+  /* Scroll snap for mockups */
+  .mockups-scroll {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mockups-scroll > div {
+    scroll-snap-align: center;
+  }
+
+  /* Animated gradient bg */
+  .hero-gradient {
+    background: linear-gradient(135deg, #2D6A4F 0%, #264653 50%, #2D6A4F 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Discussion topic styling */
+  .topic-card {
+    transition: all 0.2s;
+  }
+  .topic-card:hover {
+    background-color: #f0fdf4;
+    border-color: #2D6A4F;
+  }
+
+  /* Budget table */
+  .budget-row:nth-child(even) {
+    background-color: rgba(45,106,79,0.03);
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-dark">
+
+<!-- NAVIGATION -->
+<nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white">eco</span>
+      </div>
+      <div>
+        <h1 class="font-bold text-lg text-dark leading-tight">App Orga</h1>
+        <p class="text-xs text-slate-400">Brainstorm Board</p>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#mockups" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Maquettes</a>
+      <a href="#features" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Features</a>
+      <a href="#roadmap" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Roadmap</a>
+      <a href="#marketing" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Marketing</a>
+      <a href="#discussion" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Discussion</a>
+      <a href="#budget" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Budget</a>
+      <a href="#influenceurs" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Influenceurs</a>
+      <a href="#fermes" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Fermes</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-gradient pt-28 pb-20 px-6">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 bg-white/10 text-white/80 px-4 py-2 rounded-full text-sm mb-6">
+      <span class="material-symbols-outlined text-sm">calendar_today</span>
+      Mars 2026 &mdash; Session brainstorm
+    </div>
+    <h1 class="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
+      App Orga
+    </h1>
+    <p class="text-xl text-white/70 max-w-2xl mx-auto mb-2">
+      Alimentation organique & locale au Quebec
+    </p>
+    <p class="text-base text-white/50 max-w-xl mx-auto">
+      Decouvrir les fermes, scanner les produits, manger sante.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3 mt-8">
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium">iOS + Android</span>
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium">React Native + Expo</span>
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium">Supabase</span>
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white text-sm font-medium">Quebec d'abord</span>
+    </div>
+  </div>
+</section>
+
+<!-- PALETTE -->
+<section class="py-6 bg-white border-b">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#2D6A4F]"></div>
+        <span class="text-xs font-medium text-slate-500">Foret #2D6A4F</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#E76F51]"></div>
+        <span class="text-xs font-medium text-slate-500">Orange #E76F51</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#F4A261]"></div>
+        <span class="text-xs font-medium text-slate-500">Soleil #F4A261</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#FEFAE0] border"></div>
+        <span class="text-xs font-medium text-slate-500">Creme #FEFAE0</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#264653]"></div>
+        <span class="text-xs font-medium text-slate-500">Nuit #264653</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-[#95D5B2]"></div>
+        <span class="text-xs font-medium text-slate-500">Sauge #95D5B2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOCKUPS -->
+<section id="mockups" class="py-16 bg-cream">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">01 &mdash; Maquettes</span>
+      <h2 class="text-3xl font-bold text-dark">5 ecrans de l'app</h2>
+      <p class="text-slate-500 mt-2">Generees avec Google Stitch &mdash; a valider ensemble</p>
+    </div>
+
+    <div class="flex gap-8 overflow-x-auto pb-8 px-4 mockups-scroll">
+      <!-- Carte -->
+      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+        <div class="phone-frame">
+          <div class="phone-overlay" onclick="openModal(0)"></div>
+          <iframe src="accueil_d_couverte_de_fermes/code.html" loading="lazy"></iframe>
+        </div>
+        <div class="text-center">
+          <span class="inline-flex items-center gap-1 text-primary font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">map</span> Carte
+          </span>
+          <p class="text-xs text-slate-400 mt-1">Ecran principal &mdash; carte des fermes</p>
+        </div>
+      </div>
+
+      <!-- Scanner -->
+      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+        <div class="phone-frame">
+          <div class="phone-overlay" onclick="openModal(1)"></div>
+          <iframe src="scanner_de_produits_r_vision/code.html" loading="lazy"></iframe>
+        </div>
+        <div class="text-center">
+          <span class="inline-flex items-center gap-1 text-secondary font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">barcode_scanner</span> Scanner
+          </span>
+          <p class="text-xs text-slate-400 mt-1">Scanner de produits &mdash; style Yuka</p>
+        </div>
+      </div>
+
+      <!-- Recettes -->
+      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+        <div class="phone-frame">
+          <div class="phone-overlay" onclick="openModal(2)"></div>
+          <iframe src="flux_de_recettes_bio/code.html" loading="lazy"></iframe>
+        </div>
+        <div class="text-center">
+          <span class="inline-flex items-center gap-1 text-primary font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">restaurant_menu</span> Recettes
+          </span>
+          <p class="text-xs text-slate-400 mt-1">Feed de recettes sante</p>
+        </div>
+      </div>
+
+      <!-- Deals -->
+      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+        <div class="phone-frame">
+          <div class="phone-overlay" onclick="openModal(3)"></div>
+          <iframe src="aubaines_app_orga/code.html" loading="lazy"></iframe>
+        </div>
+        <div class="text-center">
+          <span class="inline-flex items-center gap-1 text-accent font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">local_offer</span> Deals
+          </span>
+          <p class="text-xs text-slate-400 mt-1">Aubaines des fermes locales</p>
+        </div>
+      </div>
+
+      <!-- Profil -->
+      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+        <div class="phone-frame">
+          <div class="phone-overlay" onclick="openModal(4)"></div>
+          <iframe src="mon_profil_app_orga/code.html" loading="lazy"></iframe>
+        </div>
+        <div class="text-center">
+          <span class="inline-flex items-center gap-1 text-dark font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">person</span> Profil
+          </span>
+          <p class="text-xs text-slate-400 mt-1">Profil utilisateur</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">02 &mdash; Features</span>
+      <h2 class="text-3xl font-bold text-dark">Qu'est-ce qu'on met dans l'app?</h2>
+      <p class="text-slate-500 mt-2">Features confirmees + idees a discuter</p>
+    </div>
+
+    <!-- Confirmed features -->
+    <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined fill text-primary">check_circle</span> Dans les maquettes actuelles
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+      <div class="feature-card bg-primary/5 border-2 border-primary/20 rounded-xl p-5">
+        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-primary">map</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Carte interactive</h4>
+        <p class="text-sm text-slate-500">Fermes bio, sources d'eau, filtres par categorie. Geolocalisation.</p>
+      </div>
+      <div class="feature-card bg-secondary/5 border-2 border-secondary/20 rounded-xl p-5">
+        <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-secondary">barcode_scanner</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Scanner de produits</h4>
+        <p class="text-sm text-slate-500">Scan code-barres, Nutri-Score, alertes ingredients, alternatives bio.</p>
+      </div>
+      <div class="feature-card bg-primary/5 border-2 border-primary/20 rounded-xl p-5">
+        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-primary">restaurant_menu</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Recettes sante</h4>
+        <p class="text-sm text-slate-500">Recettes de saison, temps de prep, difficulte, populaire au Quebec.</p>
+      </div>
+      <div class="feature-card bg-accent/10 border-2 border-accent/30 rounded-xl p-5">
+        <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-accent">local_offer</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Deals / Aubaines</h4>
+        <p class="text-sm text-slate-500">Paniers bio, promotions des fermes, filtres livraison + proximite.</p>
+      </div>
+      <div class="feature-card bg-dark/5 border-2 border-dark/10 rounded-xl p-5">
+        <div class="w-12 h-12 bg-dark/10 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-dark">person</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Profil utilisateur</h4>
+        <p class="text-sm text-slate-500">Historique scans, fermes favorites, recettes sauvegardees, stats.</p>
+      </div>
+    </div>
+
+    <!-- Ideas to discuss -->
+    <h3 class="text-lg font-bold text-accent mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-accent">lightbulb</span> Idees a discuter
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-red-500">kebab_dining</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Boucheries / Eleveurs</h4>
+        <p class="text-sm text-slate-500">Ajouter boucheries artisanales, eleveurs locaux. Important si audience carnivore.</p>
+        <span class="inline-block mt-2 text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-medium">Carnivore-friendly</span>
+      </div>
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-blue-500">newspaper</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Fil de nouvelles</h4>
+        <p class="text-sm text-slate-500">Actualites fermes, nouveaux arrivages, evenements, marches fermiers.</p>
+        <span class="inline-block mt-2 text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">Engagement</span>
+      </div>
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-yellow-600">star</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Avis & Reviews</h4>
+        <p class="text-sm text-slate-500">Les utilisateurs notent les fermes visitees. Photos, commentaires.</p>
+        <span class="inline-block mt-2 text-xs bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded-full font-medium">Communaute</span>
+      </div>
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-green-600">shopping_basket</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Commander des paniers</h4>
+        <p class="text-sm text-slate-500">Commander directement depuis l'app. Paiement integre.</p>
+        <span class="inline-block mt-2 text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full font-medium">Monetisation</span>
+      </div>
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-purple-500">school</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Section educative</h4>
+        <p class="text-sm text-slate-500">D'ou vient ta viande? Comment lire une etiquette? Guides sante.</p>
+        <span class="inline-block mt-2 text-xs bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full font-medium">Contenu</span>
+      </div>
+      <div class="feature-card bg-white border-2 border-dashed border-slate-200 rounded-xl p-5 hover:border-primary">
+        <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-pink-500">forum</span>
+        </div>
+        <h4 class="font-bold text-dark mb-1">Communaute / Feed</h4>
+        <p class="text-sm text-slate-500">Feed social entre passionnes de bouffe sante. Partage de trouvailles.</p>
+        <span class="inline-block mt-2 text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full font-medium">Phase 2+</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="py-16 bg-slate-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">03 &mdash; Roadmap</span>
+      <h2 class="text-3xl font-bold text-dark">Du brainstorm au lancement</h2>
+      <p class="text-slate-500 mt-2">Etapes cles pour aller de l'idee a l'App Store</p>
+    </div>
+
+    <div class="relative pl-16">
+      <div class="roadmap-line"></div>
+
+      <!-- Phase 0 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+          <span class="material-symbols-outlined">handshake</span>
+        </div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="px-3 py-1 bg-primary text-white text-xs font-bold rounded-full">ON EST ICI</span>
+            <h3 class="font-bold text-lg text-dark">Phase 0 &mdash; Brainstorm & Partenariat</h3>
+          </div>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-0.5 fill">check_circle</span> Maquettes des 5 ecrans</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-0.5 fill">check_circle</span> Base de donnees Supabase configuree</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-0.5 fill">check_circle</span> Stack technique choisi</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> <strong>Valider la vision avec le partenaire</strong></li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Choisir le nom de l'app</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Definir les roles (dev vs contenu/marketing)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-primary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">1</div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 1 &mdash; Branding & Design Final</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Logo + identite visuelle</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Palette de couleurs validee</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Maquettes finales (ajustees selon feedback)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Creer les comptes sociaux (Insta, TikTok, Facebook)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-primary/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">2</div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 2 &mdash; Developpement MVP</h3>
+          <p class="text-xs text-slate-400 mb-3">Le coeur de l'app &mdash; les features essentielles seulement</p>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ecran Carte avec vraie map + fermes de la DB</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Scanner de produits (camera + Open Food Facts)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ecran Recettes (feed basique)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ecran Deals (liste des aubaines)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Profil + authentification</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Navigation entre les 5 tabs</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-secondary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">3</div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 3 &mdash; Contenu & Donnees</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ajouter les vraies fermes du Quebec dans la DB</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ajouter boucheries & eleveurs (si confirme)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Creer les premieres recettes (carnivore + bio)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Photos des fermes (visites ou stock)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Premiers deals avec fermes partenaires</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-secondary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">4</div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 4 &mdash; Beta Testing</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> TestFlight (iOS) + Google Play beta</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Inviter 20-50 testeurs (amis, followers du partenaire)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Collecter le feedback, corriger les bugs</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Commencer le teasing sur les reseaux sociaux</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="relative mb-8">
+        <div class="absolute -left-16 w-14 h-14 bg-accent rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+          <span class="material-symbols-outlined">rocket_launch</span>
+        </div>
+        <div class="phase-card bg-gradient-to-r from-primary/5 to-accent/10 rounded-xl p-6 shadow-sm border-2 border-primary/20">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 5 &mdash; LANCEMENT</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Publier sur App Store + Google Play</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Video de lancement (partenaire)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Campagne TikTok / Instagram Reels</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Contacter medias locaux / blogueurs bouffe QC</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Landing page web avec lien de telechargement</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="relative">
+        <div class="absolute -left-16 w-14 h-14 bg-accent/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+          <span class="material-symbols-outlined">trending_up</span>
+        </div>
+        <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+          <h3 class="font-bold text-lg text-dark mb-3">Phase 6 &mdash; Croissance</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Ajouter features Phase 2 (commandes, communaute, news)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Expansion : France, US</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Monetisation (premium, commissions, pubs fermes)</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-slate-300 text-sm mt-0.5">circle</span> Partenariats avec chaines (IGA, Metro bio sections)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETING -->
+<section id="marketing" class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-accent/10 text-accent px-4 py-1.5 rounded-full text-sm font-semibold mb-3">04 &mdash; Marketing</span>
+      <h2 class="text-3xl font-bold text-dark">Strategie reseaux sociaux</h2>
+      <p class="text-slate-500 mt-2">Comment utiliser l'audience du partenaire</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <!-- TikTok -->
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.76a8.28 8.28 0 0 0 4.76 1.5V6.81a4.81 4.81 0 0 1-1-.12z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">TikTok</h3>
+            <p class="text-xs text-white/50">Priorite #1</p>
+          </div>
+        </div>
+        <ul class="space-y-2 text-sm text-white/80">
+          <li>Visites de fermes en video</li>
+          <li>Scan de produits "C'est quoi dedans?"</li>
+          <li>Recettes rapides 60 secondes</li>
+          <li>Comparatifs bio vs conventionnel</li>
+          <li>"Taste test" produits locaux</li>
+        </ul>
+      </div>
+
+      <!-- Instagram -->
+      <div class="bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl p-6 text-white">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">Instagram</h3>
+            <p class="text-xs text-white/50">Brand + Communaute</p>
+          </div>
+        </div>
+        <ul class="space-y-2 text-sm text-white/80">
+          <li>Photos des fermes (esthetique)</li>
+          <li>Stories "behind the scenes"</li>
+          <li>Reels courts (reposter TikToks)</li>
+          <li>Carousels educatifs</li>
+          <li>Lien app dans la bio</li>
+        </ul>
+      </div>
+
+      <!-- Facebook -->
+      <div class="bg-gradient-to-br from-blue-700 to-blue-600 rounded-2xl p-6 text-white">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg">Facebook</h3>
+            <p class="text-xs text-white/50">Communaute locale</p>
+          </div>
+        </div>
+        <ul class="space-y-2 text-sm text-white/80">
+          <li>Groupe "Manger local QC"</li>
+          <li>Partager dans groupes existants</li>
+          <li>Evenements (marches fermiers)</li>
+          <li>Articles plus longs</li>
+          <li>Cibler 35+ ans</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Content strategy -->
+    <div class="bg-cream rounded-2xl p-8">
+      <h3 class="font-bold text-lg text-dark mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">campaign</span> Strategie pre-lancement
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h4 class="font-semibold text-dark mb-2">Avant le lancement</h4>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="text-primary font-bold">1.</span> Creer les comptes sociaux avec le branding</li>
+            <li class="flex items-start gap-2"><span class="text-primary font-bold">2.</span> Commencer a poster du contenu (fermes, recettes) SANS mentionner l'app</li>
+            <li class="flex items-start gap-2"><span class="text-primary font-bold">3.</span> Builder une audience organique</li>
+            <li class="flex items-start gap-2"><span class="text-primary font-bold">4.</span> Teaser l'app 2-3 semaines avant</li>
+            <li class="flex items-start gap-2"><span class="text-primary font-bold">5.</span> Liste d'attente / pre-inscription</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-dark mb-2">Jour du lancement</h4>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="text-secondary font-bold">1.</span> Video de lancement du partenaire</li>
+            <li class="flex items-start gap-2"><span class="text-secondary font-bold">2.</span> Poster sur toutes les plateformes en meme temps</li>
+            <li class="flex items-start gap-2"><span class="text-secondary font-bold">3.</span> Envoyer a la liste d'attente</li>
+            <li class="flex items-start gap-2"><span class="text-secondary font-bold">4.</span> Demander aux premiers users de laisser un avis (App Store)</li>
+            <li class="flex items-start gap-2"><span class="text-secondary font-bold">5.</span> Contacter journalistes/blogueurs bouffe QC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCUSSION TOPICS -->
+<section id="discussion" class="py-16 bg-slate-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">05 &mdash; A discuter</span>
+      <h2 class="text-3xl font-bold text-dark">Points a clarifier ensemble</h2>
+      <p class="text-slate-500 mt-2">Questions ouvertes pour l'appel</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-red-500">priority_high</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Nom de l'app</h4>
+          <p class="text-sm text-slate-500 mt-1">Brainstormer ensemble. "App Orga" c'est un nom de travail. Faut quelque chose de catchy, facile a retenir, disponible sur les stores.</p>
+        </div>
+      </div>
+
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-red-500">kebab_dining</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Direction contenu : carnivore vs bio vs mix?</h4>
+          <p class="text-sm text-slate-500 mt-1">Son audience est plus carnivore/sante. On garde le bio mais on ajoute boucheries, eleveurs, viande de paturage? Quel equilibre?</p>
+        </div>
+      </div>
+
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-blue-500">groups</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Roles & responsabilites</h4>
+          <p class="text-sm text-slate-500 mt-1">Qui fait quoi? Dev (toi), contenu/marketing (lui)? Co-fondateurs ou createur + ambassadeur? Comment on split?</p>
+        </div>
+      </div>
+
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-green-500">palette</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Couleurs & look de l'app</h4>
+          <p class="text-sm text-slate-500 mt-1">Il aime la palette actuelle (vert/orange/creme)? Ou il voit ca autrement? Plus sombre? Plus minimal?</p>
+        </div>
+      </div>
+
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-purple-500">attach_money</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Monetisation (pas urgent mais bon a savoir)</h4>
+          <p class="text-sm text-slate-500 mt-1">Gratuit pour les users? Fermes paient pour etre mises en avant? Abonnement premium? Commission sur paniers? A reflechir.</p>
+        </div>
+      </div>
+
+      <div class="topic-card bg-white rounded-xl p-5 border-2 border-slate-100 flex items-start gap-4">
+        <div class="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-yellow-600">people</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-dark">Son audience : qui sont ses followers?</h4>
+          <p class="text-sm text-slate-500 mt-1">Age moyen? Hommes/femmes? Quebec seulement? Qu'est-ce qui marche le mieux dans son contenu actuel?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section id="budget" class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">06 &mdash; Budget</span>
+      <h2 class="text-3xl font-bold text-dark">Cout pour lancer (bootstrap)</h2>
+      <p class="text-slate-500 mt-2">Le minimum pour mettre l'app sur les stores</p>
+    </div>
+
+    <div class="bg-slate-50 rounded-2xl overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-primary text-white">
+            <th class="text-left px-6 py-4 font-semibold">Depense</th>
+            <th class="text-left px-6 py-4 font-semibold">Cout</th>
+            <th class="text-left px-6 py-4 font-semibold">Frequence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="budget-row border-b border-slate-100">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Supabase</div>
+              <div class="text-slate-400 text-xs">Base de donnees + auth + storage</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-primary">Gratuit</td>
+            <td class="px-6 py-4 text-xs text-slate-400">Plan free suffisant au debut</td>
+          </tr>
+          <tr class="budget-row border-b border-slate-100">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Apple Developer Program</div>
+              <div class="text-slate-400 text-xs">Requis pour publier sur App Store</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-secondary">99 USD</td>
+            <td class="px-6 py-4 text-xs text-slate-400">Par annee</td>
+          </tr>
+          <tr class="budget-row border-b border-slate-100">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Google Play Console</div>
+              <div class="text-slate-400 text-xs">Requis pour publier sur Play Store</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-secondary">25 USD</td>
+            <td class="px-6 py-4 text-xs text-slate-400">Une seule fois</td>
+          </tr>
+          <tr class="budget-row border-b border-slate-100">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Nom de domaine (.ca ou .com)</div>
+              <div class="text-slate-400 text-xs">Landing page + email pro</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-secondary">~15 USD</td>
+            <td class="px-6 py-4 text-xs text-slate-400">Par annee</td>
+          </tr>
+          <tr class="budget-row border-b border-slate-100">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Expo / React Native</div>
+              <div class="text-slate-400 text-xs">Framework de dev</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-primary">Gratuit</td>
+            <td class="px-6 py-4 text-xs text-slate-400">Open source</td>
+          </tr>
+          <tr class="budget-row">
+            <td class="px-6 py-4 text-sm">
+              <div class="font-medium text-dark">Google Maps API</div>
+              <div class="text-slate-400 text-xs">Pour la carte interactive</div>
+            </td>
+            <td class="px-6 py-4 text-sm font-bold text-primary">Gratuit*</td>
+            <td class="px-6 py-4 text-xs text-slate-400">200$/mois de credit gratuit</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="bg-primary/5 px-6 py-4 flex items-center justify-between">
+        <span class="font-bold text-dark">Total pour lancer</span>
+        <span class="text-2xl font-black text-primary">~140 USD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- INFLUENCEURS SECTION -->
+<section id="influenceurs" class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-pink-100 text-pink-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-3">08 &mdash; Croissance</span>
+      <h2 class="text-3xl font-bold text-dark">Strategie influenceurs & codes referral</h2>
+      <p class="text-slate-500 mt-2">Comment faire grandir l'app sans budget publicitaire au debut</p>
+    </div>
+
+    <!-- Pourquoi ça marche -->
+    <div class="bg-gradient-to-r from-primary/5 to-pink-50 rounded-2xl p-8 mb-12 border border-primary/10">
+      <h3 class="font-bold text-lg text-dark mb-4 flex items-center gap-2">
+        <span class="text-2xl">💡</span> Pourquoi cette strategie fonctionne
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600">
+        <div class="flex items-start gap-3">
+          <span class="text-xl mt-0.5">🎯</span>
+          <div><strong class="text-dark block mb-1">Audience ultra-ciblee</strong>Un micro-influenceur fitness/sante de 2K abonnes a une audience PLUS engagee qu'un compte de 100K generaliste.</div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-xl mt-0.5">💸</span>
+          <div><strong class="text-dark block mb-1">Cout quasi zero</strong>Les micro-influenceurs acceptent souvent un code referral + commission plutot qu'un cachet. Pas besoin de budget.</div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="text-xl mt-0.5">📈</span>
+          <div><strong class="text-dark block mb-1">Effet boule de neige</strong>50 influenceurs x 2K abonnes = 100K personnes atteintes. Meme 2% de conversion = 2,000 nouveaux users.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiers d'influenceurs -->
+    <h3 class="text-lg font-bold text-dark mb-6 flex items-center gap-2">
+      <span class="text-xl">📊</span> Les 3 tiers d'influenceurs a cibler
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+      <!-- Nano -->
+      <div class="bg-slate-50 rounded-2xl p-6 border-2 border-slate-100">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-slate-200 rounded-xl flex items-center justify-center text-xl font-black text-slate-500">N</div>
+          <div>
+            <h4 class="font-bold text-dark">Nano-influenceurs</h4>
+            <p class="text-xs text-slate-400">1K &mdash; 10K abonnes</p>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm text-slate-600 mb-4">
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Engagement tres eleve (5-15%)</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Audience locale Quebec</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Acceptent souvent gratuit</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Authentiques et credibles</div>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-xs text-slate-500">
+          <strong class="text-dark block mb-1">Niches a cibler :</strong>
+          Fitness QC, nutrition, alimentation saine, recettes, CrossFit, running, yoga
+        </div>
+        <div class="mt-3 text-xs font-semibold text-primary">Objectif : 50-100 partenaires</div>
+      </div>
+
+      <!-- Micro -->
+      <div class="bg-primary/5 rounded-2xl p-6 border-2 border-primary/20">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-xl font-black text-primary">M</div>
+          <div>
+            <h4 class="font-bold text-dark">Micro-influenceurs</h4>
+            <p class="text-xs text-slate-400">10K &mdash; 100K abonnes</p>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm text-slate-600 mb-4">
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Bon ratio portee/engagement</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Creneau bien defini</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Commission ou echange produit</div>
+          <div class="flex items-start gap-2"><span class="text-secondary">→</span> Ex: Xavier Lemay (20K-30K)</div>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-xs text-slate-500">
+          <strong class="text-dark block mb-1">Exemples de profils :</strong>
+          Entraineurs perso QC, dieteticiens, chefs cuisiniers, agriculteurs, blogueurs sante
+        </div>
+        <div class="mt-3 text-xs font-semibold text-primary">Objectif : 10-20 partenaires cles</div>
+      </div>
+
+      <!-- Macro -->
+      <div class="bg-secondary/5 rounded-2xl p-6 border-2 border-secondary/20">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 bg-secondary/20 rounded-xl flex items-center justify-center text-xl font-black text-secondary">X</div>
+          <div>
+            <h4 class="font-bold text-dark">Macro-influenceurs</h4>
+            <p class="text-xs text-slate-400">100K+ abonnes</p>
+          </div>
+        </div>
+        <div class="space-y-2 text-sm text-slate-600 mb-4">
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Portee massive</div>
+          <div class="flex items-start gap-2"><span class="text-primary">✓</span> Credibilite instantanee</div>
+          <div class="flex items-start gap-2"><span class="text-slate-400">~</span> Cachet potentiel requis</div>
+          <div class="flex items-start gap-2"><span class="text-secondary">→</span> Ex: Olivier Primault</div>
+        </div>
+        <div class="bg-white rounded-xl p-3 text-xs text-slate-500">
+          <strong class="text-dark block mb-1">Approche :</strong>
+          Commencer par le code referral, offrir une part des revenus, ou un partenariat officiel avec l'app
+        </div>
+        <div class="mt-3 text-xs font-semibold text-secondary">Phase 2 (quand l'app tourne)</div>
+      </div>
+    </div>
+
+    <!-- Code referral -->
+    <div class="bg-dark rounded-2xl p-8 text-white mb-12">
+      <h3 class="font-bold text-xl mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">🔗</span>
+        Comment le code referral fonctionne
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white/5 rounded-xl p-4 text-center">
+          <div class="text-3xl mb-2">1</div>
+          <div class="text-sm font-semibold mb-1">Influenceur s'inscrit</div>
+          <div class="text-xs text-white/50">On lui cree un code unique<br/>ex: <code class="bg-white/10 px-1 rounded">XAVIER10</code></div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 text-center">
+          <div class="text-3xl mb-2">2</div>
+          <div class="text-sm font-semibold mb-1">Il partage son code</div>
+          <div class="text-xs text-white/50">Bio Instagram, Story, TikTok<br/>Lien de telechargement</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 text-center">
+          <div class="text-3xl mb-2">3</div>
+          <div class="text-sm font-semibold mb-1">Ses abonnes signent up</div>
+          <div class="text-xs text-white/50">Entrent le code a l'inscription<br/>ou cliquent son lien</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 text-center">
+          <div class="text-3xl mb-2">4</div>
+          <div class="text-sm font-semibold mb-1">Il gagne une commission</div>
+          <div class="text-xs text-white/50">Ex: 2$ par inscription<br/>ou % si abonnement premium</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h4 class="font-semibold text-white/80 text-sm mb-2">Ce que l'influenceur gagne :</h4>
+          <ul class="space-y-1 text-sm text-white/60">
+            <li>&#8594; Commission par inscription (ex: 1-2$ par user)</li>
+            <li>&#8594; % des abonnements premium generes</li>
+            <li>&#8594; Badge "Partenaire officiel" dans l'app</li>
+            <li>&#8594; Profil mis en avant dans la section Recettes</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white/80 text-sm mb-2">Ce qu'on gagne :</h4>
+          <ul class="space-y-1 text-sm text-white/60">
+            <li>&#8594; Nouveaux utilisateurs qualifies</li>
+            <li>&#8594; Contenu cree gratuitement par les influenceurs</li>
+            <li>&#8594; Credibilite dans la communaute sante QC</li>
+            <li>&#8594; Croissance organique durable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ads phase 2 -->
+    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center text-xl">💰</span>
+        <div>
+          <h3 class="font-bold text-lg text-dark">Phase 2 &mdash; Publicites payantes</h3>
+          <p class="text-sm text-slate-400">Quand on a du capital et une base d'utilisateurs</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-slate-900 rounded-xl p-5 text-white">
+          <div class="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.76a8.28 8.28 0 0 0 4.76 1.5V6.81a4.81 4.81 0 0 1-1-.12z"/></svg>
+            <span class="font-semibold text-sm">TikTok Ads</span>
+          </div>
+          <p class="text-xs text-white/60">Meilleur ROI pour le mobile. Ciblage par interet (fitness, sante, alimentation). Video ads courtes.</p>
+          <div class="mt-3 text-xs text-white/40">Budget min: ~500$/mois</div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-600 to-pink-500 rounded-xl p-5 text-white">
+          <div class="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            <span class="font-semibold text-sm">Instagram Ads</span>
+          </div>
+          <p class="text-xs text-white/60">Stories + Reels. Retargeting des visiteurs du site. Lookalike audience des premiers users.</p>
+          <div class="mt-3 text-xs text-white/40">Budget min: ~300$/mois</div>
+        </div>
+        <div class="bg-blue-700 rounded-xl p-5 text-white">
+          <div class="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <span class="font-semibold text-sm">Facebook Ads</span>
+          </div>
+          <p class="text-xs text-white/60">Ciblage 30-55 ans, interet agriculture locale, bio, sante. Forte audience Quebec sur Facebook.</p>
+          <div class="mt-3 text-xs text-white/40">Budget min: ~300$/mois</div>
+        </div>
+      </div>
+      <div class="mt-4 p-4 bg-white rounded-xl border border-slate-100 text-sm text-slate-500">
+        <strong class="text-dark">Strategie :</strong> D'abord croissance organique (influenceurs + codes referral) → quand on genere des revenus → reinvestir en ads pour accelerer.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FERMES SECTION -->
+<section id="fermes" class="py-16 bg-cream">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">07 &mdash; Fermes du Quebec</span>
+      <h2 class="text-3xl font-bold text-dark">153 fermes recommandees</h2>
+      <p class="text-slate-500 mt-2">Extraites des commentaires du post de Xavier (Facebook + Instagram) &middot; Mars 2026</p>
+      <div class="flex flex-wrap justify-center gap-3 mt-4">
+        <span class="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">11 regions du Quebec</span>
+        <span class="px-3 py-1.5 bg-secondary/10 text-secondary rounded-full text-sm font-medium">12 partenaires potentiels</span>
+        <span class="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-full text-sm font-medium">Boeuf &middot; Porc &middot; Poulet &middot; Legumes &middot; Fromage</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <div class="relative flex-1">
+        <input id="farmSearch" type="text" placeholder="Chercher une ferme..." 
+          class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-sm"/>
+      </div>
+      <select id="regionFilter" class="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none bg-white text-sm text-slate-600">
+        <option value="">Toutes les regions</option>
+        <option value="Monteregio">Monteregie</option>
+        <option value="Quebec/Chaudiere">Quebec / Chaudiere-Appalaches</option>
+        <option value="Lanaudiere">Lanaudiere</option>
+        <option value="Estrie">Estrie</option>
+        <option value="Laurentides">Laurentides</option>
+        <option value="Mauricie">Mauricie</option>
+        <option value="Outaouais">Outaouais</option>
+        <option value="Saguenay/Charlevoix">Saguenay / Charlevoix</option>
+        <option value="Bas-St-Laurent/Gaspesie">Bas-St-Laurent / Gaspesie</option>
+        <option value="Becancour/Centre-QC">Becancour / Centre-QC</option>
+        <option value="Autre region">Region non identifiee</option>
+      </select>
+      <label class="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 bg-white cursor-pointer text-sm text-slate-600">
+        <input type="checkbox" id="partnerFilter" class="accent-primary w-4 h-4"/>
+        Partenaires potentiels seulement
+      </label>
+    </div>
+
+    <div class="text-sm text-slate-400 mb-4">Affichage de <span id="visibleCount">0</span> fermes</div>
+
+    <div id="farmsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+</section>
+
+<script>
+const farmsData = [{"name": "Ranch Lalythan S.E.N.C.", "description": "Dans le coin de Rimouski : le Broutard des Appalaches, Ranch Lalythan S.E.N.C., la Caboche.ils dont de la viande nourrie à l'herbe et des œufs. Si tu ", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Geneviève Couillard", "is_partner_candidate": false}, {"name": "Ferme Ragnarüches", "description": "Wow! Mais quelle belle initiative 🫶🏼\nJe demeure sur la Côte-Nord donc les fermes sont plutôt rare ici. Par contre, il y a un apiculteur dans notre rég", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Priscilla Fortier", "is_partner_candidate": false}, {"name": "Mon Panier Bio-Aux Jardins d'Irisa", "description": "Mon Panier Bio-Aux Jardins d'Irisa Nous produisons plus de 50 variétés de fruits et de légumes dans Lanaudière. Étant une ferme qui applique la permaculture, nous privilégions la santé du sol, en trav", "region": "Lanaudière", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme le Phoenix bleu inc.", "description": "Gaspésie-baie des chaleurs, ici on produit du boeuf Highland , on a une 2e production de boeuf angus (en 2 productions différentes!) , nous avons des oeufs de consommation à l'année, du bois de chauff", "region": "Bas-St-Laurent/Gaspésie", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Brylee", "description": "Dans l'outaouais Ferme Brylee / Brylee Farm Bœuf nourri à l’herbe, sans hormones et sans antibiotiques et utilise un système de pâturage tournant 🥰", "region": "Outaouais", "source": "Commentaire de Annie Gendron", "is_partner_candidate": false}, {"name": "Les Viandes d'Autrefois", "description": "Chez nous, on a fait le choix de revenir à une agriculture comme à l’époque où on donnait les restes de jardin aux animaux au pâturage. Nos porcs Berkshire et Mangalitsa sont nourris aux invendus et r", "region": "", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Pédagogique", "description": "Dans Lotbinière pour la viande je vais chez Ferme Pédagogique Marichel ou Les fermes Audet et Moreau. Pour le vin, gin, acerum sirop d’érable tous bio", "region": "Québec/Chaudière", "source": "Commentaire de Isabelle Levesque", "is_partner_candidate": false}, {"name": "Domaine Small", "description": "Dans Lotbinière pour la viande je vais chez Ferme Pédagogique Marichel ou Les fermes Audet et Moreau. Pour le vin, gin, acerum sirop d’érable tous bio", "region": "Québec/Chaudière", "source": "Commentaire de Isabelle Levesque", "is_partner_candidate": false}, {"name": "Ferme Authentique", "description": "Ferme Authentique : Montérégie Est \nÉlevage de cochon, poulet et oeufs au pâturage et en liberté. Parce que pour nous l'agriculture conventionnelle ne faisais pas de sens pour notre santé et notre bie", "region": "Montérégie", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Authentique : Montérégie Est", "description": "Ferme Authentique : Montérégie Est \nÉlevage de cochon, poulet et oeufs au pâturage et en liberté. Parce que pour nous l'agriculture conventionnelle ne", "region": "Montérégie", "source": "Commentaire de Ferme Authentique", "is_partner_candidate": false}, {"name": "Élevage de cochon", "description": "Ferme Authentique : Montérégie Est \nÉlevage de cochon, poulet et oeufs au pâturage et en liberté. Parce que pour nous l'agriculture conventionnelle ne", "region": "Montérégie", "source": "Commentaire de Ferme Authentique", "is_partner_candidate": false}, {"name": "Ferme Chez Mario", "description": "Ferme Chez Mario\nMoi j y fait mon auto cueillette de légumes à la mi août \nTomate piment doux et fort  oignons zucchini aubergines \nIl y a même du mel", "region": "", "source": "Commentaire de Edith Choquette", "is_partner_candidate": false}, {"name": "Ferme Élivic", "description": "Ferme Élivic situé à Mirabel, jeune bovin certifié bio, nourris à herbe. \n\nFerme la Roquette, situé a Brownsburg-Chatham, légumes bio \n\nFerme Villoise, situé a Saint-Gédéon, porc bio \n\nLa Pinte, situé", "region": "Laurentides", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Élivic situé à Mirabel", "description": "Ferme Élivic situé à Mirabel, jeune bovin certifié bio, nourris à herbe. \n\nFerme la Roquette, situé a Brownsburg-Chatham, légumes bio \n\nFerme Villoise", "region": "Laurentides", "source": "Commentaire de Ferme Élivic", "is_partner_candidate": false}, {"name": "Ferme la Roquette", "description": "Ferme Élivic situé à Mirabel, jeune bovin certifié bio, nourris à herbe. \n\nFerme la Roquette, situé a Brownsburg-Chatham, légumes bio \n\nFerme Villoise", "region": "Laurentides", "source": "Commentaire de Ferme Élivic", "is_partner_candidate": false}, {"name": "Ferme Villoise", "description": "Ferme Élivic situé à Mirabel, jeune bovin certifié bio, nourris à herbe. \n\nFerme la Roquette, situé a Brownsburg-Chatham, légumes bio \n\nFerme Villoise", "region": "Laurentides", "source": "Commentaire de Ferme Élivic", "is_partner_candidate": false}, {"name": "Ferme La Petite Patrie", "description": "Nous avons une production “atypique”, des oeufs à incuber de volaille afin que tous.tes puissent produire leur propres animaux (pour le plaisir ou l’autosuffisance). C’est très important en Gaspésie c", "region": "Bas-St-Laurent/Gaspésie", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Production de porc mangalitsa pur et mixte rustique", "description": "L'OthentiC Ranch \nProduction de porc mangalitsa pur et mixte rustique \nCocos de poules en liberté \nPoulets de grains \n\nNos animaux sont nourri aux inv", "region": "Montérégie", "source": "Commentaire de Cynthiia Beaulieu-Riendeau", "is_partner_candidate": false}, {"name": "Ferme La Petite Patrie oeufs à incuber", "description": "En Gaspésie: \nFerme La Petite Patrie oeufs à incuber, petits animaux de ferme\n\nFerme le Phoenix bleu inc. boeufs Angus and Highland, oeufs à consommer", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Alexandra Hébert-Dufour", "is_partner_candidate": false}, {"name": "Ferme le Phoenix bleu inc. boeufs Angus and Highland", "description": "En Gaspésie: \nFerme La Petite Patrie oeufs à incuber, petits animaux de ferme\n\nFerme le Phoenix bleu inc. boeufs Angus and Highland, oeufs à consommer", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Alexandra Hébert-Dufour", "is_partner_candidate": false}, {"name": "Ferme Guayclair", "description": "Dans le coin de Brownsburg-Chatham dans les Laurentides, Ferme Guayclair bœuf nourri à l’herbe et agriculture régénératrice.", "region": "Laurentides", "source": "Commentaire de Stéphane Guay", "is_partner_candidate": false}, {"name": "Ferme des Petits Torrieux", "description": "Ferme des Petits Torrieux\nNous sommes situés en Estrie et élevons boeuf et agneau a l’herbe et porc en foret \nNous avons quelques légumes et courge \n\nWww.torrieux.com", "region": "Estrie", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme des Hautes Terres", "description": "Ferme des Hautes Terres", "region": "", "source": "Commentaire de Geneviève Baril", "is_partner_candidate": false}, {"name": "Ferme Ail", "description": "Ferme Ail-Land Inc", "region": "", "source": "Commentaire de Karine Bélanger", "is_partner_candidate": false}, {"name": "En Beauce : Les Viandes d'Autrefois", "description": "En Beauce : Les Viandes d'Autrefois \nFerme Roberge-Innov", "region": "Québec/Chaudière", "source": "Commentaire de Annie Laflamme-Breault", "is_partner_candidate": false}, {"name": "Ferme Roberge", "description": "En Beauce : Les Viandes d'Autrefois \nFerme Roberge-Innov", "region": "Québec/Chaudière", "source": "Commentaire de Annie Laflamme-Breault", "is_partner_candidate": false}, {"name": "Ferme Le Lopin", "description": "Ferme Le Lopin \nLégumes bio de feu!", "region": "", "source": "Commentaire de Jean Benoit Lemire", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa à St", "description": "Mon Panier Bio-Aux Jardins d'Irisa  à St-Félix de Valois. Fruits et légumes biologiques.\n\nLa Ferme 292 à Notre-Dame-des-Prairies. Fermier de famille: ", "region": "Lanaudière", "source": "Commentaire de Karina Gouger", "is_partner_candidate": false}, {"name": "La Ferme 292 à Notre", "description": "Mon Panier Bio-Aux Jardins d'Irisa  à St-Félix de Valois. Fruits et légumes biologiques.\n\nLa Ferme 292 à Notre-Dame-des-Prairies. Fermier de famille: ", "region": "Lanaudière", "source": "Commentaire de Karina Gouger", "is_partner_candidate": false}, {"name": "Ferme d'ORée en Estrie", "description": "Ferme d'ORée en Estrie, ils livrent 4 fois par année dans la ville de Québec", "region": "Estrie", "source": "Commentaire de Mariane Pagé", "is_partner_candidate": false}, {"name": "Ferme Miboulay", "description": "En Montérégie, à St Mathieu de Beloeil pour le boeuf et les œufs : Les viandes du Ruisseau;\nLa Présentation : Côté Plumes kiosque fermier pour le poul", "region": "Montérégie", "source": "Commentaire de Marie Josée", "is_partner_candidate": false}, {"name": "Les Jardins du Haricot Magique. Auto", "description": "C’est une superbe initiative Xavier. On apprécie beaucoup tes recherches et publications.\n\nLes Jardins du Haricot Magique. Auto-cueillette de fraises ", "region": "Estrie", "source": "Commentaire de Suzanne Gosselin", "is_partner_candidate": false}, {"name": "Ferme l'Oiseau Bleu", "description": "Allo Xavier, merci pour cette belle initiative tu viens nous voir quand tu veux à la ferme !!! 👩‍🌾🐮 Nous sommes situés à Baie-Saint-Paul, dans Charlevoix ⛰️, et faisons la mise en marché à la ferme d’", "region": "Saguenay/Charlevoix", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme aux pleines saveurs St", "description": "Tous biologiques ❤️\nLa Shop à Légumes coop à St-Esprit, Ferme aux pleines saveurs St-André-Avelin, Au Bout du Rang St-Félix de Valois", "region": "Lanaudière", "source": "Commentaire de Les Champimignons", "is_partner_candidate": false}, {"name": "Ferme lauzon labranche", "description": "Ferme lauzon labranche", "region": "", "source": "Commentaire de Stephane Lauzon Bellisle", "is_partner_candidate": false}, {"name": "Ferme Jersbi est juste exceptionnelle! Viande bio de qualité", "description": "Ferme Jersbi est juste exceptionnelle! Viande bio de qualité, petits plats cuisinés maison, propriétaires passionnés et accueillant, animaux magnifiqu", "region": "", "source": "Commentaire de Cath Lortie", "is_partner_candidate": false}, {"name": "Ferme Mille", "description": "La Ferme Mille Fleurs vente de viande de boeuf highland et porc rustique, mais aussi service de restauration sur place.\nUne expérience touristique trè", "region": "Québec/Chaudière", "source": "Commentaire de Laurence Labbé", "is_partner_candidate": false}, {"name": "Bœuf : Ferme Lavoie Inc", "description": "Au Saguenay, je les adore 💖 \nBœuf 🥩: Ferme Lavoie Inc \nPorc, poulet, œufs et bien plus : Les Paysans du Fjord / Micro-ferme écologique", "region": "Saguenay/Charlevoix", "source": "Commentaire de Maggie Ayotte", "is_partner_candidate": false}, {"name": "Ferme Vallée Verte", "description": "Ferme Vallée Verte \nà St-Jean-de-Matha  (Lanaudière)\nLait, yogourt, fromage", "region": "Lanaudière", "source": "Commentaire de Caroline Forget", "is_partner_candidate": false}, {"name": "Ferme Radicelle à Saint", "description": "Ferme Radicelle à Saint-Damase près de St-Hyacinthe. \nUn joyaux pour trouver plusieurs produits, fruits, légumes, produits cuisinés maison, œufs de po", "region": "Montérégie", "source": "Commentaire de Mrlyn Gch", "is_partner_candidate": false}, {"name": "Ferme Kirk", "description": "Dans les Laurentides;\n- Ferme Élivic \n-Ferme Kirk \n-Ferme GuayClair \n-Ferme la Roquette\n-Ferme de Germe en pousse 🌱", "region": "Laurentides", "source": "Commentaire de Karine Blanchet", "is_partner_candidate": false}, {"name": "Ferme GuayClair", "description": "Dans les Laurentides;\n- Ferme Élivic \n-Ferme Kirk \n-Ferme GuayClair \n-Ferme la Roquette\n-Ferme de Germe en pousse 🌱", "region": "Laurentides", "source": "Commentaire de Karine Blanchet", "is_partner_candidate": false}, {"name": "Ferme de Germe en pousse", "description": "Dans les Laurentides;\n- Ferme Élivic \n-Ferme Kirk \n-Ferme GuayClair \n-Ferme la Roquette\n-Ferme de Germe en pousse 🌱", "region": "Laurentides", "source": "Commentaire de Karine Blanchet", "is_partner_candidate": false}, {"name": "La Ferme  de la Tannerie", "description": "Passe nous voir \nPorc Mangalitza en pâturage \nPoulet de grain et œuf frais \nLégumes en saison", "region": "", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Fumoir d'érable argenté", "description": "Xavier Lemay moi Fumoir d'érable argenté ‼️ je vais t’en référer quelques-unes dans le centre du Québec", "region": "Québec/Chaudière", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Je te propose de visiter La Ferme de la Tannerie cet été !", "description": "Je te propose de visiter La Ferme  de la Tannerie cet été !\n\nDès l’arrivée, on est accueillis par une joyeuse troupe de poules 🐓, puis on découvre le ", "region": "Lanaudière", "source": "Commentaire de Nancy Lafleur", "is_partner_candidate": false}, {"name": "Ferme serso", "description": "Tous dans mon coin proche de saint-roch-de-richelieu \nFerme serso\nLes produits d'Antoine \nFerme du villange", "region": "", "source": "Commentaire de Elodie Jean", "is_partner_candidate": false}, {"name": "Ferme du villange", "description": "Tous dans mon coin proche de saint-roch-de-richelieu \nFerme serso\nLes produits d'Antoine \nFerme du villange", "region": "", "source": "Commentaire de Elodie Jean", "is_partner_candidate": false}, {"name": "Compton: Fromagerie La Station de Compton", "description": "Compton: Fromagerie La Station de Compton \nDu délicieux fromage au lait cru!", "region": "Estrie", "source": "Commentaire de Jelly L-c", "is_partner_candidate": false}, {"name": "Il y a la Ferme du fond d’orme (viande agneau", "description": "Depuis plusieurs années j’ai un panier de légumes d’octobre à mars de SaveursMitis ,\nIl y a la Ferme du fond d’orme (viande agneau ,bœuf, porc ) Ferme", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Sylvie Parent", "is_partner_candidate": false}, {"name": "Ferme Chanviclou", "description": "Depuis plusieurs années j’ai un panier de légumes d’octobre à mars de SaveursMitis ,\nIl y a la Ferme du fond d’orme (viande agneau ,bœuf, porc ) Ferme", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Sylvie Parent", "is_partner_candidate": false}, {"name": "Jardins d", "description": "Mon Panier Bio-Aux Jardins d'Irisa  Des gens dévoués à rencontrer absolument!", "region": "", "source": "Commentaire de Cynthia Lapointe", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa dans LANAUDIÈRE", "description": "Mon Panier Bio-Aux Jardins d'Irisa dans LANAUDIÈRE 🍅🥕🍉", "region": "Lanaudière", "source": "Commentaire de Juli-Yan Beaudry", "is_partner_candidate": false}, {"name": "Ferme d'Orée Cookshire . Boeuf", "description": "Ferme d'Orée Cookshire  . Boeuf , cochon laineux et oeufs . Miam .", "region": "Estrie", "source": "Commentaire de Lise Boisvert", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa", "description": "Mon Panier Bio-Aux Jardins d'Irisa\nCe sont les meilleurs dans Lanaudière, tu devrais communiquer avec eux ✌🏻", "region": "Lanaudière", "source": "Commentaire de Sylvain Rondeau", "is_partner_candidate": false}, {"name": "Becancour : Ferme La", "description": "Becancour : Ferme La", "region": "Bécancour/Centre-QC", "source": "Commentaire de Rachel Bilodeau", "is_partner_candidate": false}, {"name": "Fromagerie Julio! Ferme laitière! Excellents produits lait", "description": "Fromagerie Julio! Ferme laitière! Excellents produits lait,fromage en grain et yogourt en plus de la crème glacée à Granby!", "region": "Estrie", "source": "Commentaire de Chantal Hardy", "is_partner_candidate": false}, {"name": "Ferme Ravito à Ste", "description": "Ferme Ravito à Ste-flavie 🙂", "region": "Bas-St-Laurent/Gaspésie", "source": "Commentaire de Camille Côté", "is_partner_candidate": false}, {"name": "Les Jardins de NaLau à Mirabel pour les légumes", "description": "Les Jardins de NaLau à Mirabel pour les légumes \n\nFerme kirk à st-sophie bœuf nourris à herbe \n\nFerme Authentique à Yamaska porc de pâturage, œufs, po", "region": "Montérégie", "source": "Commentaire de Cindy Morrison", "is_partner_candidate": false}, {"name": "Ferme kirk à st", "description": "Les Jardins de NaLau à Mirabel pour les légumes \n\nFerme kirk à st-sophie bœuf nourris à herbe \n\nFerme Authentique à Yamaska porc de pâturage, œufs, po", "region": "Montérégie", "source": "Commentaire de Cindy Morrison", "is_partner_candidate": false}, {"name": "Ferme Authentique à Yamaska porc de pâturage", "description": "Les Jardins de NaLau à Mirabel pour les légumes \n\nFerme kirk à st-sophie bœuf nourris à herbe \n\nFerme Authentique à Yamaska porc de pâturage, œufs, po", "region": "Montérégie", "source": "Commentaire de Cindy Morrison", "is_partner_candidate": false}, {"name": "Ferme Brylee", "description": "Ferme Brylee, 524, Qc-317, Thurso/ bœuf, agneaux nourri à l’herbe, ils font la rotation dans les champs", "region": "Outaouais", "source": "Commentaire de Stephanie Malo", "is_partner_candidate": false}, {"name": "Ferme Grenier", "description": "Nous produisons des viandes (porc, boeuf, agneau, canard, lapin, poulet de races rustiques), des oeufs, du miel, des cosmétiques naturelles à base de ", "region": "", "source": "Commentaire de Le Fief Gaulois", "is_partner_candidate": false}, {"name": "Ferme Croteau", "description": "Je suis en Mauricie et j'adore prendre mes légumes et fruits chez Campanipol ou coop charette, pour la viande de boeuf à la Ferme Croteau pour le from", "region": "Mauricie", "source": "Commentaire de Lulu Cas", "is_partner_candidate": false}, {"name": "Ferme la Vieille École en Maurice", "description": "Ferme la Vieille École en Maurice", "region": "", "source": "Commentaire de Manon Mlte", "is_partner_candidate": false}, {"name": "Ferme Bry Lee", "description": "Dans la Petite-Nation en Outaouais!\n\nDébitage des cantons! Eric Thibaudeau\nSabrina Bouwman Bergerie Bowman!\nFerme Bry Lee, Lochaber Est", "region": "Outaouais", "source": "Commentaire de Vicki Paquin", "is_partner_candidate": false}, {"name": "Les Jardins de la Terre à Saint", "description": "Les Jardins de la Terre à Saint-Paul-d'Abbotsford (près de Saint-Césaire, Granby, Saint-Pie, Saint-Hyacinthe) - Ferme de légumes biologiques et organi", "region": "Montérégie", "source": "Commentaire de Rebecca Végiard", "is_partner_candidate": false}, {"name": "Domaine Horizon À Granby ☺️", "description": "Domaine Horizon À Granby ☺️", "region": "Estrie", "source": "Commentaire de Mélissa Messier", "is_partner_candidate": false}, {"name": "La Ferme Forget", "description": "Pour les gens de Laval / Terrebonne et les environs \n\nLa Ferme Forget", "region": "", "source": "Commentaire de Rémy Marin", "is_partner_candidate": false}, {"name": "Fromagerie du Vieux Saint", "description": "Fromagerie du Vieux Saint-François (Laval) : Située au 4740, boul. des Mille-Îles (Saint-François, Laval), cette ferme familiale élève des chèvres Saa", "region": "", "source": "Commentaire de Nancy Raymond", "is_partner_candidate": false}, {"name": "Ferme A.Lauzon éleveur et producteur de bœuf Angus", "description": "Ferme A.Lauzon éleveur et producteur de bœuf Angus, porc, poulet œufs etc. \n\nSans hormones Sans antibiotiques. Nourri à l’herbe.\n\nTrès St Rédempteur", "region": "", "source": "Commentaire de Pascale Leblanc", "is_partner_candidate": false}, {"name": "Ferme La à Becancour ma viande mes œufs", "description": "Ferme La à Becancour ma viande mes œufs 👌🏽", "region": "Bécancour/Centre-QC", "source": "Commentaire de Laury Anne Clément", "is_partner_candidate": false}, {"name": "Ferme l’harmonium", "description": "Ferme l’harmonium, porc sur pâturage, le meilleur, poulet au grain, oeufs, à Bury près de Cookshire", "region": "Estrie", "source": "Commentaire de Karine Theberge", "is_partner_candidate": false}, {"name": "Ferme St", "description": "Ferme St-Vincent à St-Cutbert dans Lanaudiere ! Élevage de boeuf Biologique ! Fromagerie L'ancêtre fromage de lait non pasteurisé !! Ferme Mateo Biolo", "region": "Lanaudière", "source": "Commentaire de Charles St-laurent", "is_partner_candidate": false}, {"name": "Ferme La", "description": "Ferme La Rabouillère un endroit a ne pas manquer!! Situé a st-valérien de Milton en monteregie.", "region": "", "source": "Commentaire de Jjassmiin Marc-aurèle", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa ✨✨✨", "description": "Les meilleurs! Mon Panier Bio-Aux Jardins d'Irisa ✨✨✨", "region": "", "source": "Commentaire de Audrey Duval", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa st", "description": "Boucherie Morin et fils boeuf bio lanaudière st-felix de Valois\nLes Champimignons Laval et Mon Panier Bio-Aux Jardins d'Irisa st-felix aussi", "region": "Lanaudière", "source": "Commentaire de Carolyn Rivest", "is_partner_candidate": false}, {"name": "Ferme le Crépuscule ferme familiale bio", "description": "@la_balzane 😊 , Ferme le Crépuscule ferme familiale bio, @Mon bon beau boeuf 💗", "region": "", "source": "Commentaire de Marianne Gingras", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa la meilleure dans Lanaudière !!", "description": "Mon Panier Bio-Aux Jardins d'Irisa la meilleure dans Lanaudière !!", "region": "Lanaudière", "source": "Commentaire de Céleste Fournier", "is_partner_candidate": false}, {"name": "Ferme Syldia à Neuville", "description": "Ferme Syldia à Neuville", "region": "", "source": "Commentaire de Céline Côté", "is_partner_candidate": false}, {"name": "Ferme Gadbois", "description": "Dans la région de St-hyacinthe Ferme Gadbois  les fraise sont délicieuse et il en ont à l'année et plusieurs beau produit l'été", "region": "Montérégie", "source": "Commentaire de Emilie St-georges", "is_partner_candidate": false}, {"name": "Dans Charlevoix...la Ferme l'Ferme l'Oiseau Bleu de Baie", "description": "Dans Charlevoix...la Ferme l'Ferme l'Oiseau Bleu de Baie-St-Paul.", "region": "Saguenay/Charlevoix", "source": "Commentaire de Michelle Bilodeau", "is_partner_candidate": false}, {"name": "Ferme p tits plaisirs a Weedon", "description": "Ferme p tits plaisirs a Weedon, lait de caséine A2 \nPour fabriquer de nombreux fromages, moins inflammatoires, peuvent livrer par internet", "region": "Estrie", "source": "Commentaire de Jocelyne Lavergne", "is_partner_candidate": false}, {"name": "Un bel endroit à visiter. Ferme La Rabouillère", "description": "Un bel endroit à visiter. Ferme La Rabouillère 🙂", "region": "", "source": "Commentaire de Li Ne", "is_partner_candidate": false}, {"name": "Ferme Guyon a Chambly", "description": "Ferme Guyon a Chambly", "region": "Montérégie", "source": "Commentaire de Julie Martin", "is_partner_candidate": false}, {"name": "Les Jardins de la Pointe (Trois", "description": "Les Jardins de la Pointe (Trois-Rivières )legumes succulent \nFerme chasseur-cueilleur(bière ,trois-rivières )", "region": "Mauricie", "source": "Commentaire de Sara Rose", "is_partner_candidate": false}, {"name": "Ferme chasseur", "description": "Les Jardins de la Pointe (Trois-Rivières )legumes succulent \nFerme chasseur-cueilleur(bière ,trois-rivières )", "region": "Mauricie", "source": "Commentaire de Sara Rose", "is_partner_candidate": false}, {"name": "Ferme le Crépuscule", "description": "Ferme le Crépuscule, Camerise et Compagnie, Aux jardins de la Bergère, Mon Panier Bio-Aux Jardins d'Irisa, Verger Joannette Bio, Verger Sainte-Marguer", "region": "", "source": "Commentaire de Caroline Alonso", "is_partner_candidate": false}, {"name": "Verger Joannette Bio", "description": "Ferme le Crépuscule, Camerise et Compagnie, Aux jardins de la Bergère, Mon Panier Bio-Aux Jardins d'Irisa, Verger Joannette Bio, Verger Sainte-Marguer", "region": "", "source": "Commentaire de Caroline Alonso", "is_partner_candidate": false}, {"name": "Verger Sainte", "description": "Ferme le Crépuscule, Camerise et Compagnie, Aux jardins de la Bergère, Mon Panier Bio-Aux Jardins d'Irisa, Verger Joannette Bio, Verger Sainte-Marguer", "region": "", "source": "Commentaire de Caroline Alonso", "is_partner_candidate": false}, {"name": "Verger La tête dans les pommes / Biologique", "description": "Ferme le Crépuscule, Camerise et Compagnie, Aux jardins de la Bergère, Mon Panier Bio-Aux Jardins d'Irisa, Verger Joannette Bio, Verger Sainte-Marguer", "region": "", "source": "Commentaire de Caroline Alonso", "is_partner_candidate": false}, {"name": "Verger À La Croisée Des Pom", "description": "Ferme le Crépuscule, Camerise et Compagnie, Aux jardins de la Bergère, Mon Panier Bio-Aux Jardins d'Irisa, Verger Joannette Bio, Verger Sainte-Marguer", "region": "", "source": "Commentaire de Caroline Alonso", "is_partner_candidate": false}, {"name": "La Ferme Caminoix est une microferme diversifiée", "description": "La Ferme Caminoix est une microferme diversifiée, située à Val-Des-Monts, QC, qui produit du sirop d'érable, plusieurs fruits et légumes ainsi que des", "region": "", "source": "Commentaire de Gaëtane Laviolette", "is_partner_candidate": false}, {"name": "Ferme le Crépuscule (Yamachiche)", "description": "Ferme le Crépuscule (Yamachiche), Ferme Croteau (St-Barnabé), Ferme Marie-Mouton (St-Barnabé), Ferme Galyco (Lac-aux-Sables), Ferme Autarcie ( Notre-D", "region": "Mauricie", "source": "Commentaire de Ycnan Nitrof", "is_partner_candidate": false}, {"name": "Ferme Croteau (St", "description": "Ferme le Crépuscule (Yamachiche), Ferme Croteau (St-Barnabé), Ferme Marie-Mouton (St-Barnabé), Ferme Galyco (Lac-aux-Sables), Ferme Autarcie ( Notre-D", "region": "Mauricie", "source": "Commentaire de Ycnan Nitrof", "is_partner_candidate": false}, {"name": "Ferme Marie", "description": "Ferme le Crépuscule (Yamachiche), Ferme Croteau (St-Barnabé), Ferme Marie-Mouton (St-Barnabé), Ferme Galyco (Lac-aux-Sables), Ferme Autarcie ( Notre-D", "region": "Mauricie", "source": "Commentaire de Ycnan Nitrof", "is_partner_candidate": false}, {"name": "Ferme Galyco (Lac", "description": "Ferme le Crépuscule (Yamachiche), Ferme Croteau (St-Barnabé), Ferme Marie-Mouton (St-Barnabé), Ferme Galyco (Lac-aux-Sables), Ferme Autarcie ( Notre-D", "region": "Mauricie", "source": "Commentaire de Ycnan Nitrof", "is_partner_candidate": false}, {"name": "Ferme Autarcie ( Notre", "description": "Ferme le Crépuscule (Yamachiche), Ferme Croteau (St-Barnabé), Ferme Marie-Mouton (St-Barnabé), Ferme Galyco (Lac-aux-Sables), Ferme Autarcie ( Notre-D", "region": "Mauricie", "source": "Commentaire de Ycnan Nitrof", "is_partner_candidate": false}, {"name": "Ferme Locale", "description": "Bienvenue chez nous...en montérégie , Ville de Notre-Dame-de-l'Île-Perrot (page officielle) à La Petite Ferme Locale. Notre ici: https://www.lapetitef", "region": "Montérégie", "source": "Commentaire de Pierre-Paul Lariviere", "is_partner_candidate": false}, {"name": "Ferme Brylee", "description": "Dans l'Outaouais:\nFerme Brylee (Thurso) : Ferme familiale (5e génération) offrant du bœuf, agneau et veau nourris à l'herbe, disponibles à leur boutiq", "region": "Outaouais", "source": "Commentaire de Hélène Bolduc", "is_partner_candidate": false}, {"name": "Ferme Le Bel (La Pêche) : Spécialisée en bœuf Angus naturel", "description": "Dans l'Outaouais:\nFerme Brylee (Thurso) : Ferme familiale (5e génération) offrant du bœuf, agneau et veau nourris à l'herbe, disponibles à leur boutiq", "region": "Outaouais", "source": "Commentaire de Hélène Bolduc", "is_partner_candidate": false}, {"name": "Avellin) : Élevage de bœuf nourri 100% à l'herbe et au foin", "description": "Dans l'Outaouais:\nFerme Brylee (Thurso) : Ferme familiale (5e génération) offrant du bœuf, agneau et veau nourris à l'herbe, disponibles à leur boutiq", "region": "Outaouais", "source": "Commentaire de Hélène Bolduc", "is_partner_candidate": false}, {"name": "Ferme Pure", "description": "Dans l'Outaouais:\nFerme Brylee (Thurso) : Ferme familiale (5e génération) offrant du bœuf, agneau et veau nourris à l'herbe, disponibles à leur boutiq", "region": "Outaouais", "source": "Commentaire de Hélène Bolduc", "is_partner_candidate": false}, {"name": "Ferme la coulée douce à st", "description": "Ferme la coulée douce à st-antoine-de/tilly. Un maraîcher qui s’y connaît pas à peu près. Tout bio avec des filets. Désherbe à la main à la grandeur. ", "region": "", "source": "Commentaire de Danny Lemay", "is_partner_candidate": false}, {"name": "Ferme d'ORée", "description": "Ferme d'ORée", "region": "", "source": "Commentaire de Myriam Rose", "is_partner_candidate": false}, {"name": "L'OthentiC Ranch ❤️❤️", "description": "L'OthentiC Ranch ❤️❤️", "region": "", "source": "Commentaire de Marilyne Tremblay", "is_partner_candidate": false}, {"name": "Ferme Rustique", "description": "Ferme Rustique 🥰", "region": "", "source": "Commentaire de Frederique Lamontagne", "is_partner_candidate": false}, {"name": "Ferme de pointe fortune", "description": "https://www.facebook.com/share/14Ww9HFQRRE/?mibextid=wwXIfr\n\nFerme de pointe fortune , une amie de longue date qui a acheté il y a quelques année et c", "region": "Québec/Chaudière", "source": "Commentaire de Zimba Ledoux", "is_partner_candidate": false}, {"name": "Ferme Kobec", "description": "Ferme Kobec - Wagyu", "region": "", "source": "Commentaire de Mélissa Daigle", "is_partner_candidate": false}, {"name": "La Ferme Mille Fleurs", "description": "La Ferme Mille Fleurs", "region": "", "source": "Commentaire de Caroline Fontaine", "is_partner_candidate": false}, {"name": "Ferme Gijamika", "description": "Ferme Gijamika", "region": "", "source": "Commentaire de Vanessa Michaud", "is_partner_candidate": false}, {"name": "Aux Jardins d'Irisa ❤️", "description": "Mon Panier Bio-Aux Jardins d'Irisa ❤️", "region": "", "source": "Commentaire de So Adam", "is_partner_candidate": false}, {"name": "Ferme d'ORée pour la viande et aussi le service hors pair!", "description": "Ferme d'ORée pour la viande et aussi le service hors pair!", "region": "", "source": "Commentaire de Emilie Ettocissam", "is_partner_candidate": false}, {"name": "Ferme Jersbi", "description": "Ferme Jersbi les meilleures viande de qualité exceptionnelle!!!", "region": "", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Jersbi", "description": "Ferme Jersbi les meilleures viande de qualité exceptionnelle!!!", "region": "", "source": "Commentaire de Ferme Jersbi", "is_partner_candidate": false}, {"name": "Ferme Jersbi", "description": "Bonjour nous sommes une ferme situé à St-Sylvestre dans la belle région de chaudière appalache. On vends du bœuf certifié biologique nourris à l’herbe", "region": "", "source": "Commentaire de Claudia Parent", "is_partner_candidate": false}, {"name": "Ranch Lalythan", "description": "Salut tu est la bienvenue chez nous au Ranch Lalythan S.E.N.C.!!!\nMagnifique vue sur le fleuve et chevaux sur place! Nous produisons du bœuf nourrit à", "region": "", "source": "Commentaire de Ranch Lalythan S.E.N.C.", "is_partner_candidate": false}, {"name": "Ferme Rustique dans Lotbinière près de Québec", "description": "Ferme Rustique  dans Lotbinière près de Québec", "region": "Québec/Chaudière", "source": "Commentaire de Karine Poulin", "is_partner_candidate": false}, {"name": "Ferme Fleurimont", "description": "Ferme Fleurimont à Sherbrooke (anciennement ferme Bibeau). C'est une coop, tout est bio, ils ont un kiosque libre service très accessible. Animaux nou", "region": "Estrie", "source": "Commentaire de Émilie Houle", "is_partner_candidate": false}, {"name": "La Ferme des Trois Ruisseaux", "description": "La Ferme des Trois Ruisseaux\n\nTrès bon producteur locaux, cidre de pomme, miel fait sur place, œuf et plein d’autre bon produit maison !", "region": "", "source": "Commentaire de Miguel Boucher", "is_partner_candidate": false}, {"name": "Quelle bonne idée!!! Ferme Aquilon Bio à Ste", "description": "Quelle bonne idée!!! Ferme Aquilon Bio à Ste-Sabine de Bellechasse, dans la MRC des Etchemins en Chaudiere-Appalaches produit du boeuf à l'herbe. Mais", "region": "Québec/Chaudière", "source": "Commentaire de Luce Bisson", "is_partner_candidate": false}, {"name": "Domaine La Balzane à St", "description": "Dans la région de Sainte-Anne des plaines, il y a La Ménagerie d’Annie, Saint Lin Museaux D’écosse, La Terre Des Bisons à Rawdon, Domaine La Balzane à", "region": "Lanaudière", "source": "Commentaire de Mélanie Major", "is_partner_candidate": false}, {"name": "les produits de chez nous (Ferme gérard bousquet", "description": "Les fermes lufa offre des produits de producteur locaux québécois partout au Qc. ❤️\n\nSinon près de St-denis-sur-richelieux il y a la récolte, les prod", "region": "", "source": "Commentaire de Marie-pier Jean", "is_partner_candidate": false}, {"name": "Ferme Lufa on peut commande en ligne", "description": "Ferme Lufa on peut commande en ligne, tout est bio et local.", "region": "", "source": "Commentaire de Isabelle Paradis", "is_partner_candidate": false}, {"name": "Ferme D'Orée", "description": "Ferme d'ORée Ferme D'Orée biologique et Grassfed (commande en ligne).  Ferme Formido 876, 5e rang nord\nSt-Ignace-de-Stanbridge (Québec)\nJ0J 1Y0.  Gran", "region": "Québec/Chaudière", "source": "Commentaire de Michele Benard", "is_partner_candidate": false}, {"name": "Ferme Valen", "description": "Bonjour Xavier,\n\nJ'achète Boeuf, Poulet et Oeufs Biologique de la Ferme Valen située à Huntington, Québec 🤗", "region": "Montérégie", "source": "Commentaire de Sylvie Pion", "is_partner_candidate": false}, {"name": "Ferme Croteau produit Bio (Saint", "description": "Ferme Croteau produit Bio (Saint-Prospère) boeuf élevé en liberté.", "region": "", "source": "Commentaire de Mélanie Chantal", "is_partner_candidate": false}, {"name": "Ferme Brovin à St", "description": "Ferme Brovin à St-Hyacinthe animaux nourris à l’herbe toute l’année. Produit seulement bio. Ils ont vraiment une très belle qualité de viande.\n8055 5e", "region": "Montérégie", "source": "Commentaire de Micheline Leclerc", "is_partner_candidate": false}, {"name": "Ferme d'ORée Ferme Saint", "description": "Ferme d'ORée Ferme Saint-Vincent Ferme Brylee / Brylee Farm La ferme du Petit Chicot Ferme La La Balzane__Sol Vivant à L'Œuvre", "region": "", "source": "Commentaire de Marie-Noël Joé", "is_partner_candidate": false}, {"name": "Ferme Brylee", "description": "Ferme d'ORée Ferme Saint-Vincent Ferme Brylee / Brylee Farm La ferme du Petit Chicot Ferme La La Balzane__Sol Vivant à L'Œuvre", "region": "", "source": "Commentaire de Marie-Noël Joé", "is_partner_candidate": false}, {"name": "Fromagerie les vagabondes", "description": "Fromagerie les vagabondes, fromages au lait cru de chèvre élevées en liberté et sans vaccins/ antibiotiques \n\n466 Chem. du Golf, Montmagny, QC G5V 3R9", "region": "", "source": "Commentaire de Marjolaine Senecal", "is_partner_candidate": false}, {"name": "Ferme Lavoie", "description": "Il y Ferme Lavoie Inc au Saguenay pour le boeuf nourri à l'herbe. Il y a quelques fermes de cette qualité au Saguenay, pour le porc, les oeufs. Il y e", "region": "Saguenay/Charlevoix", "source": "Commentaire de Daniel Beegraw", "is_partner_candidate": false}, {"name": "Ferme S & C", "description": "Ferme S & C, 14005, chemin du Saint-Laurent, Bécancour, Québec, G9H 3G6 \nBoeuf, poulet, canard, lapins, oeufs enrichis Oméga-3, et visite de ferme en prime.\n#producteursdebonheur ❤️", "region": "Québec/Chaudière", "source": "Facebook - compte ferme", "is_partner_candidate": true}, {"name": "Ferme Forget", "description": "La Ferme Forget, située au 7901, avenue Marcel-Villeneuve à Saint-François (Laval), est une exploitation familiale depuis neuf générations proposant d", "region": "", "source": "Commentaire de Nancy Raymond", "is_partner_candidate": false}, {"name": "Ferme Le Crépuscule viande poisson et érablière bio .", "description": "Ferme Le Crépuscule viande  poisson et érablière bio .", "region": "", "source": "Commentaire de Annie Grondin", "is_partner_candidate": false}, {"name": "Ferme formido", "description": "Ferme formido,/www.fermeformido.com. Viande, légumes,  oeufs certifié bio et livre à Longueuil 1 fois par mois", "region": "", "source": "Commentaire de Michel Brunet", "is_partner_candidate": false}, {"name": "Ferme Rochville", "description": "Ferme Rochville\nOffre des légumes sans pesticides \n855, 6e rang, St-Jude\n\nTu pourras aussi visiter CHOUETTE À  VOIR à St-Jude où tu y verras un specta", "region": "", "source": "Commentaire de Micheline Leclerc", "is_partner_candidate": false}, {"name": "Ferme Jean", "description": "Ferme Jean-Pierre Plante\nOffre des légumes et petits fruits bios. \n7441 chemin Royal,\n Île d’Orléans", "region": "", "source": "Commentaire de Micheline Leclerc", "is_partner_candidate": false}, {"name": "Fromagerie du Terroir de Bellechasse (Saint", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Ferme des Chutes (Saint", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Élevage des Appalaches (Saint", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Ferme Genest (Lévis/Saint", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Ferme Jarold (Saint", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Ferme de la Clarté (Sainte", "description": "🧀 Fromages et Produits Laitiers\nFromagerie du Terroir de Bellechasse (Saint-Vallier) : Incontournable pour leurs fromages frais et affinés.\n\nFromageri", "region": "Québec/Chaudière", "source": "Commentaire de Papoute Boule", "is_partner_candidate": false}, {"name": "Ferme Brovin Saint", "description": "Ferme Brovin Saint-Rosalie Montérégie", "region": "Montérégie", "source": "Commentaire de Caroline Dufault", "is_partner_candidate": false}, {"name": "Ferme Artisane Hortus & Fungi", "description": "Ferme Artisane Hortus & Fungi 🥰", "region": "", "source": "Commentaire de Frederique Lamontagne", "is_partner_candidate": false}, {"name": "Ferme charbonneau", "description": "Ferme charbonneau", "region": "", "source": "Commentaire de Catherine L'heureux", "is_partner_candidate": false}, {"name": "Les Jardins de la Pointe", "description": "Les Jardins de la Pointe", "region": "", "source": "Commentaire de Sara Rose", "is_partner_candidate": false}, {"name": "Ferme Desrochers", "description": "Ferme Desrochers, Cōte-nord https://www.facebook.com/profile.php?id=100082226782162", "region": "", "source": "Commentaire de Hélène Grenier", "is_partner_candidate": false}, {"name": "Ferme Brylee / Brylee Farm", "description": "Ferme Brylee / Brylee Farm", "region": "", "source": "Commentaire de Claudiane Turcot Sutton", "is_partner_candidate": false}, {"name": "Chicoutimi : Ferme la Rouquine", "description": "Chicoutimi : Ferme la Rouquine", "region": "Saguenay/Charlevoix", "source": "Commentaire de Tatie Sara Aylestock", "is_partner_candidate": false}, {"name": "Ferme le maraîcher du 1er rang Lac", "description": "Ferme le maraîcher du 1er rang Lac-Saint-Jean  Roberval", "region": "Saguenay/Charlevoix", "source": "Commentaire de Catherine Laforte", "is_partner_candidate": false}, {"name": "Ferme la Rose des Vents", "description": "Ferme la Rose des Vents 🙏🏻", "region": "", "source": "Commentaire de Allyson Lavoie-Grant", "is_partner_candidate": false}];
+
+const regionColors = {
+  "Monteregio": "bg-blue-50 text-blue-700",
+  "Quebec/Chaudiere": "bg-purple-50 text-purple-700",
+  "Lanaudiere": "bg-green-50 text-green-700",
+  "Estrie": "bg-emerald-50 text-emerald-700",
+  "Laurentides": "bg-sky-50 text-sky-700",
+  "Mauricie": "bg-orange-50 text-orange-700",
+  "Outaouais": "bg-rose-50 text-rose-700",
+  "Saguenay/Charlevoix": "bg-indigo-50 text-indigo-700",
+  "Bas-St-Laurent/Gaspesie": "bg-teal-50 text-teal-700",
+  "Becancour/Centre-QC": "bg-amber-50 text-amber-700",
+  "Autre region": "bg-slate-50 text-slate-500"
+};
+
+function renderFarms() {
+  var search = document.getElementById("farmSearch").value.toLowerCase();
+  var region = document.getElementById("regionFilter").value;
+  var partnerOnly = document.getElementById("partnerFilter").checked;
+
+  var filtered = farmsData.filter(function(f) {
+    var matchSearch = !search || f.name.toLowerCase().includes(search) || (f.description||"").toLowerCase().includes(search);
+    var matchRegion = !region || f.region === region;
+    var matchPartner = !partnerOnly || f.is_partner_candidate === true;
+    return matchSearch && matchRegion && matchPartner;
+  });
+
+  document.getElementById("visibleCount").textContent = filtered.length;
+
+  var html = filtered.map(function(f) {
+    var regionKey = (f.region || "Autre region").replace(/[^a-zA-Z\/]/g, "");
+    var colorClass = regionColors[f.region] || "bg-slate-50 text-slate-500";
+    var desc = (f.description || "").replace(/\n/g, " ").substring(0, 110);
+    var partnerBadge = f.is_partner_candidate === true
+      ? "<span class=\"inline-block px-2 py-0.5 bg-primary text-white text-xs rounded-full font-medium mb-2\">Partenaire potentiel</span>"
+      : "";
+
+    return "<div class=\"bg-white rounded-xl p-5 border-2 border-slate-100 hover:border-primary/40 hover:shadow-md transition-all\">"
+      + "<div class=\"mb-2\">" + partnerBadge + "</div>"
+      + "<h4 class=\"font-bold text-dark text-sm leading-snug mb-2\">" + f.name + "</h4>"
+      + "<p class=\"text-xs text-slate-400 mb-3 line-clamp-2\">" + desc + "...</p>"
+      + "<div class=\"flex items-center justify-between\">"
+      + "<span class=\"inline-block px-2 py-1 rounded-lg text-xs font-medium " + colorClass + "\">" + (f.region || "Region inconnue") + "</span>"
+      + "<span class=\"text-xs text-slate-300\">" + (f.source || "").substring(0, 25) + "</span>"
+      + "</div></div>";
+  }).join("");
+
+  document.getElementById("farmsGrid").innerHTML = html;
+}
+
+document.getElementById("farmSearch").addEventListener("input", renderFarms);
+document.getElementById("regionFilter").addEventListener("change", renderFarms);
+document.getElementById("partnerFilter").addEventListener("change", renderFarms);
+renderFarms();
+</script>
+
+<!-- FOOTER -->
+<footer class="hero-gradient py-12 px-6">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+      <span class="material-symbols-outlined text-white text-3xl">eco</span>
+    </div>
+    <h2 class="text-2xl font-bold text-white mb-2">Pret a builder?</h2>
+    <p class="text-white/60 mb-6">Apres l'appel, on ajuste et on commence a coder.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white/80 text-sm">Quebec d'abord</span>
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white/80 text-sm">Puis la France</span>
+      <span class="px-4 py-2 bg-white/10 rounded-full text-white/80 text-sm">Puis les US</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Active nav script -->
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (scrollY >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+
+<!-- MODAL PLEIN ÉCRAN -->
+<div id="mockupModal">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal-phone">
+    <iframe id="modalIframe" src="" loading="lazy"></iframe>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+    <div class="modal-nav">
+      <button onclick="prevMockup()">&#8592;</button>
+      <div class="modal-label" id="modalLabel"></div>
+      <button onclick="nextMockup()">&#8594;</button>
+    </div>
+    <div class="modal-dots" id="modalDots"></div>
+  </div>
+</div>
+
+<script>
+const mockups = [
+  { src: 'accueil_d_couverte_de_fermes/code.html',   label: 'Carte — Accueil' },
+  { src: 'scanner_de_produits_r_vision/code.html',   label: 'Scanner' },
+  { src: 'flux_de_recettes_bio/code.html',           label: 'Recettes' },
+  { src: 'aubaines_app_orga/code.html',              label: 'Deals / Aubaines' },
+  { src: 'mon_profil_app_orga/code.html',            label: 'Mon Profil' },
+];
+
+let currentIndex = 0;
+
+function openModal(index) {
+  currentIndex = index;
+  updateModal();
+  document.getElementById('mockupModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('mockupModal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('modalIframe').src = '';
+}
+
+function updateModal() {
+  const m = mockups[currentIndex];
+  document.getElementById('modalIframe').src = m.src;
+  document.getElementById('modalLabel').textContent = m.label;
+
+  const dots = document.getElementById('modalDots');
+  dots.innerHTML = mockups.map((_, i) =>
+    '<span class="' + (i === currentIndex ? 'active' : '') + '" onclick="jumpTo(' + i + ')"></span>'
+  ).join('');
+}
+
+function jumpTo(i) {
+  currentIndex = i;
+  updateModal();
+}
+
+function prevMockup() {
+  currentIndex = (currentIndex - 1 + mockups.length) % mockups.length;
+  updateModal();
+}
+
+function nextMockup() {
+  currentIndex = (currentIndex + 1) % mockups.length;
+  updateModal();
+}
+
+// Click outside to close
+document.getElementById('mockupModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('mockupModal').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') nextMockup();
+  if (e.key === 'ArrowLeft') prevMockup();
+});
+
+// Click handlers are inline on .phone-overlay divs
+</script>
+
+</body>
+</html>

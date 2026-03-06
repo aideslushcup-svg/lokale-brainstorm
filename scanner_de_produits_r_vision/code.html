@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="fr-CA"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2d6a4f",
+                        "harvest-orange": "#e76f51",
+                        "dark-blue": "#264653",
+                        "warm-cream": "#fefae0",
+                        "background-light": "#fefae0",
+                        "background-dark": "#151d19",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .camera-viewfinder {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1615485290382-441e4d0c9cb5?auto=format&fit=crop&q=80&w=800');
+            background-size: cover;
+            background-position: center;
+        }
+        .nutri-score-gradient {
+            background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-warm-cream font-display text-dark-blue min-h-screen flex flex-col">
+<header class="flex items-center justify-between px-6 py-4 bg-warm-cream">
+<div class="w-10"></div>
+<h1 class="text-xl font-bold text-dark-blue">Scanner</h1>
+<button class="flex items-center justify-center size-10 rounded-full bg-white shadow-sm text-dark-blue">
+<span class="material-symbols-outlined">history</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto pb-32">
+<div class="px-6 py-2">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-slate-400">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-full border-none shadow-sm focus:ring-2 focus:ring-harvest-orange/50 text-sm" placeholder="Chercher un produit par nom..." type="text"/>
+</div>
+</div>
+<div class="px-6 py-4">
+<div class="camera-viewfinder relative w-full aspect-[4/3] rounded-xl overflow-hidden border-4 border-slate-800 shadow-inner" data-alt="Vue de la caméra scannant un code-barres de produit">
+<div class="absolute top-6 left-6 w-8 h-8 border-t-4 border-l-4 border-white rounded-tl-lg"></div>
+<div class="absolute top-6 right-6 w-8 h-8 border-t-4 border-r-4 border-white rounded-tr-lg"></div>
+<div class="absolute bottom-6 left-6 w-8 h-8 border-b-4 border-l-4 border-white rounded-bl-lg"></div>
+<div class="absolute bottom-6 right-6 w-8 h-8 border-b-4 border-r-4 border-white rounded-br-lg"></div>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+<button class="bg-harvest-orange text-white size-16 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">barcode_scanner</span>
+</button>
+</div>
+</div>
+</div>
+<div class="px-6 py-4">
+<div class="bg-white rounded-xl p-4 shadow-md">
+<div class="flex gap-4">
+<div class="w-24 h-24 rounded-lg bg-slate-100 flex-shrink-0 bg-center bg-cover" data-alt="Boîte de barres granola Nature Valley" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJyLIvtDZfuBXJ-BmIfVVI2XcsJ9s5E_dOOr1GSVPIRDxUYlky28v06qQ5MW977994qWrcdf0Txmxa1E8Dp0EPPDUWPwqwBCzlHGhmMWg0QNAqpq4InMMhEbj_q5HiQ9eArNCtJuYGA-ConNKO8KKpz_zrK7xWiHvLTkagWSXSRE0xK1Xmx5B2o7KQwgeJ7rZXpnZbxlaN064oAEkzqcaXYfGYuJu4f8sTi09s23e-FEP05ZPwealBixljMNvYirMaKG9ihMpZ--8')"></div>
+<div class="flex-1">
+<h3 class="font-bold text-lg leading-tight">Barres Granola Nature Valley</h3>
+<div class="flex items-center gap-2 mt-2">
+<div class="nutri-score-gradient size-10 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">C</div>
+<span class="text-sm font-medium text-slate-600">Nutri-Score</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">warning</span> Huile de palme
+                    </span>
+<span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">warning</span> Sirop de glucose
+                    </span>
+<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span> Avoine complète
+                    </span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-red-600 text-sm font-medium">
+<span class="material-symbols-outlined text-lg">close</span>
+                    Non certifié biologique
+                </div>
+<button class="w-full mt-4 bg-primary text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">eco</span>
+                    Voir les alternatives bio
+                </button>
+</div>
+</div>
+<div class="px-6 py-4">
+<h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">Scans récents</h4>
+<div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-primary p-1 bg-white">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Bouteille de lait bio" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDk5TMh-6bb4HAT7xt47Ure-SuC1lE9SBnF3tRoSxawfOXOBD0oz3PJozGdXytOUUoaY5PPsZpxuJ_RoDMrsgEYyzHKSZ8ZaiObgkRXUaEbdDB0awJhsu-ViV9K2lkMNcdD6fbjSMQrpn3aQ13Tkewz-6C9NcH-F00MK5RSbh9VMESdseGed6ne-eww95elKa_927F4Oq3VXntd3wQPFKWT3BofaCkQrsbKOttbnCKKnGZXpQaiIFpA2k_qscFbhaCgQKmQ5LmXytw')"></div>
+</div>
+<span class="text-xs font-medium text-dark-blue truncate w-full text-center">Lait Bio</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-primary p-1 bg-white">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Avocats frais" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBoqIR9cAce7bdg5KT4r8U8YfC0Np4dZiOR8TNUoIbfZp1YSs_MVg6S0PdcaEJH8aX95frmts4xofDFFyPHnPlzv5vOIp8Fhg2mKQdl9IrbA8n480Zcx5yn_fvBCrvdGwIwXUu0-V3cm8bCcA_vP1jA6tpPcU-2PUWvUlrLTRa17h7P_1QsDMWo3f7pP6d7ZyVqOBnqo47kPieOcbCnQD-wgHCTs9hl2IyTIuA2Gl1OcYljYzxBUxI1i3ph1eJfUNXdUyGia9ukM7U')"></div>
+</div>
+<span class="text-xs font-medium text-dark-blue truncate w-full text-center">Avocats</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-primary p-1 bg-white">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Pain de blé entier" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrYl9QLPypplvgdxAXZOjPpuajODwu1w1sXQqB09LZj9n-X_ERYfQbE14whKAFvRCFAa6QlJ-2i_s9ScdWVDSQAQ8MEuFePA_SzC92X_BfQoEjiLUL8l27QxpogWNGGvE8mpM-1or2OiFCqnbd2EGbkNJc7awpPom1VQ2KNQmZnN3OdwSgPKncVsrzc-PDNmo6ZuUc9MEDfE_YFRQ8hwy6eMny-SlpLDRSj2agSy5xbhqi_NAFPxFWPPn2z6T9gxgJkcQv3Xxsacw')"></div>
+</div>
+<span class="text-xs font-medium text-dark-blue truncate w-full text-center">Pain Blé</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-primary p-1 bg-white">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Pot de yaourt" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDSp1P5M701qeWWBBIaCxwSlPS9foghUEj8gYLEMQbdPxUymcKxcmvdGEH6ArB8i0hUaN7lLgTtrcY-n6-PL7CpQrSzJgDVovCeST8aBh01y6mFm6xva8Tcgc13UGnYxD5B-y3yhqjvFZr0b0NbOdtQph2XrlF3m-6-N3KwtCgsWK5ROpsP-4yj4DUo71gVPCeg6xwxVxTuWSRfeoSurfDcDPksCo3bG9KokP2YDgE2AETvaJRR23dBMx5OuFZYKnYlmCELEFaWUhg')"></div>
+</div>
+<span class="text-xs font-medium text-dark-blue truncate w-full text-center">Yaourt</span>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-2 pb-6 pt-2 flex items-center justify-around z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="text-[10px] font-medium">Carte</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-medium">Recettes</span>
+</a>
+<div class="relative -top-6">
+<button class="bg-harvest-orange size-16 rounded-full flex items-center justify-center text-white shadow-lg ring-4 ring-warm-cream">
+<span class="material-symbols-outlined text-3xl">barcode_scanner</span>
+</button>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-harvest-orange">Scanner</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="text-[10px] font-medium">Deals</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profil</span>
+</a>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>
