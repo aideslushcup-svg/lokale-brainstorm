@@ -33,119 +33,20 @@ tailwind.config = {
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
   .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
   html { scroll-behavior: smooth; }
-
-  /* Sidebar */
-  .sidebar {
-    width: 260px;
-    min-height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 40;
-    transition: transform 0.3s;
-  }
-  .main-content {
-    margin-left: 260px;
-  }
+  .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
+  .main-content { margin-left: 260px; }
   @media (max-width: 768px) {
-    .sidebar {
-      transform: translateX(-100%);
-      width: 280px;
-    }
+    .sidebar { transform: translateX(-100%); width: 280px; }
     .sidebar.open { transform: translateX(0); }
     .main-content { margin-left: 0; }
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 35;
-    }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
     .sidebar-overlay.open { display: block; }
   }
-
-  /* Progress bar animation */
-  .progress-fill {
-    transition: width 1s ease-out;
-  }
-
-  /* Idea card hover */
-  .idea-card {
-    transition: all 0.2s;
-  }
-  .idea-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  }
-
-  /* Vote button */
-  .vote-btn {
-    transition: all 0.15s;
-  }
-  .vote-btn:hover {
-    transform: scale(1.15);
-  }
-  .vote-btn.voted {
-    color: #2D6A4F;
-    font-variation-settings: 'FILL' 1;
-  }
-
-  /* Task checkbox */
-  .task-check {
-    appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 2px solid #cbd5e1;
-    border-radius: 6px;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .task-check:checked {
-    background: #2D6A4F;
-    border-color: #2D6A4F;
-  }
-  .task-check:checked::after {
-    content: '✓';
-    color: white;
-    font-size: 14px;
-    font-weight: 700;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  /* Phase node */
-  .phase-node {
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-  .phase-node:hover {
-    transform: scale(1.08);
-  }
-  .phase-node.active {
-    box-shadow: 0 0 0 4px rgba(45,106,79,0.3);
-  }
-
-  /* Content calendar cell */
-  .cal-cell {
-    min-height: 80px;
-    transition: background 0.15s;
-  }
-  .cal-cell:hover {
-    background: rgba(45,106,79,0.03);
-  }
-
-  /* Animated counter */
-  @keyframes countUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .stat-number {
-    animation: countUp 0.6s ease-out;
-  }
+  .progress-fill { transition: width 1s ease-out; }
+  @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .stat-number { animation: countUp 0.6s ease-out; }
+  .page-card { transition: all 0.2s; }
+  .page-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
 </style>
 </head>
 <body class="bg-slate-50 text-dark">
@@ -168,26 +69,26 @@ tailwind.config = {
   </div>
 
   <nav class="flex-1 p-4 space-y-1">
-    <a href="#dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium">
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium">
       <span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble
     </a>
-    <a href="#tasks" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
       <span class="material-symbols-outlined text-lg">checklist</span> Taches
     </a>
-    <a href="#roadmap" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
       <span class="material-symbols-outlined text-lg">timeline</span> Roadmap
     </a>
-    <a href="#ideas" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
       <span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur
     </a>
-    <a href="#calendar" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
       <span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu
     </a>
-    <a href="#notes" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
       <span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting
     </a>
-    <a href="#links" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">link</span> Liens rapides
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
+      <span class="material-symbols-outlined text-lg">storefront</span> Marketplace
     </a>
   </nav>
 
@@ -230,700 +131,249 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- ===================== SECTION 1: DASHBOARD ===================== -->
-    <section id="dashboard" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">dashboard</span> Vue d'ensemble
-      </h2>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        <!-- Phase -->
-        <div class="bg-white rounded-xl p-4 border border-slate-100">
-          <div class="text-xs text-slate-400 mb-1">Phase actuelle</div>
-          <div class="text-lg sm:text-xl font-black text-primary stat-number">Phase 0</div>
-          <div class="text-xs text-slate-500">Brainstorm</div>
-        </div>
-        <!-- Fermes -->
-        <div class="bg-white rounded-xl p-4 border border-slate-100">
-          <div class="text-xs text-slate-400 mb-1">Fermes dans la DB</div>
-          <div class="text-lg sm:text-xl font-black text-secondary stat-number">153</div>
-          <div class="text-xs text-slate-500">11 regions</div>
-        </div>
-        <!-- Features -->
-        <div class="bg-white rounded-xl p-4 border border-slate-100">
-          <div class="text-xs text-slate-400 mb-1">Features</div>
-          <div class="text-lg sm:text-xl font-black text-dark stat-number">5 <span class="text-sm font-medium text-slate-400">+ 6 idees</span></div>
-          <div class="text-xs text-slate-500">confirmees</div>
-        </div>
-        <!-- Jours -->
-        <div class="bg-white rounded-xl p-4 border border-slate-100">
-          <div class="text-xs text-slate-400 mb-1">Jours depuis debut</div>
-          <div class="text-lg sm:text-xl font-black text-accent stat-number" id="daysSinceStart">0</div>
-          <div class="text-xs text-slate-500">Mars 2026</div>
-        </div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+      <div class="bg-white rounded-xl p-4 border border-slate-100">
+        <div class="text-xs text-slate-400 mb-1">Phase actuelle</div>
+        <div class="text-lg sm:text-xl font-black text-primary stat-number">Phase 0</div>
+        <div class="text-xs text-slate-500">Brainstorm</div>
       </div>
-
-      <!-- Progress Phase 0 -->
-      <div class="bg-white rounded-xl p-5 border border-slate-100">
-        <div class="flex items-center justify-between mb-3">
-          <div class="font-semibold text-dark text-sm">Progression Phase 0</div>
-          <div class="text-sm font-bold text-primary" id="phase0Pct">50%</div>
-        </div>
-        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-          <div class="progress-fill h-full bg-gradient-to-r from-primary to-sage rounded-full" style="width: 50%"></div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 text-sm">
-          <div class="flex items-center gap-2 text-primary"><span class="material-symbols-outlined text-sm fill">check_circle</span> Maquettes 5 ecrans</div>
-          <div class="flex items-center gap-2 text-primary"><span class="material-symbols-outlined text-sm fill">check_circle</span> Base de donnees Supabase</div>
-          <div class="flex items-center gap-2 text-primary"><span class="material-symbols-outlined text-sm fill">check_circle</span> Stack technique choisi</div>
-          <div class="flex items-center gap-2 text-slate-400"><span class="material-symbols-outlined text-sm">circle</span> Valider vision avec partenaire</div>
-          <div class="flex items-center gap-2 text-slate-400"><span class="material-symbols-outlined text-sm">circle</span> Choisir le nom de l'app</div>
-          <div class="flex items-center gap-2 text-slate-400"><span class="material-symbols-outlined text-sm">circle</span> Definir les roles</div>
-        </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100">
+        <div class="text-xs text-slate-400 mb-1">Fermes dans la DB</div>
+        <div class="text-lg sm:text-xl font-black text-secondary stat-number">153</div>
+        <div class="text-xs text-slate-500">11 regions</div>
       </div>
-    </section>
-
-    <!-- ===================== SECTION 2: TASKS ===================== -->
-    <section id="tasks" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">checklist</span> Taches
-      </h2>
-
-      <!-- Add task -->
-      <div class="flex gap-2 mb-4">
-        <input id="newTaskInput" type="text" placeholder="Ajouter une tache..."
-          class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-sm"
-          onkeydown="if(event.key==='Enter')addTask()"/>
-        <select id="newTaskCat" class="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-600">
-          <option value="dev">Dev</option>
-          <option value="design">Design</option>
-          <option value="marketing">Marketing</option>
-          <option value="contenu">Contenu</option>
-          <option value="partenariat">Partenariat</option>
-        </select>
-        <button onclick="addTask()" class="px-4 py-3 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary/90 transition flex-shrink-0">
-          <span class="material-symbols-outlined text-sm">add</span>
-        </button>
+      <div class="bg-white rounded-xl p-4 border border-slate-100">
+        <div class="text-xs text-slate-400 mb-1">Features</div>
+        <div class="text-lg sm:text-xl font-black text-dark stat-number">5 <span class="text-sm font-medium text-slate-400">+ 6 idees</span></div>
+        <div class="text-xs text-slate-500">confirmees</div>
       </div>
-
-      <!-- Filter tabs -->
-      <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
-        <button onclick="filterTasks('all')" class="task-filter active px-3 py-1.5 rounded-lg text-xs font-medium bg-dark text-white flex-shrink-0">Tout</button>
-        <button onclick="filterTasks('dev')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Dev</button>
-        <button onclick="filterTasks('design')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Design</button>
-        <button onclick="filterTasks('marketing')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Marketing</button>
-        <button onclick="filterTasks('contenu')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Contenu</button>
-        <button onclick="filterTasks('partenariat')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Partenariat</button>
+      <div class="bg-white rounded-xl p-4 border border-slate-100">
+        <div class="text-xs text-slate-400 mb-1">Jours depuis debut</div>
+        <div class="text-lg sm:text-xl font-black text-accent stat-number" id="daysSinceStart">0</div>
+        <div class="text-xs text-slate-500">Mars 2026</div>
       </div>
+    </div>
 
-      <!-- Task list -->
-      <div id="taskList" class="space-y-2"></div>
-
-      <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
-        <span><span id="tasksDone">0</span> completees</span>
-        <span><span id="tasksTotal">0</span> total</span>
+    <!-- Progress Phase 0 -->
+    <div class="bg-white rounded-xl p-5 border border-slate-100 mb-8">
+      <div class="flex items-center justify-between mb-3">
+        <div class="font-semibold text-dark text-sm">Progression Phase 0</div>
+        <div class="text-sm font-bold text-primary" id="phase0Pct">0%</div>
       </div>
-    </section>
+      <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+        <div id="phase0Bar" class="progress-fill h-full bg-gradient-to-r from-primary to-sage rounded-full" style="width: 0%"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 text-sm" id="phase0Items"></div>
+    </div>
 
-    <!-- ===================== SECTION 3: ROADMAP ===================== -->
-    <section id="roadmap" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">timeline</span> Roadmap
-      </h2>
+    <!-- Page Links Grid -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">apps</span> Sections
+    </h2>
 
-      <!-- Progress bar -->
-      <div class="bg-white rounded-xl p-5 border border-slate-100 mb-4">
-        <div class="flex items-center justify-between mb-3">
-          <span class="text-sm font-semibold text-dark">Progression globale</span>
-          <span class="text-xs text-slate-400">Phase 0 / 5</span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <a href="tasks.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3">
+        <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary text-2xl">checklist</span>
         </div>
-        <div class="relative">
-          <div class="w-full h-2 bg-slate-100 rounded-full">
-            <div class="h-full bg-gradient-to-r from-primary via-secondary to-accent rounded-full" style="width: 8%"></div>
-          </div>
-          <!-- Phase nodes -->
-          <div class="flex justify-between mt-4">
-            <div class="phase-node active flex flex-col items-center" onclick="showPhase(0)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">0</div>
-              <span class="text-[10px] sm:text-xs text-slate-500 mt-1 text-center">Brainstorm</span>
-            </div>
-            <div class="phase-node flex flex-col items-center" onclick="showPhase(1)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">1</div>
-              <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Branding</span>
-            </div>
-            <div class="phase-node flex flex-col items-center" onclick="showPhase(2)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">2</div>
-              <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">MVP</span>
-            </div>
-            <div class="phase-node flex flex-col items-center" onclick="showPhase(3)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">3</div>
-              <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Contenu</span>
-            </div>
-            <div class="phase-node flex flex-col items-center" onclick="showPhase(4)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">4</div>
-              <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Beta</span>
-            </div>
-            <div class="phase-node flex flex-col items-center" onclick="showPhase(5)">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">
-                <span class="material-symbols-outlined text-sm">rocket_launch</span>
-              </div>
-              <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Launch</span>
-            </div>
-          </div>
+        <div>
+          <h3 class="font-bold text-dark">Taches</h3>
+          <p class="text-xs text-slate-400 mt-1">Gerer tes taches, filtrer par categorie, suivre la progression</p>
         </div>
-      </div>
-
-      <!-- Phase detail -->
-      <div id="phaseDetail" class="bg-white rounded-xl p-5 border border-slate-100"></div>
-    </section>
-
-    <!-- ===================== SECTION 4: IDEAS ===================== -->
-    <section id="ideas" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-accent">lightbulb</span> Idees pour le futur
-        <span class="text-xs font-normal text-slate-400 ml-2">Vote pour prioriser</span>
-      </h2>
-
-      <div id="ideasGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-    </section>
-
-    <!-- ===================== SECTION 5: CALENDAR ===================== -->
-    <section id="calendar" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-secondary">calendar_month</span> Calendrier contenu
-      </h2>
-
-      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <!-- Legend -->
-        <div class="flex flex-wrap gap-3 p-4 border-b border-slate-100 text-xs">
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-slate-900 inline-block"></span> TikTok</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-gradient-to-r from-purple-500 to-pink-500 inline-block"></span> Instagram</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-blue-600 inline-block"></span> Facebook</span>
+        <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
+          <span id="taskSummary">0 completees</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </div>
+      </a>
 
-        <div class="overflow-x-auto">
-          <div class="min-w-[600px]">
-            <!-- Header -->
-            <div class="grid grid-cols-8 text-xs font-semibold text-slate-500 border-b border-slate-100">
-              <div class="p-3">Semaine</div>
-              <div class="p-3">Lun</div>
-              <div class="p-3">Mar</div>
-              <div class="p-3">Mer</div>
-              <div class="p-3">Jeu</div>
-              <div class="p-3">Ven</div>
-              <div class="p-3">Sam</div>
-              <div class="p-3">Dim</div>
-            </div>
-            <!-- Week 1 -->
-            <div class="grid grid-cols-8 border-b border-slate-50">
-              <div class="p-3 text-xs font-medium text-slate-400 bg-slate-50">S1<br/>Pre-lancement</div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Visite ferme #1</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Photo ferme</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Scan produit</div>
-              </div>
-              <div class="cal-cell p-2"></div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Carousel bio</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Recette 60s</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-blue-600 text-white mb-1">Article marche</div>
-              </div>
-            </div>
-            <!-- Week 2 -->
-            <div class="grid grid-cols-8 border-b border-slate-50">
-              <div class="p-3 text-xs font-medium text-slate-400 bg-slate-50">S2<br/>Teasing</div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Comparatif bio</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Story ferme</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Taste test local</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-blue-600 text-white mb-1">Groupe QC</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Teaser app</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Behind scenes</div>
-              </div>
-              <div class="cal-cell p-2"></div>
-            </div>
-            <!-- Week 3 -->
-            <div class="grid grid-cols-8 border-b border-slate-50">
-              <div class="p-3 text-xs font-medium text-slate-400 bg-slate-50">S3<br/>Hype</div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Demo app</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Countdown</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Top 5 fermes</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 text-white mb-1">Reel recette</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-blue-600 text-white mb-1">Evenement</div>
-              </div>
-              <div class="cal-cell p-2">
-                <div class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-white mb-1">Lancement!</div>
-              </div>
-              <div class="cal-cell p-2"></div>
-            </div>
-          </div>
+      <a href="roadmap.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3">
+        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-2xl">timeline</span>
         </div>
-      </div>
-    </section>
-
-    <!-- ===================== SECTION 6: NOTES ===================== -->
-    <section id="notes" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary">edit_note</span> Notes de meeting
-      </h2>
-
-      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div class="flex items-center justify-between p-4 border-b border-slate-100">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm text-slate-400">event</span>
-            <span class="text-sm font-medium text-dark" id="noteDate"></span>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="newNote()" class="px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-xs font-medium hover:bg-primary/20 transition">
-              <span class="material-symbols-outlined text-sm align-middle">add</span> Nouvelle note
-            </button>
-          </div>
+        <div>
+          <h3 class="font-bold text-dark">Roadmap</h3>
+          <p class="text-xs text-slate-400 mt-1">6 phases de Brainstorm au Lancement</p>
         </div>
-        <textarea id="noteArea" rows="8" placeholder="Ecris tes notes ici... Sauvegarde automatique."
-          class="w-full p-4 text-sm text-dark resize-y focus:outline-none min-h-[200px]"
-          oninput="saveNote()"></textarea>
-      </div>
+        <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
+          Phase 0 en cours
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+      </a>
 
-      <!-- Previous notes -->
-      <div id="previousNotes" class="mt-4 space-y-2"></div>
-    </section>
+      <a href="ideas.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3">
+        <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-accent text-2xl">lightbulb</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-dark">Idees futur</h3>
+          <p class="text-xs text-slate-400 mt-1">Voter, prioriser et ajouter de nouvelles idees</p>
+        </div>
+        <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
+          <span id="ideaSummary">0 idees</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+      </a>
 
-    <!-- ===================== SECTION 7: QUICK LINKS ===================== -->
-    <section id="links" class="mb-10">
-      <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-accent">link</span> Liens rapides
-      </h2>
+      <a href="calendar.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3">
+        <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary text-2xl">calendar_month</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-dark">Calendrier contenu</h3>
+          <p class="text-xs text-slate-400 mt-1">Planifier les publications TikTok, Insta, Facebook</p>
+        </div>
+        <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
+          3 semaines planifiees
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+      </a>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <a href="index.html" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-primary">web</span>
-          </div>
-          <span class="text-xs font-medium text-dark">Brainstorm Board</span>
-        </a>
-        <a href="https://github.com/aideslushcup-svg/lokale-brainstorm" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-dark/10 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-dark">code</span>
-          </div>
-          <span class="text-xs font-medium text-dark">GitHub Repo</span>
-        </a>
-        <a href="https://supabase.com/dashboard/project/sndemgtgolzwryrdqzzb" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-emerald-600">database</span>
-          </div>
-          <span class="text-xs font-medium text-dark">Supabase</span>
-        </a>
-        <a href="https://stitch.google.com" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-blue-600">design_services</span>
-          </div>
-          <span class="text-xs font-medium text-dark">Google Stitch</span>
-        </a>
-        <a href="https://appstoreconnect.apple.com" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-slate-600">phone_iphone</span>
-          </div>
-          <span class="text-xs font-medium text-dark">App Store Connect</span>
-        </a>
-        <a href="https://play.google.com/console" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
-          <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-green-600">android</span>
-          </div>
-          <span class="text-xs font-medium text-dark">Google Play Console</span>
-        </a>
-      </div>
-    </section>
+      <a href="notes.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3">
+        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-2xl">edit_note</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-dark">Notes de meeting</h3>
+          <p class="text-xs text-slate-400 mt-1">Prendre et retrouver tes notes de meeting</p>
+        </div>
+        <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
+          Sauvegarde auto
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+      </a>
+
+      <a href="marketplace.html" class="page-card bg-white rounded-2xl p-6 border border-slate-100 flex flex-col gap-3 relative overflow-hidden">
+        <div class="absolute top-3 right-3 px-2 py-0.5 bg-secondary text-white text-[10px] font-bold rounded-full">NOUVEAU</div>
+        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-emerald-600 text-2xl">storefront</span>
+        </div>
+        <div>
+          <h3 class="font-bold text-dark">Marketplace</h3>
+          <p class="text-xs text-slate-400 mt-1">Commandes, livraison, commissions sur chaque vente</p>
+        </div>
+        <div class="flex items-center gap-1 text-xs text-secondary font-medium mt-auto">
+          Explorer le modele
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick Links -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-accent">link</span> Liens rapides
+    </h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+      <a href="index.html" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary">web</span>
+        </div>
+        <span class="text-xs font-medium text-dark">Brainstorm Board</span>
+      </a>
+      <a href="https://github.com/aideslushcup-svg/lokale-brainstorm" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-dark/10 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-dark">code</span>
+        </div>
+        <span class="text-xs font-medium text-dark">GitHub Repo</span>
+      </a>
+      <a href="https://supabase.com/dashboard/project/sndemgtgolzwryrdqzzb" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-emerald-600">database</span>
+        </div>
+        <span class="text-xs font-medium text-dark">Supabase</span>
+      </a>
+      <a href="https://stitch.google.com" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-blue-600">design_services</span>
+        </div>
+        <span class="text-xs font-medium text-dark">Google Stitch</span>
+      </a>
+      <a href="https://appstoreconnect.apple.com" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-600">phone_iphone</span>
+        </div>
+        <span class="text-xs font-medium text-dark">App Store Connect</span>
+      </a>
+      <a href="https://play.google.com/console" target="_blank" class="bg-white rounded-xl p-4 border border-slate-100 hover:border-primary/30 hover:shadow-sm transition flex flex-col items-center gap-2 text-center">
+        <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-green-600">android</span>
+        </div>
+        <span class="text-xs font-medium text-dark">Google Play Console</span>
+      </a>
+    </div>
 
   </div>
 </div>
 
-<!-- ===================== JAVASCRIPT ===================== -->
 <script>
-// ---- SIDEBAR ----
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
-// ---- DATE ----
+// Date
 var now = new Date();
 var months = ['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
 document.getElementById('todayDate').textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
-document.getElementById('noteDate').textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
 
-// Days since project start (March 1, 2026)
+// Days since start
 var startDate = new Date(2026, 2, 1);
 var daysDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
 document.getElementById('daysSinceStart').textContent = Math.max(0, daysDiff);
 
-// ---- TASKS ----
-var defaultTasks = [
-  { id: 1, text: "Appel avec le partenaire — valider la vision", cat: "partenariat", done: false },
-  { id: 2, text: "Choisir le nom final de l'app", cat: "partenariat", done: false },
-  { id: 3, text: "Definir les roles (dev vs contenu/marketing)", cat: "partenariat", done: false },
-  { id: 4, text: "Finaliser le logo Lokale", cat: "design", done: false },
-  { id: 5, text: "Valider la palette de couleurs", cat: "design", done: false },
-  { id: 6, text: "Ajuster les maquettes selon feedback partenaire", cat: "design", done: false },
-  { id: 7, text: "Setup projet Expo + navigation", cat: "dev", done: true },
-  { id: 8, text: "Configurer Supabase + migrations", cat: "dev", done: true },
-  { id: 9, text: "Implementer ecran Carte avec map", cat: "dev", done: false },
-  { id: 10, text: "Implementer Scanner de produits", cat: "dev", done: false },
-  { id: 11, text: "Creer les comptes sociaux (Insta, TikTok)", cat: "marketing", done: false },
-  { id: 12, text: "Planifier le calendrier de contenu", cat: "marketing", done: false },
-  { id: 13, text: "Ecrire 5 premieres recettes", cat: "contenu", done: false },
-  { id: 14, text: "Lister les 20 premieres fermes a contacter", cat: "contenu", done: false },
-  { id: 15, text: "Brainstorm board + deploy Vercel", cat: "dev", done: true },
+// Phase 0 items (synced with tasks)
+var phase0Items = [
+  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel", defaultDone: true },
+  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations", defaultDone: true },
+  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation", defaultDone: true },
+  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire", defaultDone: false },
+  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final", defaultDone: false },
+  { text: "Definir les roles", taskMatch: "Definir les roles", defaultDone: false },
 ];
 
-var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || defaultTasks;
-var taskFilter = 'all';
-var taskIdCounter = tasks.reduce(function(max, t) { return Math.max(max, t.id); }, 0) + 1;
+function updatePhase0() {
+  var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || [];
+  var doneCount = 0;
+  var html = '';
 
-function saveTasks() {
-  localStorage.setItem('lokale_tasks', JSON.stringify(tasks));
-}
-
-function renderTasks() {
-  var filtered = taskFilter === 'all' ? tasks : tasks.filter(function(t) { return t.cat === taskFilter; });
-  var catColors = {
-    dev: 'bg-blue-50 text-blue-600',
-    design: 'bg-purple-50 text-purple-600',
-    marketing: 'bg-pink-50 text-pink-600',
-    contenu: 'bg-amber-50 text-amber-600',
-    partenariat: 'bg-emerald-50 text-emerald-600',
-  };
-
-  var html = filtered.map(function(t) {
-    var cc = catColors[t.cat] || 'bg-slate-50 text-slate-500';
-    return '<div class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-slate-100' + (t.done ? ' opacity-60' : '') + '">'
-      + '<input type="checkbox" class="task-check" ' + (t.done ? 'checked' : '') + ' onchange="toggleTask(' + t.id + ')" />'
-      + '<span class="flex-1 text-sm ' + (t.done ? 'line-through text-slate-400' : 'text-dark') + '">' + t.text + '</span>'
-      + '<span class="px-2 py-0.5 rounded-lg text-[10px] font-medium ' + cc + ' flex-shrink-0">' + t.cat + '</span>'
-      + '<button onclick="deleteTask(' + t.id + ')" class="text-slate-300 hover:text-red-400 transition flex-shrink-0">'
-      + '<span class="material-symbols-outlined text-sm">close</span></button>'
-      + '</div>';
-  }).join('');
-
-  document.getElementById('taskList').innerHTML = html;
-  document.getElementById('tasksDone').textContent = tasks.filter(function(t) { return t.done; }).length;
-  document.getElementById('tasksTotal').textContent = tasks.length;
-}
-
-function toggleTask(id) {
-  tasks = tasks.map(function(t) { return t.id === id ? Object.assign({}, t, { done: !t.done }) : t; });
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(id) {
-  tasks = tasks.filter(function(t) { return t.id !== id; });
-  saveTasks();
-  renderTasks();
-}
-
-function addTask() {
-  var input = document.getElementById('newTaskInput');
-  var text = input.value.trim();
-  if (!text) return;
-  var cat = document.getElementById('newTaskCat').value;
-  tasks.push({ id: taskIdCounter++, text: text, cat: cat, done: false });
-  saveTasks();
-  renderTasks();
-  input.value = '';
-}
-
-function filterTasks(cat) {
-  taskFilter = cat;
-  document.querySelectorAll('.task-filter').forEach(function(btn) {
-    btn.classList.remove('bg-dark', 'text-white');
-    btn.classList.add('bg-slate-100', 'text-slate-600');
-  });
-  event.target.classList.remove('bg-slate-100', 'text-slate-600');
-  event.target.classList.add('bg-dark', 'text-white');
-  renderTasks();
-}
-
-renderTasks();
-
-// ---- ROADMAP PHASES ----
-var phases = [
-  {
-    title: "Phase 0 — Brainstorm & Partenariat",
-    status: "EN COURS",
-    color: "primary",
-    items: [
-      { text: "Maquettes des 5 ecrans", done: true },
-      { text: "Base de donnees Supabase configuree", done: true },
-      { text: "Stack technique choisi", done: true },
-      { text: "Valider la vision avec le partenaire", done: false },
-      { text: "Choisir le nom de l'app", done: false },
-      { text: "Definir les roles (dev vs contenu/marketing)", done: false },
-    ]
-  },
-  {
-    title: "Phase 1 — Branding & Design Final",
-    status: "A VENIR",
-    color: "secondary",
-    items: [
-      { text: "Logo + identite visuelle", done: false },
-      { text: "Palette de couleurs validee", done: false },
-      { text: "Maquettes finales ajustees", done: false },
-      { text: "Creer les comptes sociaux", done: false },
-    ]
-  },
-  {
-    title: "Phase 2 — Developpement MVP",
-    status: "A VENIR",
-    color: "primary",
-    items: [
-      { text: "Ecran Carte avec map + fermes", done: false },
-      { text: "Scanner de produits (camera + Open Food Facts)", done: false },
-      { text: "Ecran Recettes (feed)", done: false },
-      { text: "Ecran Deals (aubaines)", done: false },
-      { text: "Profil + authentification", done: false },
-      { text: "Navigation entre les 5 tabs", done: false },
-    ]
-  },
-  {
-    title: "Phase 3 — Contenu & Donnees",
-    status: "A VENIR",
-    color: "secondary",
-    items: [
-      { text: "Ajouter les vraies fermes du Quebec", done: false },
-      { text: "Creer les premieres recettes", done: false },
-      { text: "Photos des fermes", done: false },
-      { text: "Premiers deals avec fermes partenaires", done: false },
-    ]
-  },
-  {
-    title: "Phase 4 — Beta Testing",
-    status: "A VENIR",
-    color: "accent",
-    items: [
-      { text: "TestFlight + Google Play beta", done: false },
-      { text: "Inviter 20-50 testeurs", done: false },
-      { text: "Collecter feedback, corriger bugs", done: false },
-      { text: "Teasing sur les reseaux sociaux", done: false },
-    ]
-  },
-  {
-    title: "Phase 5 — LANCEMENT",
-    status: "A VENIR",
-    color: "secondary",
-    items: [
-      { text: "Publier sur App Store + Google Play", done: false },
-      { text: "Video de lancement (partenaire)", done: false },
-      { text: "Campagne TikTok / Instagram Reels", done: false },
-      { text: "Contacter medias locaux", done: false },
-      { text: "Landing page web", done: false },
-    ]
-  },
-];
-
-function showPhase(i) {
-  var p = phases[i];
-  var done = p.items.filter(function(x) { return x.done; }).length;
-  var total = p.items.length;
-  var pct = total > 0 ? Math.round(done / total * 100) : 0;
-
-  var statusClass = p.status === 'EN COURS' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500';
-
-  var html = '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">'
-    + '<h3 class="font-bold text-dark">' + p.title + '</h3>'
-    + '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + p.status + '</span>'
-    + '</div>'
-    + '<div class="w-full h-2 bg-slate-100 rounded-full mb-4"><div class="h-full bg-' + p.color + ' rounded-full" style="width:' + pct + '%"></div></div>'
-    + '<div class="space-y-2">';
-
-  p.items.forEach(function(item) {
-    var icon = item.done
-      ? '<span class="material-symbols-outlined text-primary text-sm fill">check_circle</span>'
-      : '<span class="material-symbols-outlined text-slate-300 text-sm">circle</span>';
-    html += '<div class="flex items-center gap-2 text-sm ' + (item.done ? 'text-primary' : 'text-slate-600') + '">' + icon + ' ' + item.text + '</div>';
+  phase0Items.forEach(function(item) {
+    var isDone = item.defaultDone;
+    // Check if matching task exists and is done
+    tasks.forEach(function(t) {
+      if (t.text.indexOf(item.taskMatch) !== -1) {
+        isDone = t.done;
+      }
+    });
+    if (isDone) doneCount++;
+    var cls = isDone ? 'text-primary' : 'text-slate-400';
+    var icon = isDone
+      ? '<span class="material-symbols-outlined text-sm fill">check_circle</span>'
+      : '<span class="material-symbols-outlined text-sm">circle</span>';
+    html += '<div class="flex items-center gap-2 ' + cls + '">' + icon + ' ' + item.text + '</div>';
   });
 
-  html += '</div><div class="mt-3 text-xs text-slate-400">' + done + ' / ' + total + ' completes (' + pct + '%)</div>';
-
-  document.getElementById('phaseDetail').innerHTML = html;
-
-  // Update active node
-  document.querySelectorAll('.phase-node').forEach(function(n, idx) {
-    n.classList.toggle('active', idx === i);
-  });
-}
-showPhase(0);
-
-// ---- IDEAS ----
-var defaultIdeas = [
-  { id: 1, text: "Systeme de gamification (badges, points)", tag: "engagement", emoji: "🏆" },
-  { id: 2, text: "Mode hors-ligne pour la carte", tag: "dev", emoji: "📡" },
-  { id: 3, text: "Notifications push (nouveaux deals, saison)", tag: "engagement", emoji: "🔔" },
-  { id: 4, text: "Integration calendrier marches fermiers", tag: "feature", emoji: "📅" },
-  { id: 5, text: "Programme de fidelite fermes", tag: "monetisation", emoji: "💎" },
-  { id: 6, text: "Partage social (partager une decouverte)", tag: "engagement", emoji: "📤" },
-  { id: 7, text: "Widget iOS pour deals du jour", tag: "dev", emoji: "📱" },
-  { id: 8, text: "AI recommandation de recettes selon scan", tag: "feature", emoji: "🤖" },
-  { id: 9, text: "Section educative (d'ou vient ta viande?)", tag: "contenu", emoji: "📚" },
-  { id: 10, text: "Partenariat avec nutritionnistes", tag: "partenariat", emoji: "🥗" },
-  { id: 11, text: "Livraison collaborative entre fermes", tag: "feature", emoji: "🚛" },
-  { id: 12, text: "Carte des marches fermiers saisonniers", tag: "feature", emoji: "🗺️" },
-  { id: 13, text: "API publique pour fermes partenaires", tag: "dev", emoji: "🔌" },
-  { id: 14, text: "Version web (PWA) de la carte", tag: "dev", emoji: "🌐" },
-];
-
-var ideas = JSON.parse(localStorage.getItem('lokale_ideas')) || defaultIdeas.map(function(idea) {
-  return Object.assign({}, idea, { votes: 0 });
-});
-
-function saveIdeas() {
-  localStorage.setItem('lokale_ideas', JSON.stringify(ideas));
+  var pct = Math.round(doneCount / phase0Items.length * 100);
+  document.getElementById('phase0Items').innerHTML = html;
+  document.getElementById('phase0Pct').textContent = pct + '%';
+  document.getElementById('phase0Bar').style.width = pct + '%';
 }
 
-function renderIdeas() {
-  var sorted = ideas.slice().sort(function(a, b) { return b.votes - a.votes; });
-  var tagColors = {
-    engagement: 'bg-pink-50 text-pink-600',
-    dev: 'bg-blue-50 text-blue-600',
-    feature: 'bg-emerald-50 text-emerald-600',
-    monetisation: 'bg-amber-50 text-amber-600',
-    contenu: 'bg-purple-50 text-purple-600',
-    partenariat: 'bg-orange-50 text-orange-600',
-  };
-
-  var html = sorted.map(function(idea) {
-    var tc = tagColors[idea.tag] || 'bg-slate-50 text-slate-500';
-    var voted = (JSON.parse(localStorage.getItem('lokale_voted') || '[]')).indexOf(idea.id) !== -1;
-    return '<div class="idea-card bg-white rounded-xl p-4 border border-slate-100 flex items-start gap-3">'
-      + '<button onclick="voteIdea(' + idea.id + ')" class="vote-btn flex flex-col items-center gap-0.5 flex-shrink-0 mt-0.5">'
-      + '<span class="material-symbols-outlined text-lg ' + (voted ? 'voted' : 'text-slate-300') + '">arrow_upward</span>'
-      + '<span class="text-xs font-bold ' + (voted ? 'text-primary' : 'text-slate-400') + '">' + idea.votes + '</span>'
-      + '</button>'
-      + '<div class="flex-1 min-w-0">'
-      + '<div class="text-sm text-dark">' + idea.emoji + ' ' + idea.text + '</div>'
-      + '<span class="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-medium ' + tc + '">' + idea.tag + '</span>'
-      + '</div></div>';
-  }).join('');
-
-  document.getElementById('ideasGrid').innerHTML = html;
+// Task summary for card
+function updateTaskSummary() {
+  var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || [];
+  var done = tasks.filter(function(t) { return t.done; }).length;
+  document.getElementById('taskSummary').textContent = done + ' / ' + tasks.length + ' completees';
 }
 
-function voteIdea(id) {
-  var voted = JSON.parse(localStorage.getItem('lokale_voted') || '[]');
-  var idx = voted.indexOf(id);
-  ideas = ideas.map(function(idea) {
-    if (idea.id !== id) return idea;
-    if (idx !== -1) {
-      voted.splice(idx, 1);
-      return Object.assign({}, idea, { votes: Math.max(0, idea.votes - 1) });
-    } else {
-      voted.push(id);
-      return Object.assign({}, idea, { votes: idea.votes + 1 });
-    }
-  });
-  localStorage.setItem('lokale_voted', JSON.stringify(voted));
-  saveIdeas();
-  renderIdeas();
+// Ideas summary
+function updateIdeaSummary() {
+  var ideas = JSON.parse(localStorage.getItem('lokale_ideas')) || [];
+  document.getElementById('ideaSummary').textContent = ideas.length + ' idees';
 }
 
-renderIdeas();
-
-// ---- NOTES ----
-var noteKey = 'lokale_note_' + now.toISOString().split('T')[0];
-
-function loadNote() {
-  var saved = localStorage.getItem(noteKey);
-  if (saved) document.getElementById('noteArea').value = saved;
-}
-
-function saveNote() {
-  localStorage.setItem(noteKey, document.getElementById('noteArea').value);
-  renderPreviousNotes();
-}
-
-function newNote() {
-  document.getElementById('noteArea').value = '';
-  saveNote();
-  document.getElementById('noteArea').focus();
-}
-
-function renderPreviousNotes() {
-  var keys = [];
-  for (var i = 0; i < localStorage.length; i++) {
-    var k = localStorage.key(i);
-    if (k && k.startsWith('lokale_note_') && k !== noteKey) keys.push(k);
-  }
-  keys.sort().reverse();
-
-  if (keys.length === 0) {
-    document.getElementById('previousNotes').innerHTML = '';
-    return;
-  }
-
-  var html = '<div class="text-xs font-semibold text-slate-400 mb-2">Notes precedentes</div>';
-  keys.slice(0, 5).forEach(function(k) {
-    var date = k.replace('lokale_note_', '');
-    var text = localStorage.getItem(k);
-    if (!text || !text.trim()) return;
-    var preview = text.substring(0, 120).replace(/\n/g, ' ');
-    html += '<div class="bg-white rounded-lg p-3 border border-slate-100 text-sm">'
-      + '<div class="text-xs text-slate-400 mb-1">' + date + '</div>'
-      + '<div class="text-slate-600 text-xs">' + preview + (text.length > 120 ? '...' : '') + '</div>'
-      + '</div>';
-  });
-
-  document.getElementById('previousNotes').innerHTML = html;
-}
-
-loadNote();
-renderPreviousNotes();
-
-// ---- ACTIVE NAV ----
-var sections = document.querySelectorAll('section[id]');
-var navLinks = document.querySelectorAll('aside nav a');
-
-window.addEventListener('scroll', function() {
-  var current = '';
-  sections.forEach(function(section) {
-    var top = section.offsetTop - 120;
-    if (scrollY >= top) current = section.getAttribute('id');
-  });
-  navLinks.forEach(function(link) {
-    link.classList.remove('bg-white/10', 'text-white');
-    link.classList.add('text-white/60');
-    if (link.getAttribute('href') === '#' + current) {
-      link.classList.add('bg-white/10', 'text-white');
-      link.classList.remove('text-white/60');
-    }
-  });
-});
+updatePhase0();
+updateTaskSummary();
+updateIdeaSummary();
 </script>
-
 </body>
 </html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lokale — Notes de meeting</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D6A4F', secondary: '#E76F51', accent: '#F4A261',
+        cream: '#FEFAE0', dark: '#264653', sage: '#95D5B2', sidebar: '#1a2332',
+      },
+      fontFamily: { display: ['Inter', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+  html { scroll-behavior: smooth; }
+  .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
+  .main-content { margin-left: 260px; }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); width: 280px; }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+    .sidebar-overlay.open { display: block; }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-dark">
+
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar" class="sidebar bg-sidebar text-white flex flex-col">
+  <div class="p-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-xl">eco</span>
+      </div>
+      <div><h1 class="font-bold text-base leading-tight">Lokale</h1><p class="text-[11px] text-white/40">Centre de Commandes</p></div>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble</a>
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">checklist</span> Taches</a>
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">timeline</span> Roadmap</a>
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur</a>
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu</a>
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium"><span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting</a>
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">storefront</span> Marketplace</a>
+  </nav>
+  <div class="p-4 border-t border-white/10">
+    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board</a>
+  </div>
+</aside>
+
+<div class="main-content min-h-screen">
+  <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
+    <span class="font-bold text-sm">Notes de meeting</span>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
+    <div class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-3xl">edit_note</span> Notes de meeting
+      </h1>
+      <p class="text-slate-400 text-sm mt-1">Sauvegarde automatique dans le navigateur</p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+      <div class="flex items-center justify-between p-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm text-slate-400">event</span>
+          <span class="text-sm font-medium text-dark" id="noteDate"></span>
+        </div>
+        <button onclick="newNote()" class="px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-xs font-medium hover:bg-primary/20 transition">
+          <span class="material-symbols-outlined text-sm align-middle">add</span> Nouvelle note
+        </button>
+      </div>
+      <textarea id="noteArea" rows="12" placeholder="Ecris tes notes ici... Sauvegarde automatique."
+        class="w-full p-4 text-sm text-dark resize-y focus:outline-none min-h-[300px]"
+        oninput="saveNote()"></textarea>
+    </div>
+
+    <!-- Previous notes -->
+    <div id="previousNotes" class="mt-6 space-y-2"></div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+var now = new Date();
+var months = ['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
+document.getElementById('noteDate').textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+
+var noteKey = 'lokale_note_' + now.toISOString().split('T')[0];
+
+function loadNote() {
+  var saved = localStorage.getItem(noteKey);
+  if (saved) document.getElementById('noteArea').value = saved;
+}
+
+function saveNote() {
+  localStorage.setItem(noteKey, document.getElementById('noteArea').value);
+  renderPreviousNotes();
+}
+
+function newNote() {
+  document.getElementById('noteArea').value = '';
+  saveNote();
+  document.getElementById('noteArea').focus();
+}
+
+function renderPreviousNotes() {
+  var keys = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k && k.startsWith('lokale_note_') && k !== noteKey) keys.push(k);
+  }
+  keys.sort().reverse();
+  if (keys.length === 0) { document.getElementById('previousNotes').innerHTML = ''; return; }
+
+  var html = '<div class="text-sm font-semibold text-slate-500 mb-3">Notes precedentes</div>';
+  keys.slice(0, 10).forEach(function(k) {
+    var date = k.replace('lokale_note_', '');
+    var text = localStorage.getItem(k);
+    if (!text || !text.trim()) return;
+    var preview = text.substring(0, 200).replace(/\n/g, ' ');
+    html += '<div class="bg-white rounded-xl p-4 border border-slate-100">'
+      + '<div class="text-xs font-medium text-slate-400 mb-2">' + date + '</div>'
+      + '<div class="text-sm text-slate-600">' + preview + (text.length > 200 ? '...' : '') + '</div>'
+      + '</div>';
+  });
+  document.getElementById('previousNotes').innerHTML = html;
+}
+
+loadNote();
+renderPreviousNotes();
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lokale — Idees futur</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D6A4F', secondary: '#E76F51', accent: '#F4A261',
+        cream: '#FEFAE0', dark: '#264653', sage: '#95D5B2', sidebar: '#1a2332',
+      },
+      fontFamily: { display: ['Inter', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+  html { scroll-behavior: smooth; }
+  .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
+  .main-content { margin-left: 260px; }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); width: 280px; }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+    .sidebar-overlay.open { display: block; }
+  }
+  .idea-card { transition: all 0.2s; }
+  .idea-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+  .vote-btn { transition: all 0.15s; }
+  .vote-btn:hover { transform: scale(1.15); }
+  .vote-btn.voted { color: #2D6A4F; font-variation-settings: 'FILL' 1; }
+</style>
+</head>
+<body class="bg-slate-50 text-dark">
+
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar" class="sidebar bg-sidebar text-white flex flex-col">
+  <div class="p-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-xl">eco</span>
+      </div>
+      <div><h1 class="font-bold text-base leading-tight">Lokale</h1><p class="text-[11px] text-white/40">Centre de Commandes</p></div>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble</a>
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">checklist</span> Taches</a>
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">timeline</span> Roadmap</a>
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium"><span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur</a>
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu</a>
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting</a>
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">storefront</span> Marketplace</a>
+  </nav>
+  <div class="p-4 border-t border-white/10">
+    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board</a>
+  </div>
+</aside>
+
+<div class="main-content min-h-screen">
+  <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
+    <span class="font-bold text-sm">Idees futur</span>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
+    <div class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+        <span class="material-symbols-outlined text-accent text-3xl">lightbulb</span> Idees pour le futur
+      </h1>
+      <p class="text-slate-400 text-sm mt-1">Vote pour prioriser, ajoute tes propres idees</p>
+    </div>
+
+    <!-- Add idea form -->
+    <div class="bg-white rounded-xl p-4 border border-slate-100 mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary text-lg">add_circle</span>
+        <span class="font-semibold text-dark text-sm">Ajouter une idee</span>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input id="newIdeaText" type="text" placeholder="Decris ton idee..."
+          class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-sm"
+          onkeydown="if(event.key==='Enter')addIdea()"/>
+        <select id="newIdeaTag" class="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-600">
+          <option value="feature">Feature</option>
+          <option value="dev">Dev</option>
+          <option value="engagement">Engagement</option>
+          <option value="monetisation">Monetisation</option>
+          <option value="contenu">Contenu</option>
+          <option value="partenariat">Partenariat</option>
+        </select>
+        <button onclick="addIdea()" class="px-4 py-3 bg-accent text-white rounded-xl text-sm font-medium hover:bg-accent/90 transition flex-shrink-0">
+          <span class="material-symbols-outlined text-sm">add</span> Ajouter
+        </button>
+      </div>
+    </div>
+
+    <!-- Ideas grid -->
+    <div class="flex items-center justify-between mb-4">
+      <span class="text-sm text-slate-400" id="ideaCount">0 idees</span>
+      <span class="text-xs text-slate-400">Triees par votes</span>
+    </div>
+    <div id="ideasGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+var defaultIdeas = [
+  { id: 1, text: "Systeme de gamification (badges, points)", tag: "engagement", emoji: "\uD83C\uDFC6" },
+  { id: 2, text: "Mode hors-ligne pour la carte", tag: "dev", emoji: "\uD83D\uDCE1" },
+  { id: 3, text: "Notifications push (nouveaux deals, saison)", tag: "engagement", emoji: "\uD83D\uDD14" },
+  { id: 4, text: "Integration calendrier marches fermiers", tag: "feature", emoji: "\uD83D\uDCC5" },
+  { id: 5, text: "Programme de fidelite fermes", tag: "monetisation", emoji: "\uD83D\uDC8E" },
+  { id: 6, text: "Partage social (partager une decouverte)", tag: "engagement", emoji: "\uD83D\uDCE4" },
+  { id: 7, text: "Widget iOS pour deals du jour", tag: "dev", emoji: "\uD83D\uDCF1" },
+  { id: 8, text: "AI recommandation de recettes selon scan", tag: "feature", emoji: "\uD83E\uDD16" },
+  { id: 9, text: "Section educative (d'ou vient ta viande?)", tag: "contenu", emoji: "\uD83D\uDCDA" },
+  { id: 10, text: "Partenariat avec nutritionnistes", tag: "partenariat", emoji: "\uD83E\uDD57" },
+  { id: 11, text: "Livraison collaborative entre fermes", tag: "feature", emoji: "\uD83D\uDE9B" },
+  { id: 12, text: "Carte des marches fermiers saisonniers", tag: "feature", emoji: "\uD83D\uDDFA\uFE0F" },
+  { id: 13, text: "API publique pour fermes partenaires", tag: "dev", emoji: "\uD83D\uDD0C" },
+  { id: 14, text: "Version web (PWA) de la carte", tag: "dev", emoji: "\uD83C\uDF10" },
+];
+
+var ideas = JSON.parse(localStorage.getItem('lokale_ideas')) || defaultIdeas.map(function(idea) {
+  return Object.assign({}, idea, { votes: 0 });
+});
+var ideaIdCounter = ideas.reduce(function(max, i) { return Math.max(max, i.id); }, 0) + 1;
+
+function saveIdeas() {
+  localStorage.setItem('lokale_ideas', JSON.stringify(ideas));
+}
+
+var tagColors = {
+  engagement: 'bg-pink-50 text-pink-600',
+  dev: 'bg-blue-50 text-blue-600',
+  feature: 'bg-emerald-50 text-emerald-600',
+  monetisation: 'bg-amber-50 text-amber-600',
+  contenu: 'bg-purple-50 text-purple-600',
+  partenariat: 'bg-orange-50 text-orange-600',
+};
+
+function renderIdeas() {
+  var sorted = ideas.slice().sort(function(a, b) { return b.votes - a.votes; });
+  var html = sorted.map(function(idea) {
+    var tc = tagColors[idea.tag] || 'bg-slate-50 text-slate-500';
+    var voted = (JSON.parse(localStorage.getItem('lokale_voted') || '[]')).indexOf(idea.id) !== -1;
+    return '<div class="idea-card bg-white rounded-xl p-4 border border-slate-100 flex items-start gap-3">'
+      + '<button onclick="voteIdea(' + idea.id + ')" class="vote-btn flex flex-col items-center gap-0.5 flex-shrink-0 mt-0.5">'
+      + '<span class="material-symbols-outlined text-lg ' + (voted ? 'voted' : 'text-slate-300') + '">arrow_upward</span>'
+      + '<span class="text-xs font-bold ' + (voted ? 'text-primary' : 'text-slate-400') + '">' + idea.votes + '</span>'
+      + '</button>'
+      + '<div class="flex-1 min-w-0">'
+      + '<div class="text-sm text-dark">' + (idea.emoji || '\uD83D\uDCA1') + ' ' + idea.text + '</div>'
+      + '<span class="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-medium ' + tc + '">' + idea.tag + '</span>'
+      + '</div>'
+      + '<button onclick="deleteIdea(' + idea.id + ')" class="text-slate-200 hover:text-red-400 transition flex-shrink-0 mt-1">'
+      + '<span class="material-symbols-outlined text-sm">close</span></button>'
+      + '</div>';
+  }).join('');
+
+  document.getElementById('ideasGrid').innerHTML = html;
+  document.getElementById('ideaCount').textContent = ideas.length + ' idees';
+}
+
+function voteIdea(id) {
+  var voted = JSON.parse(localStorage.getItem('lokale_voted') || '[]');
+  var idx = voted.indexOf(id);
+  ideas = ideas.map(function(idea) {
+    if (idea.id !== id) return idea;
+    if (idx !== -1) {
+      voted.splice(idx, 1);
+      return Object.assign({}, idea, { votes: Math.max(0, idea.votes - 1) });
+    } else {
+      voted.push(id);
+      return Object.assign({}, idea, { votes: idea.votes + 1 });
+    }
+  });
+  localStorage.setItem('lokale_voted', JSON.stringify(voted));
+  saveIdeas();
+  renderIdeas();
+}
+
+function addIdea() {
+  var input = document.getElementById('newIdeaText');
+  var text = input.value.trim();
+  if (!text) return;
+  var tag = document.getElementById('newIdeaTag').value;
+  var emojis = { feature: '\u2728', dev: '\uD83D\uDCBB', engagement: '\uD83D\uDE80', monetisation: '\uD83D\uDCB0', contenu: '\uD83D\uDCDD', partenariat: '\uD83E\uDD1D' };
+  ideas.push({ id: ideaIdCounter++, text: text, tag: tag, emoji: emojis[tag] || '\uD83D\uDCA1', votes: 0 });
+  saveIdeas();
+  renderIdeas();
+  input.value = '';
+}
+
+function deleteIdea(id) {
+  ideas = ideas.filter(function(i) { return i.id !== id; });
+  saveIdeas();
+  renderIdeas();
+}
+
+renderIdeas();
+</script>
+</body>
+</html>

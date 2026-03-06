@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lokale — Roadmap</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D6A4F', secondary: '#E76F51', accent: '#F4A261',
+        cream: '#FEFAE0', dark: '#264653', sage: '#95D5B2', sidebar: '#1a2332',
+      },
+      fontFamily: { display: ['Inter', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+  html { scroll-behavior: smooth; }
+  .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
+  .main-content { margin-left: 260px; }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); width: 280px; }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+    .sidebar-overlay.open { display: block; }
+  }
+  .phase-node { transition: all 0.2s; cursor: pointer; }
+  .phase-node:hover { transform: scale(1.08); }
+  .phase-node.active { box-shadow: 0 0 0 4px rgba(45,106,79,0.3); }
+</style>
+</head>
+<body class="bg-slate-50 text-dark">
+
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar" class="sidebar bg-sidebar text-white flex flex-col">
+  <div class="p-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-xl">eco</span>
+      </div>
+      <div><h1 class="font-bold text-base leading-tight">Lokale</h1><p class="text-[11px] text-white/40">Centre de Commandes</p></div>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble</a>
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">checklist</span> Taches</a>
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium"><span class="material-symbols-outlined text-lg">timeline</span> Roadmap</a>
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur</a>
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu</a>
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting</a>
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">storefront</span> Marketplace</a>
+  </nav>
+  <div class="p-4 border-t border-white/10">
+    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board</a>
+  </div>
+</aside>
+
+<div class="main-content min-h-screen">
+  <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
+    <span class="font-bold text-sm">Roadmap</span>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
+    <div class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-3xl">timeline</span> Roadmap
+      </h1>
+      <p class="text-slate-400 text-sm mt-1">6 phases du Brainstorm au Lancement</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="bg-white rounded-xl p-5 border border-slate-100 mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-dark">Progression globale</span>
+        <span class="text-xs text-slate-400">Phase 0 / 5</span>
+      </div>
+      <div class="w-full h-2 bg-slate-100 rounded-full">
+        <div class="h-full bg-gradient-to-r from-primary via-secondary to-accent rounded-full" style="width: 8%"></div>
+      </div>
+      <!-- Phase nodes -->
+      <div class="flex justify-between mt-4">
+        <div class="phase-node active flex flex-col items-center" onclick="showPhase(0)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">0</div>
+          <span class="text-[10px] sm:text-xs text-slate-500 mt-1 text-center">Brainstorm</span>
+        </div>
+        <div class="phase-node flex flex-col items-center" onclick="showPhase(1)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">1</div>
+          <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Branding</span>
+        </div>
+        <div class="phase-node flex flex-col items-center" onclick="showPhase(2)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">2</div>
+          <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">MVP</span>
+        </div>
+        <div class="phase-node flex flex-col items-center" onclick="showPhase(3)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">3</div>
+          <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Contenu</span>
+        </div>
+        <div class="phase-node flex flex-col items-center" onclick="showPhase(4)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">4</div>
+          <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Beta</span>
+        </div>
+        <div class="phase-node flex flex-col items-center" onclick="showPhase(5)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold">
+            <span class="material-symbols-outlined text-sm">rocket_launch</span>
+          </div>
+          <span class="text-[10px] sm:text-xs text-slate-400 mt-1 text-center">Launch</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase detail -->
+    <div id="phaseDetail" class="bg-white rounded-xl p-5 border border-slate-100"></div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+var phases = [
+  {
+    title: "Phase 0 — Brainstorm & Partenariat", status: "EN COURS", color: "primary",
+    items: [
+      { text: "Maquettes des 5 ecrans", done: true },
+      { text: "Base de donnees Supabase configuree", done: true },
+      { text: "Stack technique choisi", done: true },
+      { text: "Valider la vision avec le partenaire", done: false },
+      { text: "Choisir le nom de l'app", done: false },
+      { text: "Definir les roles (dev vs contenu/marketing)", done: false },
+    ]
+  },
+  {
+    title: "Phase 1 — Branding & Design Final", status: "A VENIR", color: "secondary",
+    items: [
+      { text: "Logo + identite visuelle", done: false },
+      { text: "Palette de couleurs validee", done: false },
+      { text: "Maquettes finales ajustees", done: false },
+      { text: "Creer les comptes sociaux", done: false },
+    ]
+  },
+  {
+    title: "Phase 2 — Developpement MVP", status: "A VENIR", color: "primary",
+    items: [
+      { text: "Ecran Carte avec map + fermes", done: false },
+      { text: "Scanner de produits (camera + Open Food Facts)", done: false },
+      { text: "Ecran Recettes (feed)", done: false },
+      { text: "Ecran Deals (aubaines)", done: false },
+      { text: "Profil + authentification", done: false },
+      { text: "Navigation entre les 5 tabs", done: false },
+    ]
+  },
+  {
+    title: "Phase 3 — Contenu & Donnees", status: "A VENIR", color: "secondary",
+    items: [
+      { text: "Ajouter les vraies fermes du Quebec", done: false },
+      { text: "Creer les premieres recettes", done: false },
+      { text: "Photos des fermes", done: false },
+      { text: "Premiers deals avec fermes partenaires", done: false },
+    ]
+  },
+  {
+    title: "Phase 4 — Beta Testing", status: "A VENIR", color: "accent",
+    items: [
+      { text: "TestFlight + Google Play beta", done: false },
+      { text: "Inviter 20-50 testeurs", done: false },
+      { text: "Collecter feedback, corriger bugs", done: false },
+      { text: "Teasing sur les reseaux sociaux", done: false },
+    ]
+  },
+  {
+    title: "Phase 5 — LANCEMENT", status: "A VENIR", color: "secondary",
+    items: [
+      { text: "Publier sur App Store + Google Play", done: false },
+      { text: "Video de lancement (partenaire)", done: false },
+      { text: "Campagne TikTok / Instagram Reels", done: false },
+      { text: "Contacter medias locaux", done: false },
+      { text: "Landing page web", done: false },
+    ]
+  },
+];
+
+function showPhase(i) {
+  var p = phases[i];
+  var done = p.items.filter(function(x) { return x.done; }).length;
+  var total = p.items.length;
+  var pct = total > 0 ? Math.round(done / total * 100) : 0;
+  var statusClass = p.status === 'EN COURS' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500';
+
+  var html = '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">'
+    + '<h3 class="font-bold text-dark">' + p.title + '</h3>'
+    + '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + p.status + '</span></div>'
+    + '<div class="w-full h-2 bg-slate-100 rounded-full mb-4"><div class="h-full bg-' + p.color + ' rounded-full" style="width:' + pct + '%"></div></div>'
+    + '<div class="space-y-2">';
+
+  p.items.forEach(function(item) {
+    var icon = item.done
+      ? '<span class="material-symbols-outlined text-primary text-sm fill">check_circle</span>'
+      : '<span class="material-symbols-outlined text-slate-300 text-sm">circle</span>';
+    html += '<div class="flex items-center gap-2 text-sm ' + (item.done ? 'text-primary' : 'text-slate-600') + '">' + icon + ' ' + item.text + '</div>';
+  });
+
+  html += '</div><div class="mt-3 text-xs text-slate-400">' + done + ' / ' + total + ' completes (' + pct + '%)</div>';
+  document.getElementById('phaseDetail').innerHTML = html;
+  document.querySelectorAll('.phase-node').forEach(function(n, idx) { n.classList.toggle('active', idx === i); });
+}
+
+showPhase(0);
+</script>
+</body>
+</html>
