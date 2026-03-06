@@ -34,6 +34,7 @@ tailwind.config = {
     .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
     .sidebar-overlay.open { display: block; }
   }
+  #syncStatus { transition: opacity 0.5s; font-size: 11px; }
 </style>
 </head>
 <body class="bg-slate-50 text-dark">
@@ -66,16 +67,19 @@ tailwind.config = {
 <div class="main-content min-h-screen">
   <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
     <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
-    <span class="font-bold text-sm">Notes de meeting</span>
-    <div class="w-10"></div>
+    <span class="font-bold text-sm">Notes</span>
+    <span id="syncStatus" class="text-slate-400">Chargement...</span>
   </div>
 
   <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
-    <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary text-3xl">edit_note</span> Notes de meeting
-      </h1>
-      <p class="text-slate-400 text-sm mt-1">Sauvegarde automatique dans le navigateur</p>
+    <div class="mb-6 flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-3xl">edit_note</span> Notes de meeting
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">Sync automatique entre tous les appareils</p>
+      </div>
+      <span id="syncStatus" class="hidden sm:block text-slate-400 text-xs mt-2">Chargement...</span>
     </div>
 
     <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
@@ -88,16 +92,16 @@ tailwind.config = {
           <span class="material-symbols-outlined text-sm align-middle">add</span> Nouvelle note
         </button>
       </div>
-      <textarea id="noteArea" rows="12" placeholder="Ecris tes notes ici... Sauvegarde automatique."
+      <textarea id="noteArea" rows="12" placeholder="Ecris tes notes ici... Sauvegarde automatique apres 2 secondes d'arret."
         class="w-full p-4 text-sm text-dark resize-y focus:outline-none min-h-[300px]"
-        oninput="saveNote()"></textarea>
+        oninput="debouncedSave()"></textarea>
     </div>
 
-    <!-- Previous notes -->
     <div id="previousNotes" class="mt-6 space-y-2"></div>
   </div>
 </div>
 
+<script src="sync.js"></script>
 <script>
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -106,19 +110,39 @@ function toggleSidebar() {
 
 var now = new Date();
 var months = ['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
+var todayKey = now.toISOString().split('T')[0];
 document.getElementById('noteDate').textContent = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
 
-var noteKey = 'lokale_note_' + now.toISOString().split('T')[0];
+function renderNotes() {
+  var notes = hubData.notes || {};
+  // Load today's note
+  document.getElementById('noteArea').value = notes[todayKey] || '';
 
-function loadNote() {
-  var saved = localStorage.getItem(noteKey);
-  if (saved) document.getElementById('noteArea').value = saved;
+  // Previous notes
+  var keys = Object.keys(notes).filter(function(k) { return k !== todayKey; }).sort().reverse();
+  if (keys.length === 0) { document.getElementById('previousNotes').innerHTML = ''; return; }
+
+  var html = '<div class="text-sm font-semibold text-slate-500 mb-3">Notes precedentes</div>';
+  keys.slice(0, 10).forEach(function(k) {
+    var text = notes[k];
+    if (!text || !text.trim()) return;
+    var preview = text.substring(0, 200).replace(/\n/g, ' ');
+    html += '<div class="bg-white rounded-xl p-4 border border-slate-100">'
+      + '<div class="text-xs font-medium text-slate-400 mb-2">' + k + '</div>'
+      + '<div class="text-sm text-slate-600">' + preview + (text.length > 200 ? '...' : '') + '</div>'
+      + '</div>';
+  });
+  document.getElementById('previousNotes').innerHTML = html;
 }
 
 function saveNote() {
-  localStorage.setItem(noteKey, document.getElementById('noteArea').value);
-  renderPreviousNotes();
+  if (!hubData.notes) hubData.notes = {};
+  hubData.notes[todayKey] = document.getElementById('noteArea').value;
+  saveData(function() { renderNotes(); });
 }
+
+// Debounce: save 2 seconds after typing stops
+var debouncedSave = debounce(saveNote, 2000);
 
 function newNote() {
   document.getElementById('noteArea').value = '';
@@ -126,31 +150,9 @@ function newNote() {
   document.getElementById('noteArea').focus();
 }
 
-function renderPreviousNotes() {
-  var keys = [];
-  for (var i = 0; i < localStorage.length; i++) {
-    var k = localStorage.key(i);
-    if (k && k.startsWith('lokale_note_') && k !== noteKey) keys.push(k);
-  }
-  keys.sort().reverse();
-  if (keys.length === 0) { document.getElementById('previousNotes').innerHTML = ''; return; }
-
-  var html = '<div class="text-sm font-semibold text-slate-500 mb-3">Notes precedentes</div>';
-  keys.slice(0, 10).forEach(function(k) {
-    var date = k.replace('lokale_note_', '');
-    var text = localStorage.getItem(k);
-    if (!text || !text.trim()) return;
-    var preview = text.substring(0, 200).replace(/\n/g, ' ');
-    html += '<div class="bg-white rounded-xl p-4 border border-slate-100">'
-      + '<div class="text-xs font-medium text-slate-400 mb-2">' + date + '</div>'
-      + '<div class="text-sm text-slate-600">' + preview + (text.length > 200 ? '...' : '') + '</div>'
-      + '</div>';
-  });
-  document.getElementById('previousNotes').innerHTML = html;
-}
-
-loadNote();
-renderPreviousNotes();
+fetchData(function() {
+  renderNotes();
+});
 </script>
 </body>
 </html>

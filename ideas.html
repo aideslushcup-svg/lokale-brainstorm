@@ -24,7 +24,7 @@ tailwind.config = {
   * { box-sizing: border-box; }
   body { font-family: 'Inter', sans-serif; }
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
-  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1, 'wght' 400; }
   html { scroll-behavior: smooth; }
   .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
   .main-content { margin-left: 260px; }
@@ -37,9 +37,9 @@ tailwind.config = {
   }
   .idea-card { transition: all 0.2s; }
   .idea-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-  .vote-btn { transition: all 0.15s; }
+  .vote-btn { transition: all 0.15s; cursor: pointer; }
   .vote-btn:hover { transform: scale(1.15); }
-  .vote-btn.voted { color: #2D6A4F; font-variation-settings: 'FILL' 1; }
+  #syncStatus { transition: opacity 0.5s; font-size: 11px; }
 </style>
 </head>
 <body class="bg-slate-50 text-dark">
@@ -73,15 +73,18 @@ tailwind.config = {
   <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
     <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
     <span class="font-bold text-sm">Idees futur</span>
-    <div class="w-10"></div>
+    <span id="syncStatus" class="text-slate-400">Chargement...</span>
   </div>
 
   <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
-    <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
-        <span class="material-symbols-outlined text-accent text-3xl">lightbulb</span> Idees pour le futur
-      </h1>
-      <p class="text-slate-400 text-sm mt-1">Vote pour prioriser, ajoute tes propres idees</p>
+    <div class="mb-6 flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+          <span class="material-symbols-outlined text-accent text-3xl">lightbulb</span> Idees pour le futur
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">Vote pour prioriser, ajoute tes propres idees</p>
+      </div>
+      <span id="syncStatus" class="hidden sm:block text-slate-400 text-xs mt-2">Chargement...</span>
     </div>
 
     <!-- Add idea form -->
@@ -108,46 +111,29 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Ideas grid -->
     <div class="flex items-center justify-between mb-4">
       <span class="text-sm text-slate-400" id="ideaCount">0 idees</span>
       <span class="text-xs text-slate-400">Triees par votes</span>
     </div>
-    <div id="ideasGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+    <!-- Loading -->
+    <div id="loadingState" class="text-center py-12 text-slate-400">
+      <span class="material-symbols-outlined text-4xl animate-spin">sync</span>
+      <p class="text-sm mt-2">Chargement des idees...</p>
+    </div>
+
+    <div id="ideasGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 hidden"></div>
   </div>
 </div>
 
+<script src="sync.js"></script>
 <script>
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
-var defaultIdeas = [
-  { id: 1, text: "Systeme de gamification (badges, points)", tag: "engagement", emoji: "\uD83C\uDFC6" },
-  { id: 2, text: "Mode hors-ligne pour la carte", tag: "dev", emoji: "\uD83D\uDCE1" },
-  { id: 3, text: "Notifications push (nouveaux deals, saison)", tag: "engagement", emoji: "\uD83D\uDD14" },
-  { id: 4, text: "Integration calendrier marches fermiers", tag: "feature", emoji: "\uD83D\uDCC5" },
-  { id: 5, text: "Programme de fidelite fermes", tag: "monetisation", emoji: "\uD83D\uDC8E" },
-  { id: 6, text: "Partage social (partager une decouverte)", tag: "engagement", emoji: "\uD83D\uDCE4" },
-  { id: 7, text: "Widget iOS pour deals du jour", tag: "dev", emoji: "\uD83D\uDCF1" },
-  { id: 8, text: "AI recommandation de recettes selon scan", tag: "feature", emoji: "\uD83E\uDD16" },
-  { id: 9, text: "Section educative (d'ou vient ta viande?)", tag: "contenu", emoji: "\uD83D\uDCDA" },
-  { id: 10, text: "Partenariat avec nutritionnistes", tag: "partenariat", emoji: "\uD83E\uDD57" },
-  { id: 11, text: "Livraison collaborative entre fermes", tag: "feature", emoji: "\uD83D\uDE9B" },
-  { id: 12, text: "Carte des marches fermiers saisonniers", tag: "feature", emoji: "\uD83D\uDDFA\uFE0F" },
-  { id: 13, text: "API publique pour fermes partenaires", tag: "dev", emoji: "\uD83D\uDD0C" },
-  { id: 14, text: "Version web (PWA) de la carte", tag: "dev", emoji: "\uD83C\uDF10" },
-];
-
-var ideas = JSON.parse(localStorage.getItem('lokale_ideas')) || defaultIdeas.map(function(idea) {
-  return Object.assign({}, idea, { votes: 0 });
-});
-var ideaIdCounter = ideas.reduce(function(max, i) { return Math.max(max, i.id); }, 0) + 1;
-
-function saveIdeas() {
-  localStorage.setItem('lokale_ideas', JSON.stringify(ideas));
-}
+var ideaIdCounter = 1;
 
 var tagColors = {
   engagement: 'bg-pink-50 text-pink-600',
@@ -159,44 +145,50 @@ var tagColors = {
 };
 
 function renderIdeas() {
+  var ideas = hubData.ideas || [];
+  var voted = hubData.voted || [];
+  ideaIdCounter = ideas.reduce(function(max, i) { return Math.max(max, i.id); }, 0) + 1;
+
   var sorted = ideas.slice().sort(function(a, b) { return b.votes - a.votes; });
+
   var html = sorted.map(function(idea) {
     var tc = tagColors[idea.tag] || 'bg-slate-50 text-slate-500';
-    var voted = (JSON.parse(localStorage.getItem('lokale_voted') || '[]')).indexOf(idea.id) !== -1;
+    var hasVoted = voted.indexOf(idea.id) !== -1;
     return '<div class="idea-card bg-white rounded-xl p-4 border border-slate-100 flex items-start gap-3">'
-      + '<button onclick="voteIdea(' + idea.id + ')" class="vote-btn flex flex-col items-center gap-0.5 flex-shrink-0 mt-0.5">'
-      + '<span class="material-symbols-outlined text-lg ' + (voted ? 'voted' : 'text-slate-300') + '">arrow_upward</span>'
-      + '<span class="text-xs font-bold ' + (voted ? 'text-primary' : 'text-slate-400') + '">' + idea.votes + '</span>'
-      + '</button>'
+      + '<div class="vote-btn flex flex-col items-center gap-0.5 flex-shrink-0 mt-0.5" onclick="voteIdea(' + idea.id + ')">'
+      + '<span class="material-symbols-outlined text-lg ' + (hasVoted ? 'fill text-primary' : 'text-slate-300') + '">arrow_upward</span>'
+      + '<span class="text-xs font-bold ' + (hasVoted ? 'text-primary' : 'text-slate-400') + '">' + idea.votes + '</span>'
+      + '</div>'
       + '<div class="flex-1 min-w-0">'
       + '<div class="text-sm text-dark">' + (idea.emoji || '\uD83D\uDCA1') + ' ' + idea.text + '</div>'
       + '<span class="inline-block mt-1.5 px-2 py-0.5 rounded text-[10px] font-medium ' + tc + '">' + idea.tag + '</span>'
       + '</div>'
-      + '<button onclick="deleteIdea(' + idea.id + ')" class="text-slate-200 hover:text-red-400 transition flex-shrink-0 mt-1">'
-      + '<span class="material-symbols-outlined text-sm">close</span></button>'
+      + '<div class="vote-btn text-slate-200 hover:text-red-400 transition flex-shrink-0 mt-1" onclick="deleteIdea(' + idea.id + ')">'
+      + '<span class="material-symbols-outlined text-sm">close</span></div>'
       + '</div>';
   }).join('');
 
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('ideasGrid').classList.remove('hidden');
   document.getElementById('ideasGrid').innerHTML = html;
   document.getElementById('ideaCount').textContent = ideas.length + ' idees';
 }
 
 function voteIdea(id) {
-  var voted = JSON.parse(localStorage.getItem('lokale_voted') || '[]');
+  var voted = hubData.voted || [];
   var idx = voted.indexOf(id);
-  ideas = ideas.map(function(idea) {
+  hubData.ideas = (hubData.ideas || []).map(function(idea) {
     if (idea.id !== id) return idea;
     if (idx !== -1) {
-      voted.splice(idx, 1);
+      hubData.voted = voted.filter(function(v) { return v !== id; });
       return Object.assign({}, idea, { votes: Math.max(0, idea.votes - 1) });
     } else {
-      voted.push(id);
+      hubData.voted = voted.concat([id]);
       return Object.assign({}, idea, { votes: idea.votes + 1 });
     }
   });
-  localStorage.setItem('lokale_voted', JSON.stringify(voted));
-  saveIdeas();
   renderIdeas();
+  saveData();
 }
 
 function addIdea() {
@@ -205,19 +197,22 @@ function addIdea() {
   if (!text) return;
   var tag = document.getElementById('newIdeaTag').value;
   var emojis = { feature: '\u2728', dev: '\uD83D\uDCBB', engagement: '\uD83D\uDE80', monetisation: '\uD83D\uDCB0', contenu: '\uD83D\uDCDD', partenariat: '\uD83E\uDD1D' };
-  ideas.push({ id: ideaIdCounter++, text: text, tag: tag, emoji: emojis[tag] || '\uD83D\uDCA1', votes: 0 });
-  saveIdeas();
+  if (!hubData.ideas) hubData.ideas = [];
+  hubData.ideas.push({ id: ideaIdCounter++, text: text, tag: tag, emoji: emojis[tag] || '\uD83D\uDCA1', votes: 0 });
   renderIdeas();
+  saveData();
   input.value = '';
 }
 
 function deleteIdea(id) {
-  ideas = ideas.filter(function(i) { return i.id !== id; });
-  saveIdeas();
+  hubData.ideas = (hubData.ideas || []).filter(function(i) { return i.id !== id; });
   renderIdeas();
+  saveData();
 }
 
-renderIdeas();
+fetchData(function() {
+  renderIdeas();
+});
 </script>
 </body>
 </html>

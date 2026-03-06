@@ -305,6 +305,7 @@ tailwind.config = {
   </div>
 </div>
 
+<script src="sync.js"></script>
 <script>
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -321,29 +322,25 @@ var startDate = new Date(2026, 2, 1);
 var daysDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
 document.getElementById('daysSinceStart').textContent = Math.max(0, daysDiff);
 
-// Phase 0 items (synced with tasks)
-var phase0Items = [
-  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel", defaultDone: true },
-  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations", defaultDone: true },
-  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation", defaultDone: true },
-  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire", defaultDone: false },
-  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final", defaultDone: false },
-  { text: "Definir les roles", taskMatch: "Definir les roles", defaultDone: false },
+var phase0ItemsDef = [
+  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel" },
+  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations" },
+  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation" },
+  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire" },
+  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final" },
+  { text: "Definir les roles", taskMatch: "Definir les roles" },
 ];
 
-function updatePhase0() {
-  var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || [];
+function updateDashboard() {
+  var tasks = hubData.tasks || [];
+  var ideas = hubData.ideas || [];
+
+  // Phase 0
   var doneCount = 0;
   var html = '';
-
-  phase0Items.forEach(function(item) {
-    var isDone = item.defaultDone;
-    // Check if matching task exists and is done
-    tasks.forEach(function(t) {
-      if (t.text.indexOf(item.taskMatch) !== -1) {
-        isDone = t.done;
-      }
-    });
+  phase0ItemsDef.forEach(function(item) {
+    var match = tasks.find(function(t) { return t.text.indexOf(item.taskMatch) !== -1; });
+    var isDone = match ? match.done : false;
     if (isDone) doneCount++;
     var cls = isDone ? 'text-primary' : 'text-slate-400';
     var icon = isDone
@@ -351,29 +348,23 @@ function updatePhase0() {
       : '<span class="material-symbols-outlined text-sm">circle</span>';
     html += '<div class="flex items-center gap-2 ' + cls + '">' + icon + ' ' + item.text + '</div>';
   });
-
-  var pct = Math.round(doneCount / phase0Items.length * 100);
+  var pct = Math.round(doneCount / phase0ItemsDef.length * 100);
   document.getElementById('phase0Items').innerHTML = html;
   document.getElementById('phase0Pct').textContent = pct + '%';
   document.getElementById('phase0Bar').style.width = pct + '%';
-}
 
-// Task summary for card
-function updateTaskSummary() {
-  var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || [];
+  // Task summary
   var done = tasks.filter(function(t) { return t.done; }).length;
   document.getElementById('taskSummary').textContent = done + ' / ' + tasks.length + ' completees';
-}
 
-// Ideas summary
-function updateIdeaSummary() {
-  var ideas = JSON.parse(localStorage.getItem('lokale_ideas')) || [];
+  // Ideas summary
   document.getElementById('ideaSummary').textContent = ideas.length + ' idees';
 }
 
-updatePhase0();
-updateTaskSummary();
-updateIdeaSummary();
+// Load from JSONbin on init
+fetchData(function() {
+  updateDashboard();
+});
 </script>
 </body>
 </html>

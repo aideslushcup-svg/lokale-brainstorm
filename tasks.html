@@ -12,13 +12,8 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        primary: '#2D6A4F',
-        secondary: '#E76F51',
-        accent: '#F4A261',
-        cream: '#FEFAE0',
-        dark: '#264653',
-        sage: '#95D5B2',
-        sidebar: '#1a2332',
+        primary: '#2D6A4F', secondary: '#E76F51', accent: '#F4A261',
+        cream: '#FEFAE0', dark: '#264653', sage: '#95D5B2', sidebar: '#1a2332',
       },
       fontFamily: { display: ['Inter', 'sans-serif'] }
     }
@@ -29,7 +24,7 @@ tailwind.config = {
   * { box-sizing: border-box; }
   body { font-family: 'Inter', sans-serif; }
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
-  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1, 'wght' 400; }
   html { scroll-behavior: smooth; }
   .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
   .main-content { margin-left: 260px; }
@@ -50,74 +45,55 @@ tailwind.config = {
     content: '\2713'; color: white; font-size: 14px; font-weight: 700;
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   }
+  #syncStatus { transition: opacity 0.5s; font-size: 11px; }
 </style>
 </head>
 <body class="bg-slate-50 text-dark">
 
 <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<!-- SIDEBAR -->
 <aside id="sidebar" class="sidebar bg-sidebar text-white flex flex-col">
   <div class="p-5 border-b border-white/10">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
         <span class="material-symbols-outlined text-white text-xl">eco</span>
       </div>
-      <div>
-        <h1 class="font-bold text-base leading-tight">Lokale</h1>
-        <p class="text-[11px] text-white/40">Centre de Commandes</p>
-      </div>
+      <div><h1 class="font-bold text-base leading-tight">Lokale</h1><p class="text-[11px] text-white/40">Centre de Commandes</p></div>
     </div>
   </div>
   <nav class="flex-1 p-4 space-y-1">
-    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble
-    </a>
-    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium">
-      <span class="material-symbols-outlined text-lg">checklist</span> Taches
-    </a>
-    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">timeline</span> Roadmap
-    </a>
-    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur
-    </a>
-    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu
-    </a>
-    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting
-    </a>
-    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">storefront</span> Marketplace
-    </a>
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble</a>
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium"><span class="material-symbols-outlined text-lg">checklist</span> Taches</a>
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">timeline</span> Roadmap</a>
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur</a>
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu</a>
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting</a>
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">storefront</span> Marketplace</a>
   </nav>
   <div class="p-4 border-t border-white/10">
-    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm">
-      <span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board
-    </a>
+    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board</a>
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main-content min-h-screen">
   <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
-    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
+    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
     <span class="font-bold text-sm">Taches</span>
-    <div class="w-10"></div>
+    <span id="syncStatus" class="text-slate-400">Chargement...</span>
   </div>
 
   <div class="p-4 sm:p-6 lg:p-8 max-w-4xl">
-    <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
-        <span class="material-symbols-outlined text-secondary text-3xl">checklist</span> Taches
-      </h1>
-      <p class="text-slate-400 text-sm mt-1">Gere tes taches et suis ta progression Phase 0</p>
+    <div class="mb-6 flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+          <span class="material-symbols-outlined text-secondary text-3xl">checklist</span> Taches
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">Gere tes taches et suis ta progression Phase 0</p>
+      </div>
+      <span id="syncStatus" class="hidden sm:block text-slate-400 text-xs mt-2">Chargement...</span>
     </div>
 
-    <!-- Phase 0 Progress (synced) -->
+    <!-- Phase 0 Progress -->
     <div class="bg-white rounded-xl p-5 border border-slate-100 mb-6">
       <div class="flex items-center justify-between mb-3">
         <div class="font-semibold text-dark text-sm">Progression Phase 0</div>
@@ -148,16 +124,22 @@ tailwind.config = {
 
     <!-- Filter tabs -->
     <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
-      <button onclick="filterTasks('all')" class="task-filter active px-3 py-1.5 rounded-lg text-xs font-medium bg-dark text-white flex-shrink-0">Tout</button>
-      <button onclick="filterTasks('dev')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Dev</button>
-      <button onclick="filterTasks('design')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Design</button>
-      <button onclick="filterTasks('marketing')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Marketing</button>
-      <button onclick="filterTasks('contenu')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Contenu</button>
-      <button onclick="filterTasks('partenariat')" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Partenariat</button>
+      <button onclick="filterTasks('all', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-dark text-white flex-shrink-0">Tout</button>
+      <button onclick="filterTasks('dev', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Dev</button>
+      <button onclick="filterTasks('design', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Design</button>
+      <button onclick="filterTasks('marketing', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Marketing</button>
+      <button onclick="filterTasks('contenu', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Contenu</button>
+      <button onclick="filterTasks('partenariat', this)" class="task-filter px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 flex-shrink-0">Partenariat</button>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loadingState" class="text-center py-12 text-slate-400">
+      <span class="material-symbols-outlined text-4xl animate-spin">sync</span>
+      <p class="text-sm mt-2">Chargement des taches...</p>
     </div>
 
     <!-- Task list -->
-    <div id="taskList" class="space-y-2"></div>
+    <div id="taskList" class="space-y-2 hidden"></div>
 
     <div class="mt-3 flex items-center gap-4 text-xs text-slate-400">
       <span><span id="tasksDone">0</span> completees</span>
@@ -166,38 +148,15 @@ tailwind.config = {
   </div>
 </div>
 
+<script src="sync.js"></script>
 <script>
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
-// ---- TASKS ----
-var defaultTasks = [
-  { id: 1, text: "Appel avec le partenaire — valider la vision", cat: "partenariat", done: false },
-  { id: 2, text: "Choisir le nom final de l'app", cat: "partenariat", done: false },
-  { id: 3, text: "Definir les roles (dev vs contenu/marketing)", cat: "partenariat", done: false },
-  { id: 4, text: "Finaliser le logo Lokale", cat: "design", done: false },
-  { id: 5, text: "Valider la palette de couleurs", cat: "design", done: false },
-  { id: 6, text: "Ajuster les maquettes selon feedback partenaire", cat: "design", done: false },
-  { id: 7, text: "Setup projet Expo + navigation", cat: "dev", done: true },
-  { id: 8, text: "Configurer Supabase + migrations", cat: "dev", done: true },
-  { id: 9, text: "Implementer ecran Carte avec map", cat: "dev", done: false },
-  { id: 10, text: "Implementer Scanner de produits", cat: "dev", done: false },
-  { id: 11, text: "Creer les comptes sociaux (Insta, TikTok)", cat: "marketing", done: false },
-  { id: 12, text: "Planifier le calendrier de contenu", cat: "marketing", done: false },
-  { id: 13, text: "Ecrire 5 premieres recettes", cat: "contenu", done: false },
-  { id: 14, text: "Lister les 20 premieres fermes a contacter", cat: "contenu", done: false },
-  { id: 15, text: "Brainstorm board + deploy Vercel", cat: "dev", done: true },
-];
-
-var tasks = JSON.parse(localStorage.getItem('lokale_tasks')) || defaultTasks;
 var taskFilter = 'all';
-var taskIdCounter = tasks.reduce(function(max, t) { return Math.max(max, t.id); }, 0) + 1;
-
-function saveTasks() {
-  localStorage.setItem('lokale_tasks', JSON.stringify(tasks));
-}
+var taskIdCounter = 1;
 
 var catColors = {
   dev: 'bg-blue-50 text-blue-600',
@@ -207,78 +166,22 @@ var catColors = {
   partenariat: 'bg-emerald-50 text-emerald-600',
 };
 
-function renderTasks() {
-  var filtered = taskFilter === 'all' ? tasks : tasks.filter(function(t) { return t.cat === taskFilter; });
-
-  var html = filtered.map(function(t) {
-    var cc = catColors[t.cat] || 'bg-slate-50 text-slate-500';
-    return '<div class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-slate-100' + (t.done ? ' opacity-60' : '') + '">'
-      + '<input type="checkbox" class="task-check" ' + (t.done ? 'checked' : '') + ' onchange="toggleTask(' + t.id + ')" />'
-      + '<span class="flex-1 text-sm ' + (t.done ? 'line-through text-slate-400' : 'text-dark') + '">' + t.text + '</span>'
-      + '<span class="px-2 py-0.5 rounded-lg text-[10px] font-medium ' + cc + ' flex-shrink-0">' + t.cat + '</span>'
-      + '<button onclick="deleteTask(' + t.id + ')" class="text-slate-300 hover:text-red-400 transition flex-shrink-0">'
-      + '<span class="material-symbols-outlined text-sm">close</span></button>'
-      + '</div>';
-  }).join('');
-
-  document.getElementById('taskList').innerHTML = html;
-  document.getElementById('tasksDone').textContent = tasks.filter(function(t) { return t.done; }).length;
-  document.getElementById('tasksTotal').textContent = tasks.length;
-  updatePhase0();
-}
-
-function toggleTask(id) {
-  tasks = tasks.map(function(t) { return t.id === id ? Object.assign({}, t, { done: !t.done }) : t; });
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(id) {
-  tasks = tasks.filter(function(t) { return t.id !== id; });
-  saveTasks();
-  renderTasks();
-}
-
-function addTask() {
-  var input = document.getElementById('newTaskInput');
-  var text = input.value.trim();
-  if (!text) return;
-  var cat = document.getElementById('newTaskCat').value;
-  tasks.push({ id: taskIdCounter++, text: text, cat: cat, done: false });
-  saveTasks();
-  renderTasks();
-  input.value = '';
-}
-
-function filterTasks(cat) {
-  taskFilter = cat;
-  document.querySelectorAll('.task-filter').forEach(function(btn) {
-    btn.classList.remove('bg-dark', 'text-white');
-    btn.classList.add('bg-slate-100', 'text-slate-600');
-  });
-  event.target.classList.remove('bg-slate-100', 'text-slate-600');
-  event.target.classList.add('bg-dark', 'text-white');
-  renderTasks();
-}
-
-// Phase 0 progress synced with tasks
 var phase0Items = [
-  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel", defaultDone: true },
-  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations", defaultDone: true },
-  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation", defaultDone: true },
-  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire", defaultDone: false },
-  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final", defaultDone: false },
-  { text: "Definir les roles", taskMatch: "Definir les roles", defaultDone: false },
+  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel" },
+  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations" },
+  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation" },
+  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire" },
+  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final" },
+  { text: "Definir les roles", taskMatch: "Definir les roles" },
 ];
 
 function updatePhase0() {
+  var tasks = hubData.tasks || [];
   var doneCount = 0;
   var html = '';
   phase0Items.forEach(function(item) {
-    var isDone = item.defaultDone;
-    tasks.forEach(function(t) {
-      if (t.text.indexOf(item.taskMatch) !== -1) isDone = t.done;
-    });
+    var match = tasks.find(function(t) { return t.text.indexOf(item.taskMatch) !== -1; });
+    var isDone = match ? match.done : false;
     if (isDone) doneCount++;
     var cls = isDone ? 'text-primary' : 'text-slate-400';
     var icon = isDone
@@ -292,7 +195,74 @@ function updatePhase0() {
   document.getElementById('phase0Bar').style.width = pct + '%';
 }
 
-renderTasks();
+function renderTasks() {
+  var tasks = hubData.tasks || [];
+  taskIdCounter = tasks.reduce(function(max, t) { return Math.max(max, t.id); }, 0) + 1;
+
+  var filtered = taskFilter === 'all' ? tasks : tasks.filter(function(t) { return t.cat === taskFilter; });
+
+  var html = filtered.map(function(t) {
+    var cc = catColors[t.cat] || 'bg-slate-50 text-slate-500';
+    return '<div class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-slate-100' + (t.done ? ' opacity-60' : '') + '">'
+      + '<input type="checkbox" class="task-check" ' + (t.done ? 'checked' : '') + ' onchange="toggleTask(' + t.id + ')" />'
+      + '<span class="flex-1 text-sm ' + (t.done ? 'line-through text-slate-400' : 'text-dark') + '">' + t.text + '</span>'
+      + '<span class="px-2 py-0.5 rounded-lg text-[10px] font-medium ' + cc + ' flex-shrink-0">' + t.cat + '</span>'
+      + '<button onclick="deleteTask(' + t.id + ')" class="text-slate-300 hover:text-red-400 transition flex-shrink-0">'
+      + '<span class="material-symbols-outlined text-sm">close</span></button>'
+      + '</div>';
+  }).join('');
+
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('taskList').classList.remove('hidden');
+  document.getElementById('taskList').innerHTML = html;
+  document.getElementById('tasksDone').textContent = tasks.filter(function(t) { return t.done; }).length;
+  document.getElementById('tasksTotal').textContent = tasks.length;
+  updatePhase0();
+}
+
+function toggleTask(id) {
+  hubData.tasks = (hubData.tasks || []).map(function(t) {
+    return t.id === id ? Object.assign({}, t, { done: !t.done }) : t;
+  });
+  renderTasks();
+  saveData();
+}
+
+function deleteTask(id) {
+  hubData.tasks = (hubData.tasks || []).filter(function(t) { return t.id !== id; });
+  renderTasks();
+  saveData();
+}
+
+function addTask() {
+  var input = document.getElementById('newTaskInput');
+  var text = input.value.trim();
+  if (!text) return;
+  var cat = document.getElementById('newTaskCat').value;
+  if (!hubData.tasks) hubData.tasks = [];
+  hubData.tasks.push({ id: taskIdCounter++, text: text, cat: cat, done: false });
+  renderTasks();
+  saveData();
+  input.value = '';
+}
+
+function filterTasks(cat, btn) {
+  taskFilter = cat;
+  document.querySelectorAll('.task-filter').forEach(function(b) {
+    b.classList.remove('bg-dark', 'text-white');
+    b.classList.add('bg-slate-100', 'text-slate-600');
+  });
+  if (btn) {
+    btn.classList.remove('bg-slate-100', 'text-slate-600');
+    btn.classList.add('bg-dark', 'text-white');
+  }
+  renderTasks();
+}
+
+// Init — load from JSONbin
+fetchData(function() {
+  renderTasks();
+});
 </script>
 </body>
 </html>
