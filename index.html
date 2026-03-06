@@ -101,20 +101,21 @@ tailwind.config = {
     display: flex;
   }
   .modal-phone {
-    width: 390px;
-    height: 780px;
-    border-radius: 50px;
-    border: 8px solid #1a1a1a;
+    width: min(390px, 85vw);
+    height: min(780px, 72vh);
+    border-radius: 36px;
+    border: 6px solid #1a1a1a;
     overflow: hidden;
     box-shadow: 0 40px 100px rgba(0,0,0,0.5);
     position: relative;
     background: white;
   }
   .modal-phone iframe {
-    width: 390px;
-    height: 780px;
+    width: 430px;
+    height: 932px;
     border: none;
     display: block;
+    transform-origin: top left;
   }
   .modal-nav {
     display: flex;
@@ -188,6 +189,54 @@ tailwind.config = {
     border: none;
     transform: scale(0.6);
     transform-origin: top left;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 640px) {
+    .phone-frame {
+      width: 220px;
+      height: 440px;
+      border-radius: 28px;
+      border-width: 5px;
+    }
+    .phone-frame iframe {
+      transform: scale(0.47);
+    }
+    .phone-overlay::after {
+      font-size: 10px;
+      padding: 4px 10px;
+    }
+    .modal-phone {
+      border-radius: 28px;
+      border-width: 5px;
+    }
+    .modal-nav button {
+      width: 44px;
+      height: 44px;
+    }
+    .modal-close {
+      top: 12px;
+      right: 12px;
+    }
+    .phase-card:hover {
+      transform: none;
+    }
+    .feature-card:hover {
+      transform: none;
+    }
+  }
+
+  /* Budget table mobile */
+  @media (max-width: 640px) {
+    .budget-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -1rem;
+      padding: 0 1rem;
+    }
+    .budget-table-wrap table {
+      min-width: 500px;
+    }
   }
 
   /* Roadmap */
@@ -276,7 +325,7 @@ tailwind.config = {
 
 <!-- NAVIGATION -->
 <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-50">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
         <span class="material-symbols-outlined text-white">eco</span>
@@ -286,6 +335,10 @@ tailwind.config = {
         <p class="text-xs text-slate-400">Brainstorm Board</p>
       </div>
     </div>
+    <!-- Mobile hamburger -->
+    <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100" onclick="toggleMenu()">
+      <span class="material-symbols-outlined text-dark">menu</span>
+    </button>
     <div class="hidden md:flex items-center gap-8">
       <a href="#mockups" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Maquettes</a>
       <a href="#features" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Features</a>
@@ -297,22 +350,43 @@ tailwind.config = {
       <a href="#fermes" class="nav-link text-sm font-medium text-slate-500 hover:text-primary py-1">Fermes</a>
     </div>
   </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-100 px-4 pb-4">
+    <div class="flex flex-col gap-1 pt-2">
+      <a href="#mockups" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Maquettes</a>
+      <a href="#features" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Features</a>
+      <a href="#roadmap" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Roadmap</a>
+      <a href="#marketing" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Marketing</a>
+      <a href="#discussion" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Discussion</a>
+      <a href="#budget" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Budget</a>
+      <a href="#influenceurs" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Influenceurs</a>
+      <a href="#fermes" onclick="toggleMenu()" class="nav-link text-sm font-medium text-slate-500 hover:text-primary hover:bg-primary/5 py-3 px-3 rounded-lg">Fermes</a>
+    </div>
+  </div>
 </nav>
+<script>
+function toggleMenu() {
+  var menu = document.getElementById('mobileMenu');
+  var btn = document.getElementById('menuToggle');
+  menu.classList.toggle('hidden');
+  btn.querySelector('span').textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+}
+</script>
 
 <!-- HERO -->
-<section class="hero-gradient pt-28 pb-20 px-6">
+<section class="hero-gradient pt-24 sm:pt-28 pb-14 sm:pb-20 px-4 sm:px-6">
   <div class="max-w-4xl mx-auto text-center">
     <div class="inline-flex items-center gap-2 bg-white/10 text-white/80 px-4 py-2 rounded-full text-sm mb-6">
       <span class="material-symbols-outlined text-sm">calendar_today</span>
       Mars 2026 &mdash; Session brainstorm
     </div>
-    <h1 class="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
+    <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
       App Orga
     </h1>
-    <p class="text-xl text-white/70 max-w-2xl mx-auto mb-2">
+    <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-2">
       Alimentation organique & locale au Quebec
     </p>
-    <p class="text-base text-white/50 max-w-xl mx-auto">
+    <p class="text-sm sm:text-base text-white/50 max-w-xl mx-auto">
       Decouvrir les fermes, scanner les produits, manger sante.
     </p>
     <div class="flex flex-wrap justify-center gap-3 mt-8">
@@ -357,17 +431,17 @@ tailwind.config = {
 </section>
 
 <!-- MOCKUPS -->
-<section id="mockups" class="py-16 bg-cream">
-  <div class="max-w-7xl mx-auto px-6">
+<section id="mockups" class="py-10 sm:py-16 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">01 &mdash; Maquettes</span>
       <h2 class="text-3xl font-bold text-dark">5 ecrans de l'app</h2>
       <p class="text-slate-500 mt-2">Generees avec Google Stitch &mdash; a valider ensemble</p>
     </div>
 
-    <div class="flex gap-8 overflow-x-auto pb-8 px-4 mockups-scroll">
+    <div class="flex gap-4 sm:gap-8 overflow-x-auto pb-8 px-2 sm:px-4 mockups-scroll">
       <!-- Carte -->
-      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+      <div class="flex flex-col items-center gap-4 min-w-[220px] sm:min-w-[280px]">
         <div class="phone-frame">
           <div class="phone-overlay" onclick="openModal(0)"></div>
           <iframe src="accueil_d_couverte_de_fermes/code.html" loading="lazy"></iframe>
@@ -381,7 +455,7 @@ tailwind.config = {
       </div>
 
       <!-- Scanner -->
-      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+      <div class="flex flex-col items-center gap-4 min-w-[220px] sm:min-w-[280px]">
         <div class="phone-frame">
           <div class="phone-overlay" onclick="openModal(1)"></div>
           <iframe src="scanner_de_produits_r_vision/code.html" loading="lazy"></iframe>
@@ -395,7 +469,7 @@ tailwind.config = {
       </div>
 
       <!-- Recettes -->
-      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+      <div class="flex flex-col items-center gap-4 min-w-[220px] sm:min-w-[280px]">
         <div class="phone-frame">
           <div class="phone-overlay" onclick="openModal(2)"></div>
           <iframe src="flux_de_recettes_bio/code.html" loading="lazy"></iframe>
@@ -409,7 +483,7 @@ tailwind.config = {
       </div>
 
       <!-- Deals -->
-      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+      <div class="flex flex-col items-center gap-4 min-w-[220px] sm:min-w-[280px]">
         <div class="phone-frame">
           <div class="phone-overlay" onclick="openModal(3)"></div>
           <iframe src="aubaines_app_orga/code.html" loading="lazy"></iframe>
@@ -423,7 +497,7 @@ tailwind.config = {
       </div>
 
       <!-- Profil -->
-      <div class="flex flex-col items-center gap-4 min-w-[280px]">
+      <div class="flex flex-col items-center gap-4 min-w-[220px] sm:min-w-[280px]">
         <div class="phone-frame">
           <div class="phone-overlay" onclick="openModal(4)"></div>
           <iframe src="mon_profil_app_orga/code.html" loading="lazy"></iframe>
@@ -440,8 +514,8 @@ tailwind.config = {
 </section>
 
 <!-- FEATURES -->
-<section id="features" class="py-16 bg-white">
-  <div class="max-w-7xl mx-auto px-6">
+<section id="features" class="py-10 sm:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">02 &mdash; Features</span>
       <h2 class="text-3xl font-bold text-dark">Qu'est-ce qu'on met dans l'app?</h2>
@@ -548,20 +622,20 @@ tailwind.config = {
 </section>
 
 <!-- ROADMAP -->
-<section id="roadmap" class="py-16 bg-slate-50">
-  <div class="max-w-4xl mx-auto px-6">
+<section id="roadmap" class="py-10 sm:py-16 bg-slate-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">03 &mdash; Roadmap</span>
       <h2 class="text-3xl font-bold text-dark">Du brainstorm au lancement</h2>
       <p class="text-slate-500 mt-2">Etapes cles pour aller de l'idee a l'App Store</p>
     </div>
 
-    <div class="relative pl-16">
+    <div class="relative pl-12 sm:pl-16">
       <div class="roadmap-line"></div>
 
       <!-- Phase 0 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-primary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
           <span class="material-symbols-outlined">handshake</span>
         </div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
@@ -582,7 +656,7 @@ tailwind.config = {
 
       <!-- Phase 1 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-primary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">1</div>
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-primary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">1</div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
           <h3 class="font-bold text-lg text-dark mb-3">Phase 1 &mdash; Branding & Design Final</h3>
           <ul class="space-y-2 text-sm text-slate-600">
@@ -596,7 +670,7 @@ tailwind.config = {
 
       <!-- Phase 2 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-primary/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">2</div>
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-primary/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">2</div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
           <h3 class="font-bold text-lg text-dark mb-3">Phase 2 &mdash; Developpement MVP</h3>
           <p class="text-xs text-slate-400 mb-3">Le coeur de l'app &mdash; les features essentielles seulement</p>
@@ -613,7 +687,7 @@ tailwind.config = {
 
       <!-- Phase 3 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-secondary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">3</div>
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-secondary/80 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">3</div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
           <h3 class="font-bold text-lg text-dark mb-3">Phase 3 &mdash; Contenu & Donnees</h3>
           <ul class="space-y-2 text-sm text-slate-600">
@@ -628,7 +702,7 @@ tailwind.config = {
 
       <!-- Phase 4 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-secondary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">4</div>
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-secondary rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">4</div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
           <h3 class="font-bold text-lg text-dark mb-3">Phase 4 &mdash; Beta Testing</h3>
           <ul class="space-y-2 text-sm text-slate-600">
@@ -642,7 +716,7 @@ tailwind.config = {
 
       <!-- Phase 5 -->
       <div class="relative mb-8">
-        <div class="absolute -left-16 w-14 h-14 bg-accent rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-accent rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
           <span class="material-symbols-outlined">rocket_launch</span>
         </div>
         <div class="phase-card bg-gradient-to-r from-primary/5 to-accent/10 rounded-xl p-6 shadow-sm border-2 border-primary/20">
@@ -659,7 +733,7 @@ tailwind.config = {
 
       <!-- Phase 6 -->
       <div class="relative">
-        <div class="absolute -left-16 w-14 h-14 bg-accent/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
+        <div class="absolute -left-12 sm:-left-16 w-10 h-10 sm:w-14 sm:h-14 text-xs sm:text-base bg-accent/60 rounded-full flex items-center justify-center text-white font-bold shadow-lg z-10">
           <span class="material-symbols-outlined">trending_up</span>
         </div>
         <div class="phase-card bg-white rounded-xl p-6 shadow-sm border border-slate-100">
@@ -677,8 +751,8 @@ tailwind.config = {
 </section>
 
 <!-- MARKETING -->
-<section id="marketing" class="py-16 bg-white">
-  <div class="max-w-6xl mx-auto px-6">
+<section id="marketing" class="py-10 sm:py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-accent/10 text-accent px-4 py-1.5 rounded-full text-sm font-semibold mb-3">04 &mdash; Marketing</span>
       <h2 class="text-3xl font-bold text-dark">Strategie reseaux sociaux</h2>
@@ -779,8 +853,8 @@ tailwind.config = {
 </section>
 
 <!-- DISCUSSION TOPICS -->
-<section id="discussion" class="py-16 bg-slate-50">
-  <div class="max-w-4xl mx-auto px-6">
+<section id="discussion" class="py-10 sm:py-16 bg-slate-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">05 &mdash; A discuter</span>
       <h2 class="text-3xl font-bold text-dark">Points a clarifier ensemble</h2>
@@ -852,15 +926,15 @@ tailwind.config = {
 </section>
 
 <!-- BUDGET -->
-<section id="budget" class="py-16 bg-white">
-  <div class="max-w-4xl mx-auto px-6">
+<section id="budget" class="py-10 sm:py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">06 &mdash; Budget</span>
       <h2 class="text-3xl font-bold text-dark">Cout pour lancer (bootstrap)</h2>
       <p class="text-slate-500 mt-2">Le minimum pour mettre l'app sur les stores</p>
     </div>
 
-    <div class="bg-slate-50 rounded-2xl overflow-hidden">
+    <div class="bg-slate-50 rounded-2xl overflow-hidden budget-table-wrap">
       <table class="w-full">
         <thead>
           <tr class="bg-primary text-white">
@@ -930,8 +1004,8 @@ tailwind.config = {
 
 
 <!-- INFLUENCEURS SECTION -->
-<section id="influenceurs" class="py-16 bg-white">
-  <div class="max-w-6xl mx-auto px-6">
+<section id="influenceurs" class="py-10 sm:py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-pink-100 text-pink-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-3">08 &mdash; Croissance</span>
       <h2 class="text-3xl font-bold text-dark">Strategie influenceurs & codes referral</h2>
@@ -1038,7 +1112,7 @@ tailwind.config = {
         <span class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">🔗</span>
         Comment le code referral fonctionne
       </h3>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div class="bg-white/5 rounded-xl p-4 text-center">
           <div class="text-3xl mb-2">1</div>
           <div class="text-sm font-semibold mb-1">Influenceur s'inscrit</div>
@@ -1126,8 +1200,8 @@ tailwind.config = {
 </section>
 
 <!-- FERMES SECTION -->
-<section id="fermes" class="py-16 bg-cream">
-  <div class="max-w-7xl mx-auto px-6">
+<section id="fermes" class="py-10 sm:py-16 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
     <div class="text-center mb-12">
       <span class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-3">07 &mdash; Fermes du Quebec</span>
       <h2 class="text-3xl font-bold text-dark">153 fermes recommandees</h2>
@@ -1139,12 +1213,13 @@ tailwind.config = {
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <div class="relative flex-1">
-        <input id="farmSearch" type="text" placeholder="Chercher une ferme..." 
-          class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-sm"/>
+    <div class="flex flex-col gap-3 mb-6">
+      <div class="relative">
+        <input id="farmSearch" type="text" placeholder="Chercher une ferme..."
+          class="w-full pl-4 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white text-sm"/>
       </div>
-      <select id="regionFilter" class="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none bg-white text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row gap-3">
+      <select id="regionFilter" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:outline-none bg-white text-sm text-slate-600">
         <option value="">Toutes les regions</option>
         <option value="Monteregio">Monteregie</option>
         <option value="Quebec/Chaudiere">Quebec / Chaudiere-Appalaches</option>
@@ -1162,6 +1237,7 @@ tailwind.config = {
         <input type="checkbox" id="partnerFilter" class="accent-primary w-4 h-4"/>
         Partenaires potentiels seulement
       </label>
+      </div>
     </div>
 
     <div class="text-sm text-slate-400 mb-4">Affichage de <span id="visibleCount">0</span> fermes</div>
@@ -1229,7 +1305,7 @@ renderFarms();
 </script>
 
 <!-- FOOTER -->
-<footer class="hero-gradient py-12 px-6">
+<footer class="hero-gradient py-10 sm:py-12 px-4 sm:px-6">
   <div class="max-w-4xl mx-auto text-center">
     <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
       <span class="material-symbols-outlined text-white text-3xl">eco</span>
@@ -1308,7 +1384,16 @@ function closeModal() {
 
 function updateModal() {
   const m = mockups[currentIndex];
-  document.getElementById('modalIframe').src = m.src;
+  var iframe = document.getElementById('modalIframe');
+  iframe.src = m.src;
+  // Scale iframe to fit modal-phone container
+  var container = document.querySelector('.modal-phone');
+  var scaleX = container.clientWidth / 430;
+  var scaleY = container.clientHeight / 932;
+  var scale = Math.min(scaleX, scaleY);
+  iframe.style.transform = 'scale(' + scale + ')';
+  iframe.style.width = '430px';
+  iframe.style.height = '932px';
   document.getElementById('modalLabel').textContent = m.label;
 
   const dots = document.getElementById('modalDots');
