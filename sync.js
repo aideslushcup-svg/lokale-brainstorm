@@ -1,7 +1,7 @@
 // sync.js — JSONbin.io sync for Lokale Hub
 // NOTE: This key is visible in source code — acceptable for a private brainstorm board.
 
-var JSONBIN_KEY = '$2a$10$Rx.xEw2A7bdcv9EQAO5Rj.VnglK4DL5HazMdYwORfdqY1r2c9HDVO';
+var JSONBIN_KEY = '$2a$10$W495IgqkukRyqI2IqWBuY.KgTMl2IIN2Jhjn1SZDbFadvy/FBPTj2';
 var JSONBIN_BIN = '69ab12f443b1c97be9bacaab';
 var JSONBIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN;
 
