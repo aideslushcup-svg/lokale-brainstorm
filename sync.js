@@ -42,7 +42,16 @@ var DEFAULT_DATA = {
     { id: 11, text: "Livraison collaborative entre fermes", tag: "feature", emoji: "\uD83D\uDE9B", votes: 0 },
     { id: 12, text: "Carte des marches fermiers saisonniers", tag: "feature", emoji: "\uD83D\uDDFA\uFE0F", votes: 0 },
     { id: 13, text: "API publique pour fermes partenaires", tag: "dev", emoji: "\uD83D\uDD0C", votes: 0 },
-    { id: 14, text: "Version web (PWA) de la carte", tag: "dev", emoji: "\uD83C\uDF10", votes: 0 }
+    { id: 14, text: "Version web (PWA) de la carte", tag: "dev", emoji: "\uD83C\uDF10", votes: 0 },
+    { id: 15, text: "Dashboard Fermier — app/web pour gerer les deals", tag: "feature", emoji: "\uD83D\uDCCA", votes: 0 },
+    { id: 16, text: "Panier mystere a prix reduit (produits surprise)", tag: "feature", emoji: "\uD83C\uDF81", votes: 0 },
+    { id: 17, text: "Comparaison de prix (ferme locale vs epicerie)", tag: "feature", emoji: "\uD83D\uDCB2", votes: 0 },
+    { id: 18, text: "Alertes aubaines personnalisees (push)", tag: "engagement", emoji: "\uD83D\uDD14", votes: 0 },
+    { id: 19, text: "Compte a rebours sur les deals urgents", tag: "feature", emoji: "\u23F3", votes: 0 },
+    { id: 20, text: "Badge LIVE quand partenaire visite une ferme", tag: "engagement", emoji: "\uD83D\uDD34", votes: 0 },
+    { id: 21, text: "Scanner IA — Claude Vision pour produits inconnus", tag: "dev", emoji: "\uD83E\uDD16", votes: 0 },
+    { id: 22, text: "Chemin anime du user vers la ferme la plus proche", tag: "feature", emoji: "\uD83D\uDDFA\uFE0F", votes: 0 },
+    { id: 23, text: "Section educative: d'ou vient ton steak?", tag: "contenu", emoji: "\uD83E\uDD69", votes: 0 }
   ],
   voted: [],
   notes: {}

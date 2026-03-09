@@ -127,88 +127,149 @@ tailwind.config = {
   </div>
 </div>
 
+<script src="sync.js"></script>
 <script>
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
+// Phase definitions with taskMatch patterns to link to hubData.tasks
 var phases = [
   {
-    title: "Phase 0 — Brainstorm & Partenariat", status: "EN COURS", color: "primary",
+    title: "Phase 0 — Brainstorm & Partenariat", color: "primary",
     items: [
-      { text: "Maquettes des 5 ecrans", done: true },
-      { text: "Base de donnees Supabase configuree", done: true },
-      { text: "Stack technique choisi", done: true },
-      { text: "Valider la vision avec le partenaire", done: false },
-      { text: "Choisir le nom de l'app", done: false },
-      { text: "Definir les roles (dev vs contenu/marketing)", done: false },
+      { text: "Maquettes des 5 ecrans", taskMatch: "Brainstorm board" },
+      { text: "Base de donnees Supabase configuree", taskMatch: "Configurer Supabase" },
+      { text: "Stack technique choisi", taskMatch: "Setup projet Expo" },
+      { text: "Valider la vision avec le partenaire", taskMatch: "Appel avec le partenaire" },
+      { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final" },
+      { text: "Definir les roles (dev vs contenu/marketing)", taskMatch: "Definir les roles" },
     ]
   },
   {
-    title: "Phase 1 — Branding & Design Final", status: "A VENIR", color: "secondary",
+    title: "Phase 1 — Branding & Design Final", color: "secondary",
     items: [
-      { text: "Logo + identite visuelle", done: false },
-      { text: "Palette de couleurs validee", done: false },
-      { text: "Maquettes finales ajustees", done: false },
-      { text: "Creer les comptes sociaux", done: false },
+      { text: "Logo + identite visuelle", taskMatch: "Finaliser le logo" },
+      { text: "Palette de couleurs validee", taskMatch: "Valider la palette" },
+      { text: "Maquettes finales ajustees", taskMatch: "Ajuster les maquettes" },
+      { text: "Creer les comptes sociaux", taskMatch: "Creer les comptes sociaux" },
     ]
   },
   {
-    title: "Phase 2 — Developpement MVP", status: "A VENIR", color: "primary",
+    title: "Phase 2 — Developpement MVP", color: "primary",
     items: [
-      { text: "Ecran Carte avec map + fermes", done: false },
-      { text: "Scanner de produits (camera + Open Food Facts)", done: false },
-      { text: "Ecran Recettes (feed)", done: false },
-      { text: "Ecran Deals (aubaines)", done: false },
-      { text: "Profil + authentification", done: false },
-      { text: "Navigation entre les 5 tabs", done: false },
+      { text: "Ecran Carte avec map + fermes", taskMatch: "Implementer ecran Carte" },
+      { text: "Scanner de produits (camera + Open Food Facts)", taskMatch: "Implementer Scanner" },
+      { text: "Ecran Recettes (feed)", taskMatch: "Ecrire 5 premieres recettes" },
+      { text: "Ecran Deals (aubaines)", taskMatch: "Lister les 20 premieres fermes" },
+      { text: "Profil + authentification", taskMatch: null },
+      { text: "Navigation entre les 5 tabs", taskMatch: null },
     ]
   },
   {
-    title: "Phase 3 — Contenu & Donnees", status: "A VENIR", color: "secondary",
+    title: "Phase 3 — Contenu & Donnees", color: "secondary",
     items: [
-      { text: "Ajouter les vraies fermes du Quebec", done: false },
-      { text: "Creer les premieres recettes", done: false },
-      { text: "Photos des fermes", done: false },
-      { text: "Premiers deals avec fermes partenaires", done: false },
+      { text: "Ajouter les vraies fermes du Quebec", taskMatch: null },
+      { text: "Creer les premieres recettes", taskMatch: null },
+      { text: "Photos des fermes", taskMatch: null },
+      { text: "Premiers deals avec fermes partenaires", taskMatch: null },
     ]
   },
   {
-    title: "Phase 4 — Beta Testing", status: "A VENIR", color: "accent",
+    title: "Phase 4 — Beta Testing", color: "accent",
     items: [
-      { text: "TestFlight + Google Play beta", done: false },
-      { text: "Inviter 20-50 testeurs", done: false },
-      { text: "Collecter feedback, corriger bugs", done: false },
-      { text: "Teasing sur les reseaux sociaux", done: false },
+      { text: "TestFlight + Google Play beta", taskMatch: null },
+      { text: "Inviter 20-50 testeurs", taskMatch: null },
+      { text: "Collecter feedback, corriger bugs", taskMatch: null },
+      { text: "Teasing sur les reseaux sociaux", taskMatch: null },
     ]
   },
   {
-    title: "Phase 5 — LANCEMENT", status: "A VENIR", color: "secondary",
+    title: "Phase 5 — LANCEMENT", color: "secondary",
     items: [
-      { text: "Publier sur App Store + Google Play", done: false },
-      { text: "Video de lancement (partenaire)", done: false },
-      { text: "Campagne TikTok / Instagram Reels", done: false },
-      { text: "Contacter medias locaux", done: false },
-      { text: "Landing page web", done: false },
+      { text: "Publier sur App Store + Google Play", taskMatch: null },
+      { text: "Video de lancement (partenaire)", taskMatch: null },
+      { text: "Campagne TikTok / Instagram Reels", taskMatch: null },
+      { text: "Contacter medias locaux", taskMatch: null },
+      { text: "Landing page web", taskMatch: null },
     ]
   },
 ];
 
+// Resolve done status from hubData.tasks
+function resolvePhaseItems(phase) {
+  var tasks = hubData.tasks || [];
+  return phase.items.map(function(item) {
+    var isDone = false;
+    if (item.taskMatch) {
+      var match = tasks.find(function(t) { return t.text.indexOf(item.taskMatch) !== -1; });
+      if (match) isDone = match.done;
+    }
+    return { text: item.text, done: isDone };
+  });
+}
+
+// Determine current active phase (first incomplete phase)
+function getCurrentPhase() {
+  for (var i = 0; i < phases.length; i++) {
+    var items = resolvePhaseItems(phases[i]);
+    var allDone = items.every(function(item) { return item.done; });
+    if (!allDone) return i;
+  }
+  return phases.length - 1;
+}
+
+function updatePhaseNodes() {
+  var current = getCurrentPhase();
+  document.querySelectorAll('.phase-node').forEach(function(node, idx) {
+    var circle = node.querySelector('div');
+    if (idx < current) {
+      // Completed phases
+      circle.className = circle.className.replace(/bg-slate-200 text-slate-500/g, '').replace(/bg-primary text-white/g, '');
+      circle.classList.add('bg-primary', 'text-white');
+      circle.innerHTML = '<span class="material-symbols-outlined text-sm">check</span>';
+    } else if (idx === current) {
+      circle.className = circle.className.replace(/bg-slate-200 text-slate-500/g, '');
+      circle.classList.add('bg-primary', 'text-white');
+    }
+  });
+
+  // Update global progress bar
+  var totalItems = 0;
+  var totalDone = 0;
+  phases.forEach(function(p) {
+    var items = resolvePhaseItems(p);
+    totalItems += items.length;
+    totalDone += items.filter(function(i) { return i.done; }).length;
+  });
+  var globalPct = totalItems > 0 ? Math.round(totalDone / totalItems * 100) : 0;
+  document.querySelector('.progress-fill, [style*="width: 8%"]').style.width = globalPct + '%';
+  document.querySelector('.text-xs.text-slate-400').textContent = 'Phase ' + getCurrentPhase() + ' / 5';
+}
+
 function showPhase(i) {
   var p = phases[i];
-  var done = p.items.filter(function(x) { return x.done; }).length;
-  var total = p.items.length;
+  var items = resolvePhaseItems(p);
+  var done = items.filter(function(x) { return x.done; }).length;
+  var total = items.length;
   var pct = total > 0 ? Math.round(done / total * 100) : 0;
-  var statusClass = p.status === 'EN COURS' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500';
+
+  var current = getCurrentPhase();
+  var status;
+  if (i < current) status = 'COMPLETE';
+  else if (i === current) status = 'EN COURS';
+  else status = 'A VENIR';
+
+  var statusClass = status === 'EN COURS' ? 'bg-primary text-white' : status === 'COMPLETE' ? 'bg-sage text-primary' : 'bg-slate-100 text-slate-500';
 
   var html = '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">'
     + '<h3 class="font-bold text-dark">' + p.title + '</h3>'
-    + '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + p.status + '</span></div>'
+    + '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + status + '</span></div>'
     + '<div class="w-full h-2 bg-slate-100 rounded-full mb-4"><div class="h-full bg-' + p.color + ' rounded-full" style="width:' + pct + '%"></div></div>'
     + '<div class="space-y-2">';
 
-  p.items.forEach(function(item) {
+  items.forEach(function(item) {
     var icon = item.done
       ? '<span class="material-symbols-outlined text-primary text-sm fill">check_circle</span>'
       : '<span class="material-symbols-outlined text-slate-300 text-sm">circle</span>';
@@ -220,7 +281,11 @@ function showPhase(i) {
   document.querySelectorAll('.phase-node').forEach(function(n, idx) { n.classList.toggle('active', idx === i); });
 }
 
-showPhase(0);
+// Load data from Supabase, then render
+fetchData(function() {
+  updatePhaseNodes();
+  showPhase(getCurrentPhase());
+});
 </script>
 </body>
 </html>
