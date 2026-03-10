@@ -135,18 +135,18 @@ tailwind.config = {
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
       <div class="bg-white rounded-xl p-4 border border-slate-100">
         <div class="text-xs text-slate-400 mb-1">Phase actuelle</div>
-        <div class="text-lg sm:text-xl font-black text-primary stat-number">Phase 0</div>
-        <div class="text-xs text-slate-500">Brainstorm</div>
+        <div class="text-lg sm:text-xl font-black text-primary stat-number">Phase 3</div>
+        <div class="text-xs text-slate-500">Design & Contenu</div>
       </div>
       <div class="bg-white rounded-xl p-4 border border-slate-100">
-        <div class="text-xs text-slate-400 mb-1">Fermes dans la DB</div>
-        <div class="text-lg sm:text-xl font-black text-secondary stat-number">153</div>
-        <div class="text-xs text-slate-500">11 regions</div>
+        <div class="text-xs text-slate-400 mb-1">Ecrans codes</div>
+        <div class="text-lg sm:text-xl font-black text-secondary stat-number">14</div>
+        <div class="text-xs text-slate-500">MVP complet</div>
       </div>
       <div class="bg-white rounded-xl p-4 border border-slate-100">
-        <div class="text-xs text-slate-400 mb-1">Features</div>
-        <div class="text-lg sm:text-xl font-black text-dark stat-number">5 <span class="text-sm font-medium text-slate-400">+ 6 idees</span></div>
-        <div class="text-xs text-slate-500">confirmees</div>
+        <div class="text-xs text-slate-400 mb-1">Features livrees</div>
+        <div class="text-lg sm:text-xl font-black text-dark stat-number">12 <span class="text-sm font-medium text-slate-400">+ idees</span></div>
+        <div class="text-xs text-slate-500">carte, scanner, IA...</div>
       </div>
       <div class="bg-white rounded-xl p-4 border border-slate-100">
         <div class="text-xs text-slate-400 mb-1">Jours depuis debut</div>
@@ -155,14 +155,38 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Progress Phase 0 -->
+    <!-- Progress Global -->
     <div class="bg-white rounded-xl p-5 border border-slate-100 mb-8">
       <div class="flex items-center justify-between mb-3">
-        <div class="font-semibold text-dark text-sm">Progression Phase 0</div>
+        <div>
+          <div class="font-semibold text-dark text-sm">Progression globale du projet</div>
+          <div class="text-xs text-slate-400 mt-0.5">Phase 2 (MVP) complete — Phase 3 en cours</div>
+        </div>
         <div class="text-sm font-bold text-primary" id="phase0Pct">0%</div>
       </div>
       <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
         <div id="phase0Bar" class="progress-fill h-full bg-gradient-to-r from-primary to-sage rounded-full" style="width: 0%"></div>
+      </div>
+      <!-- Phase badges -->
+      <div class="flex flex-wrap gap-2 mt-4">
+        <span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs fill">check_circle</span> Phase 0 — Brainstorm
+        </span>
+        <span class="px-3 py-1 bg-sage/30 text-primary text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs fill">check_circle</span> Phase 2 — MVP Code
+        </span>
+        <span class="px-3 py-1 bg-accent/20 text-accent text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">pending</span> Phase 1 — Branding
+        </span>
+        <span class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">pending</span> Phase 3 — Contenu
+        </span>
+        <span class="px-3 py-1 bg-slate-100 text-slate-400 text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">schedule</span> Phase 4 — Beta
+        </span>
+        <span class="px-3 py-1 bg-slate-100 text-slate-400 text-xs font-bold rounded-full flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">rocket_launch</span> Phase 5 — Launch
+        </span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 text-sm" id="phase0Items"></div>
     </div>
@@ -196,7 +220,7 @@ tailwind.config = {
           <p class="text-xs text-slate-400 mt-1">6 phases de Brainstorm au Lancement</p>
         </div>
         <div class="flex items-center gap-1 text-xs text-primary font-medium mt-auto">
-          Phase 0 en cours
+          Phase 3 en cours
           <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </div>
       </a>
@@ -259,6 +283,277 @@ tailwind.config = {
       </a>
     </div>
 
+    <!-- Plans Section -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-secondary">map</span> Plans strategiques
+    </h2>
+
+    <!-- Plan App -->
+    <div class="bg-white rounded-2xl border border-slate-100 mb-4 overflow-hidden">
+      <button onclick="togglePlan('planApp')" class="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary">phone_iphone</span>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-dark text-sm">Plan App — Etat & Roadmap technique</h3>
+            <p class="text-xs text-slate-400">Ce qui est fait, ce qui reste, features a venir</p>
+          </div>
+        </div>
+        <span id="planAppIcon" class="material-symbols-outlined text-slate-400 transition-transform">expand_more</span>
+      </button>
+      <div id="planApp" class="hidden px-5 pb-5">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <div class="text-xs font-bold text-primary uppercase tracking-wide mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm fill">check_circle</span> MVP Code (DONE)
+            </div>
+            <div class="space-y-1 text-xs text-slate-600">
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Carte — MapView, markers, clustering, GPS, carousel</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Scanner — Camera, barcode, health score, historique</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Recettes — Feed, filtres, favoris, carnivore/health</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Aubaines — Filtres, countdown, favoris</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Profil — Auth Supabase, settings, favoris</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Scanner IA — Claude Vision pour produits inconnus</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> Favoris global (fermes, recettes, aubaines)</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> 14 ecrans au total (tabs + details + auth + profil)</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span> 6 migrations Supabase + Edge Function</div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-secondary uppercase tracking-wide mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">schedule</span> Prochaines etapes
+            </div>
+            <div class="space-y-1 text-xs text-slate-600">
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span> Appliquer design Stitch aux 5 ecrans</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span> Animations & micro-interactions</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span> Empty states + loading skeletons</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary flex-shrink-0"></span> Onboarding 3 slides</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent flex-shrink-0"></span> Badge LIVE partenaire sur la carte</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent flex-shrink-0"></span> Notifications push (deals, recettes)</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-300 flex-shrink-0"></span> Dashboard Fermier (post-lancement)</div>
+              <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-300 flex-shrink-0"></span> Version web PWA (post-lancement)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Marketing -->
+    <div class="bg-white rounded-2xl border border-slate-100 mb-4 overflow-hidden">
+      <button onclick="togglePlan('planMarketing')" class="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-secondary">campaign</span>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-dark text-sm">Plan Marketing — Strategie de contenu</h3>
+            <p class="text-xs text-slate-400">Partenaire 50-60K followers, carnivore/health, viral</p>
+          </div>
+        </div>
+        <span id="planMarketingIcon" class="material-symbols-outlined text-slate-400 transition-transform">expand_more</span>
+      </button>
+      <div id="planMarketing" class="hidden px-5 pb-5">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <div class="text-xs font-bold text-secondary uppercase tracking-wide mb-2">Idees de contenu viral</div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="bg-secondary/5 rounded-lg p-2">
+                <div class="font-semibold text-dark">🎥 "Je scanne tout ce que je mange"</div>
+                <div class="text-slate-400">Scanner en action — virale, simple, impactante</div>
+              </div>
+              <div class="bg-secondary/5 rounded-lg p-2">
+                <div class="font-semibold text-dark">🗺️ "Les meilleures fermes pres de chez vous"</div>
+                <div class="text-slate-400">Carte en action — fermes locales Quebec</div>
+              </div>
+              <div class="bg-secondary/5 rounded-lg p-2">
+                <div class="font-semibold text-dark">⭐ "L'aubaine de la semaine"</div>
+                <div class="text-slate-400">Format recurrent hebdomadaire</div>
+              </div>
+              <div class="bg-secondary/5 rounded-lg p-2">
+                <div class="font-semibold text-dark">🥩 "Recette carnivore avec produits locaux"</div>
+                <div class="text-slate-400">Recettes + fermes liees — coeur de cible</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-secondary uppercase tracking-wide mb-2">Timeline marketing</div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">-4 sem</span>
+                <span>Teaser video "l'app arrive" (story + reel)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">-3 sem</span>
+                <span>Liste d'attente (landing page simple)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">-2 sem</span>
+                <span>Beta test avec 50-100 followers selectionnes</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-primary/10 text-primary rounded font-mono flex-shrink-0">Jour J</span>
+                <span class="font-semibold">Video de lancement complete</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">+1 sem</span>
+                <span>Serie "scan en epicerie" avec l'app</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">+2 sem</span>
+                <span>Collaboration avec fermes locales (elles partagent)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded font-mono flex-shrink-0">+1 mois</span>
+                <span>Reviews App Store poussees a la communaute</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Lancement -->
+    <div class="bg-white rounded-2xl border border-slate-100 mb-4 overflow-hidden">
+      <button onclick="togglePlan('planLancement')" class="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-accent">rocket_launch</span>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-dark text-sm">Plan Lancement — App Store & Go-Live</h3>
+            <p class="text-xs text-slate-400">Checklist pour soumettre sur App Store + Google Play</p>
+          </div>
+        </div>
+        <span id="planLancementIcon" class="material-symbols-outlined text-slate-400 transition-transform">expand_more</span>
+      </button>
+      <div id="planLancement" class="hidden px-5 pb-5">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">Checklist pre-soumission</div>
+            <div class="space-y-1.5 text-xs">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Nom de l'app decide</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Icone app (1024x1024)</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Screenshots iOS + Android (5-6 captures)</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Description App Store FR</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Privacy Policy (page web)</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Compte Apple Developer ($99/an)</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Compte Google Play ($25 une fois)</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">EAS Build config production</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Variables .env en production</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="rounded" disabled> <span class="text-slate-600">Tests sur device reel (iPhone + Android)</span></label>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">Timeline estimee</div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-primary/10 text-primary rounded font-semibold flex-shrink-0">Sem 1-2</span>
+                <span>Design refonte + polish + empty states</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-primary/10 text-primary rounded font-semibold flex-shrink-0">Sem 3</span>
+                <span>Tests device reel + bugfix + contenu (recettes, fermes)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-accent/20 text-accent rounded font-semibold flex-shrink-0">Sem 4</span>
+                <span>Screenshots, descriptions, assets stores, EAS build</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-accent/20 text-accent rounded font-semibold flex-shrink-0">Sem 5</span>
+                <span>Soumission Apple (review 1-3 jours) + Google (quelques heures)</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="px-2 py-0.5 bg-secondary text-white rounded font-semibold flex-shrink-0">Sem 6</span>
+                <span class="font-semibold text-dark">LANCEMENT PUBLIC + campagne marketing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Prochaines etapes -->
+    <div class="bg-gradient-to-r from-primary/5 to-sage/10 rounded-2xl border border-primary/20 mb-8 overflow-hidden">
+      <button onclick="togglePlan('planNext')" class="w-full flex items-center justify-between p-5 hover:bg-primary/5 transition">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-white">bolt</span>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-dark text-sm">Prochaines etapes — Ce qu'on fait maintenant</h3>
+            <p class="text-xs text-primary/60">Max impact, min effort — ordre prioritaire</p>
+          </div>
+        </div>
+        <span id="planNextIcon" class="material-symbols-outlined text-primary/60 transition-transform">expand_more</span>
+      </button>
+      <div id="planNext" class="hidden px-5 pb-5">
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div>
+            <div class="text-xs font-bold text-primary uppercase tracking-wide mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">looks_one</span> Cette semaine
+            </div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">1</span>
+                <span>Appliquer les mockups Stitch aux 5 ecrans principaux</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">2</span>
+                <span>Ajouter empty states pour chaque ecran</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">3</span>
+                <span>Onboarding 3 slides (Decouvrir, Scanner, Manger local)</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-secondary uppercase tracking-wide mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">looks_two</span> Semaine 2
+            </div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">4</span>
+                <span>Tests sur device reel iPhone + Android</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">5</span>
+                <span>Fixer les bugs trouves</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-secondary text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">6</span>
+                <span>Badge LIVE partenaire (feature marketing forte)</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2 flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">looks_3</span> Semaine 3-4
+            </div>
+            <div class="space-y-2 text-xs text-slate-600">
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">7</span>
+                <span>Decider le nom de l'app avec le partenaire</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">8</span>
+                <span>Icone app + screenshots stores</span>
+              </div>
+              <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+                <span class="w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0">9</span>
+                <span>Setup EAS Build + soumission App Store</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 p-3 bg-white/80 rounded-xl border border-primary/20 text-xs text-primary/70 flex items-start gap-2">
+          <span class="material-symbols-outlined text-sm flex-shrink-0">info</span>
+          <span>Decisions en attente: Nom de l'app, strategie de monetisation (gratuit/freemium?), expansion France/US, Dashboard Fermier (option A/B/C)</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Quick Links -->
     <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
       <span class="material-symbols-outlined text-accent">link</span> Liens rapides
@@ -312,6 +607,13 @@ function toggleSidebar() {
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
+function togglePlan(id) {
+  var el = document.getElementById(id);
+  var icon = document.getElementById(id + 'Icon');
+  var hidden = el.classList.toggle('hidden');
+  if (icon) icon.style.transform = hidden ? '' : 'rotate(180deg)';
+}
+
 // Date
 var now = new Date();
 var months = ['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];
@@ -322,23 +624,31 @@ var startDate = new Date(2026, 2, 1);
 var daysDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
 document.getElementById('daysSinceStart').textContent = Math.max(0, daysDiff);
 
-var phase0ItemsDef = [
-  { text: "Maquettes 5 ecrans", taskMatch: "Brainstorm board + deploy Vercel" },
-  { text: "Base de donnees Supabase", taskMatch: "Configurer Supabase + migrations" },
-  { text: "Stack technique choisi", taskMatch: "Setup projet Expo + navigation" },
-  { text: "Valider vision avec partenaire", taskMatch: "Appel avec le partenaire" },
-  { text: "Choisir le nom de l'app", taskMatch: "Choisir le nom final" },
-  { text: "Definir les roles", taskMatch: "Definir les roles" },
+// Global milestone items to show in progress section
+var milestonesDef = [
+  { text: "Brainstorm + Vercel deploy", taskMatch: "Brainstorm board + deploy Vercel" },
+  { text: "Supabase + migrations", taskMatch: "Configurer Supabase + migrations" },
+  { text: "Projet Expo configure", taskMatch: "Setup projet Expo + navigation" },
+  { text: "Vision validee avec partenaire", taskMatch: "Appel avec le partenaire" },
+  { text: "Maquettes ajustees", taskMatch: "Ajuster les maquettes selon feedback" },
+  { text: "Ecran Carte code", taskMatch: "Implementer ecran Carte avec map" },
+  { text: "Scanner code", taskMatch: "Implementer Scanner de produits" },
+  { text: "Recettes + Aubaines codes", taskMatch: "Implementer ecran Recettes" },
+  { text: "Profil + Auth codes", taskMatch: "Implementer Profil + authentification" },
+  { text: "Scanner IA Claude Vision", taskMatch: "Implementer Scanner IA" },
+  { text: "Design applique aux ecrans", taskMatch: "Ajuster les maquettes" },
+  { text: "Tests device reel", taskMatch: "Build EAS pour TestFlight" },
+  { text: "Soumission App Store", taskMatch: "Publier sur App Store" },
 ];
 
 function updateDashboard() {
   var tasks = hubData.tasks || [];
   var ideas = hubData.ideas || [];
 
-  // Phase 0
+  // Global milestones progress
   var doneCount = 0;
   var html = '';
-  phase0ItemsDef.forEach(function(item) {
+  milestonesDef.forEach(function(item) {
     var match = tasks.find(function(t) { return t.text.indexOf(item.taskMatch) !== -1; });
     var isDone = match ? match.done : false;
     if (isDone) doneCount++;
@@ -348,7 +658,7 @@ function updateDashboard() {
       : '<span class="material-symbols-outlined text-sm">circle</span>';
     html += '<div class="flex items-center gap-2 ' + cls + '">' + icon + ' ' + item.text + '</div>';
   });
-  var pct = Math.round(doneCount / phase0ItemsDef.length * 100);
+  var pct = Math.round(doneCount / milestonesDef.length * 100);
   document.getElementById('phase0Items').innerHTML = html;
   document.getElementById('phase0Pct').textContent = pct + '%';
   document.getElementById('phase0Bar').style.width = pct + '%';

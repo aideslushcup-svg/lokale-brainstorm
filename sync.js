@@ -12,21 +12,48 @@ var SB_HEADERS = {
 // Default data — shown on first load before sync, and as fallback
 var DEFAULT_DATA = {
   tasks: [
-    { id: 1, text: "Appel avec le partenaire \u2014 valider la vision", cat: "partenariat", done: false },
+    // Phase 0 — Brainstorm & Partenariat
+    { id: 1, text: "Appel avec le partenaire \u2014 valider la vision", cat: "partenariat", done: true },
     { id: 2, text: "Choisir le nom final de l'app", cat: "partenariat", done: false },
     { id: 3, text: "Definir les roles (dev vs contenu/marketing)", cat: "partenariat", done: false },
+    { id: 15, text: "Brainstorm board + deploy Vercel", cat: "dev", done: true },
+    // Phase 1 — Branding & Design
     { id: 4, text: "Finaliser le logo Lokale", cat: "design", done: false },
-    { id: 5, text: "Valider la palette de couleurs", cat: "design", done: false },
-    { id: 6, text: "Ajuster les maquettes selon feedback partenaire", cat: "design", done: false },
+    { id: 5, text: "Valider la palette de couleurs", cat: "design", done: true },
+    { id: 6, text: "Ajuster les maquettes selon feedback partenaire", cat: "design", done: true },
+    // Phase 2 — Developpement MVP (DONE)
     { id: 7, text: "Setup projet Expo + navigation", cat: "dev", done: true },
     { id: 8, text: "Configurer Supabase + migrations", cat: "dev", done: true },
-    { id: 9, text: "Implementer ecran Carte avec map", cat: "dev", done: false },
-    { id: 10, text: "Implementer Scanner de produits", cat: "dev", done: false },
+    { id: 9, text: "Implementer ecran Carte avec map", cat: "dev", done: true },
+    { id: 10, text: "Implementer Scanner de produits", cat: "dev", done: true },
+    { id: 16, text: "Implementer ecran Recettes (feed + filtres)", cat: "dev", done: true },
+    { id: 17, text: "Implementer ecran Aubaines (deals + countdown)", cat: "dev", done: true },
+    { id: 18, text: "Implementer Profil + authentification Supabase", cat: "dev", done: true },
+    { id: 19, text: "Implementer Scanner IA (Claude Vision) produits inconnus", cat: "dev", done: true },
+    { id: 20, text: "Systeme de favoris global (fermes, recettes, deals)", cat: "dev", done: true },
+    { id: 21, text: "Pages detail ferme, produit, recette, aubaine", cat: "dev", done: true },
+    { id: 22, text: "Edge Function extract-product-info (Supabase)", cat: "dev", done: true },
+    { id: 23, text: "Stores Zustand (location, scanner, deals, favorites, auth)", cat: "dev", done: true },
+    // Phase 3 — Contenu & Donnees
     { id: 11, text: "Creer les comptes sociaux (Insta, TikTok)", cat: "marketing", done: false },
     { id: 12, text: "Planifier le calendrier de contenu", cat: "marketing", done: false },
     { id: 13, text: "Ecrire 5 premieres recettes", cat: "contenu", done: false },
     { id: 14, text: "Lister les 20 premieres fermes a contacter", cat: "contenu", done: false },
-    { id: 15, text: "Brainstorm board + deploy Vercel", cat: "dev", done: true }
+    { id: 24, text: "Ajouter les vraies fermes du Quebec dans Supabase", cat: "contenu", done: false },
+    { id: 25, text: "Photos des fermes (images reelles)", cat: "contenu", done: false },
+    { id: 26, text: "Premiers deals avec fermes partenaires", cat: "contenu", done: false },
+    // Phase 4 — Beta Testing
+    { id: 27, text: "Build EAS pour TestFlight + Google Play beta", cat: "dev", done: false },
+    { id: 28, text: "Inviter 20-50 testeurs (communaute partenaire)", cat: "partenariat", done: false },
+    { id: 29, text: "Corriger les bugs critiques post-beta", cat: "dev", done: false },
+    { id: 30, text: "Teasing sur les reseaux sociaux", cat: "marketing", done: false },
+    // Phase 5 — Lancement
+    { id: 31, text: "Choisir le nom final de l'app", cat: "partenariat", done: false },
+    { id: 32, text: "Creer icone app + screenshots App Store", cat: "design", done: false },
+    { id: 33, text: "Rediger descriptions App Store + Google Play (FR)", cat: "marketing", done: false },
+    { id: 34, text: "Publier sur App Store + Google Play", cat: "dev", done: false },
+    { id: 35, text: "Video de lancement avec le partenaire", cat: "marketing", done: false },
+    { id: 36, text: "Campagne TikTok / Instagram Reels", cat: "marketing", done: false },
   ],
   ideas: [
     { id: 1, text: "Systeme de gamification (badges, points)", tag: "engagement", emoji: "\uD83C\uDFC6", votes: 0 },
