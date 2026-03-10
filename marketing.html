@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lokale — Plan Marketing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2D6A4F', secondary: '#E76F51', accent: '#F4A261',
+        cream: '#FEFAE0', dark: '#264653', sage: '#95D5B2', sidebar: '#1a2332',
+      },
+      fontFamily: { display: ['Inter', 'sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+  .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+  html { scroll-behavior: smooth; }
+  .sidebar { width: 260px; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; transition: transform 0.3s; }
+  .main-content { margin-left: 260px; }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); width: 280px; }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; }
+    .sidebar-overlay.open { display: block; }
+  }
+  .content-card { transition: all 0.15s; }
+  .content-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+</style>
+</head>
+<body class="bg-slate-50 text-dark">
+
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar" class="sidebar bg-sidebar text-white flex flex-col">
+  <div class="p-5 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-xl">eco</span>
+      </div>
+      <div><h1 class="font-bold text-base leading-tight">Lokale</h1><p class="text-[11px] text-white/40">Centre de Commandes</p></div>
+    </div>
+  </div>
+  <nav class="flex-1 p-4 space-y-1">
+    <a href="hub.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">dashboard</span> Vue d'ensemble</a>
+    <a href="tasks.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">checklist</span> Taches</a>
+    <a href="roadmap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">timeline</span> Roadmap</a>
+    <a href="ideas.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">lightbulb</span> Idees futur</a>
+    <a href="marketing.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white text-sm font-medium"><span class="material-symbols-outlined text-lg">campaign</span> Plan Marketing</a>
+    <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">calendar_month</span> Calendrier contenu</a>
+    <a href="notes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">edit_note</span> Notes de meeting</a>
+    <a href="marketplace.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/60 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">storefront</span> Marketplace</a>
+  </nav>
+  <div class="p-4 border-t border-white/10">
+    <a href="index.html" class="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/50 hover:text-white text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Brainstorm Board</a>
+  </div>
+</aside>
+
+<div class="main-content min-h-screen">
+  <div class="md:hidden sticky top-0 bg-white/90 backdrop-blur-lg border-b border-slate-200 z-30 px-4 py-3 flex items-center justify-between">
+    <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100"><span class="material-symbols-outlined">menu</span></button>
+    <span class="font-bold text-sm">Plan Marketing</span>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="p-4 sm:p-6 lg:p-8 max-w-5xl">
+
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-black text-dark flex items-center gap-3">
+        <span class="material-symbols-outlined text-secondary text-3xl">campaign</span> Plan Marketing
+      </h1>
+      <p class="text-slate-400 text-sm mt-1">Strategie de lancement — Partenaire 50-60K followers, carnivore/health Quebec</p>
+    </div>
+
+    <!-- Atouts -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+      <div class="bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <div class="text-2xl font-black text-secondary">50K+</div>
+        <div class="text-xs text-slate-400 mt-1">Followers partenaire</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <div class="text-2xl font-black text-primary">100%</div>
+        <div class="text-xs text-slate-400 mt-1">Audience alignee</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <div class="text-2xl font-black text-accent">0$</div>
+        <div class="text-xs text-slate-400 mt-1">Budget pub requis</div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <div class="text-2xl font-black text-dark">6 sem</div>
+        <div class="text-xs text-slate-400 mt-1">Jusqu'au lancement</div>
+      </div>
+    </div>
+
+    <!-- Idees contenu viral -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-secondary">play_circle</span> Idees de contenu viral
+    </h2>
+    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">🎥</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">"Je scanne tout ce que je mange"</h3>
+            <span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full">HAUTE PRIORITE</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Filmer en temps reel le scan de produits en epicerie. Afficher le score sante, les ingredients douteux. Reaction authentique = viral.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">TikTok</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">Instagram Reels</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">60-90 sec</span>
+        </div>
+      </div>
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">🗺️</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">"Les meilleures fermes pres de chez vous"</h3>
+            <span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full">FORTE RETENTION</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Carte en action, zoom sur fermes de la region. Visiter une ferme en vrai avec le partenaire + filmer. La communaute veut connaitre les fermes locales.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">YouTube</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">TikTok</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">3-10 min</span>
+        </div>
+      </div>
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">⭐</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">"L'aubaine de la semaine"</h3>
+            <span class="px-2 py-0.5 bg-accent/20 text-accent text-[10px] font-bold rounded-full">FORMAT RECURRENT</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Chaque semaine, presenter la meilleure aubaine disponible dans l'app. Court, impactant, pousse les gens a ouvrir l'app regulierement.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">Story Insta</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">TikTok</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">15-30 sec</span>
+        </div>
+      </div>
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">🥩</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">"Recette carnivore avec produits locaux"</h3>
+            <span class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-bold rounded-full">COEUR DE CIBLE</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Recette dans l'app + ferme locale ou acheter les ingredients. Combine les 2 features principales. Parfait pour la communaute carnivore/health du partenaire.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">YouTube</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">Instagram</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">5-15 min</span>
+        </div>
+      </div>
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">🔴</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">Badge LIVE — Partenaire dans une ferme</h3>
+            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full">FEATURE EXCLUSIVE</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Quand le partenaire fait un live dans une ferme, badge anime LIVE sur le pin de la carte. Les utilisateurs voient en temps reel ou il est. Fort engagement.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">Instagram Live</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">TikTok Live</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">In-app</span>
+        </div>
+      </div>
+
+      <div class="content-card bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">📱</div>
+          <div>
+            <h3 class="font-bold text-dark text-sm">"Tuto complet de l'app en 60 secondes"</h3>
+            <span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-[10px] font-bold rounded-full">LANCEMENT</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Walkthrough rapide des 5 features principales. Montrer carte, scanner, recette carnivore, aubaine, profil. A publier le jour du lancement.</p>
+        <div class="flex flex-wrap gap-2 text-[10px]">
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">TikTok</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">Reels</span>
+          <span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-full">60 sec</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Timeline pre/post lancement -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">event_note</span> Timeline marketing
+    </h2>
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 mb-8">
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="absolute left-16 top-0 bottom-0 w-0.5 bg-slate-100"></div>
+
+        <div class="space-y-5">
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">-6 sem</span>
+            <div class="w-3 h-3 rounded-full bg-slate-200 mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-slate-50 rounded-xl p-3 flex-1">
+              <div class="font-semibold text-dark text-sm">Preparer le terrain</div>
+              <div class="text-xs text-slate-500 mt-1">Finir le design app, nom decidé, comptes sociaux crees. Rien de public encore.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">-4 sem</span>
+            <div class="w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-accent/5 rounded-xl p-3 flex-1 border border-accent/20">
+              <div class="font-semibold text-dark text-sm">Teaser mystere</div>
+              <div class="text-xs text-slate-500 mt-1">"Quelque chose arrive pour la communaute..." Story + Reel court. Pas de nom, pas de details. Curiosite maximale.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">-3 sem</span>
+            <div class="w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-accent/5 rounded-xl p-3 flex-1 border border-accent/20">
+              <div class="font-semibold text-dark text-sm">Reveal + liste d'attente</div>
+              <div class="text-xs text-slate-500 mt-1">Premier vrai teaser de l'app. Landing page simple avec inscription liste d'attente. Collecter les emails des interesses.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">-2 sem</span>
+            <div class="w-3 h-3 rounded-full bg-secondary mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-secondary/5 rounded-xl p-3 flex-1 border border-secondary/20">
+              <div class="font-semibold text-dark text-sm">Beta prive — 50-100 testeurs</div>
+              <div class="text-xs text-slate-500 mt-1">Inviter les fans les plus engages. Feedback reel, corriger les bugs. Ils deviennent ambassadeurs naturels au lancement.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">-1 sem</span>
+            <div class="w-3 h-3 rounded-full bg-secondary mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-secondary/5 rounded-xl p-3 flex-1 border border-secondary/20">
+              <div class="font-semibold text-dark text-sm">Compte a rebours + sneak peeks</div>
+              <div class="text-xs text-slate-500 mt-1">Stories quotidiennes "plus que X jours". Montrer des screenshots de l'app. Derniere poussee sur la liste d'attente.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono font-bold text-primary pt-1 flex-shrink-0">JOUR J</span>
+            <div class="w-4 h-4 rounded-full bg-primary mt-1 flex-shrink-0 relative z-10 ring-4 ring-primary/20"></div>
+            <div class="bg-primary/5 rounded-xl p-3 flex-1 border-2 border-primary/30">
+              <div class="font-bold text-primary text-sm">LANCEMENT PUBLIC</div>
+              <div class="text-xs text-slate-500 mt-1">Video de lancement complete (5-10 min). L'app est disponible sur App Store + Google Play. Tous les canaux en meme temps.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">+1 sem</span>
+            <div class="w-3 h-3 rounded-full bg-sage mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-sage/10 rounded-xl p-3 flex-1">
+              <div class="font-semibold text-dark text-sm">Serie "scan en epicerie"</div>
+              <div class="text-xs text-slate-500 mt-1">3-5 videos courtes de scanning en conditions reelles. Chaque video montre un produit different. Garder le momentum post-lancement.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">+2 sem</span>
+            <div class="w-3 h-3 rounded-full bg-sage mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-sage/10 rounded-xl p-3 flex-1">
+              <div class="font-semibold text-dark text-sm">Collaboration fermes locales</div>
+              <div class="text-xs text-slate-500 mt-1">Contacter les fermes presentes dans l'app. Elles partagent avec leur propre audience. Effet boule de neige organique.</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <span class="w-14 text-right text-xs font-mono text-slate-400 pt-1 flex-shrink-0">+1 mois</span>
+            <div class="w-3 h-3 rounded-full bg-sage mt-1.5 flex-shrink-0 relative z-10"></div>
+            <div class="bg-sage/10 rounded-xl p-3 flex-1">
+              <div class="font-semibold text-dark text-sm">Push reviews App Store</div>
+              <div class="text-xs text-slate-500 mt-1">Demander a la communaute de noter l'app. Les reviews = cle pour la visibilite dans les stores. Objectif: 100 reviews 5 etoiles.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strategie par plateforme -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-accent">devices</span> Strategie par plateforme
+    </h2>
+    <div class="grid sm:grid-cols-3 gap-4 mb-8">
+
+      <div class="bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <span class="text-white text-xs font-bold">T</span>
+          </div>
+          <h3 class="font-bold text-dark text-sm">TikTok</h3>
+          <span class="ml-auto text-[10px] font-bold text-secondary px-2 py-0.5 bg-secondary/10 rounded-full">PRIORITE #1</span>
+        </div>
+        <div class="space-y-2 text-xs text-slate-600">
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span> Videos courtes 30-90 sec</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span> Scanner en action = tres viral</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span> Hook dans les 3 premieres secondes</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span> Tendances audio populaires</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span> Commenter et repondre rapidement</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 bg-gradient-to-br from-orange-400 to-pink-600 rounded-lg flex items-center justify-center">
+            <span class="text-white text-xs font-bold">I</span>
+          </div>
+          <h3 class="font-bold text-dark text-sm">Instagram</h3>
+          <span class="ml-auto text-[10px] font-bold text-accent px-2 py-0.5 bg-accent/10 rounded-full">FIDÉLISATION</span>
+        </div>
+        <div class="space-y-2 text-xs text-slate-600">
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></span> Reels pour la decouverte</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></span> Stories pour l'engagement quotidien</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></span> Aubaine de la semaine en story</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></span> Photos fermes en carrousel</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></span> Link-in-bio vers App Store</div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-100 p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+            <span class="text-white text-xs font-bold">Y</span>
+          </div>
+          <h3 class="font-bold text-dark text-sm">YouTube</h3>
+          <span class="ml-auto text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded-full">LONG FORMAT</span>
+        </div>
+        <div class="space-y-2 text-xs text-slate-600">
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></span> Tuto complet de l'app (10 min)</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></span> Visite de ferme avec la carte</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></span> Recettes carnivore completes</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></span> "Ce que je mange en une semaine"</div>
+          <div class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0"></span> SEO: "manger local Quebec"</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- KPIs -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">monitoring</span> KPIs a suivre
+    </h2>
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 mb-8">
+      <div class="grid sm:grid-cols-3 gap-6">
+        <div>
+          <div class="text-xs font-bold text-secondary uppercase tracking-wide mb-3">Semaine 1</div>
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Telechargements</span>
+              <span class="font-bold text-dark">500+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Comptes crees</span>
+              <span class="font-bold text-dark">200+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Reviews App Store</span>
+              <span class="font-bold text-dark">20+</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-accent uppercase tracking-wide mb-3">Mois 1</div>
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Telechargements</span>
+              <span class="font-bold text-dark">2 000+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Utilisateurs actifs</span>
+              <span class="font-bold text-dark">500+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Reviews</span>
+              <span class="font-bold text-dark">100+</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-primary uppercase tracking-wide mb-3">Mois 3</div>
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Telechargements</span>
+              <span class="font-bold text-dark">10 000+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Fermes actives</span>
+              <span class="font-bold text-dark">50+</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-600">Expansion France?</span>
+              <span class="font-bold text-secondary">A decider</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decisions en attente -->
+    <div class="bg-primary/5 rounded-2xl border border-primary/20 p-5">
+      <h3 class="font-bold text-primary text-sm mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">pending_actions</span> Decisions en attente (a valider avec le partenaire)
+      </h3>
+      <div class="grid sm:grid-cols-2 gap-3 text-xs text-slate-600">
+        <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+          <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0">circle</span>
+          <span><strong class="text-dark">Nom de l'app</strong> — Sans nom, pas de comptes sociaux ni d'icone</span>
+        </div>
+        <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+          <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0">circle</span>
+          <span><strong class="text-dark">Monetisation</strong> — Gratuit? Freemium? Abonnement pour les fermes?</span>
+        </div>
+        <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+          <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0">circle</span>
+          <span><strong class="text-dark">Expansion</strong> — Quebec seulement au MVP ou inclure France/US?</span>
+        </div>
+        <div class="flex items-start gap-2 bg-white/70 rounded-lg p-2">
+          <span class="material-symbols-outlined text-slate-300 text-sm flex-shrink-0">circle</span>
+          <span><strong class="text-dark">Date de lancement cible</strong> — Quand vise-t-on exactement?</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="sync.js"></script>
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -111,8 +111,18 @@ function fetchData(callback) {
   .then(function(rows) {
     var row = rows[0];
     if (row) {
-      // Merge: use DB data if non-empty, else keep defaults
-      if (row.tasks && row.tasks.length > 0) hubData.tasks = row.tasks;
+      // Smart merge: keep done-states from DB for existing IDs, add new DEFAULT tasks
+      if (row.tasks && row.tasks.length > 0) {
+        var dbById = {};
+        row.tasks.forEach(function(t) { dbById[t.id] = t; });
+        hubData.tasks = DEFAULT_DATA.tasks.map(function(def) {
+          return dbById[def.id] ? Object.assign({}, def, { done: dbById[def.id].done }) : def;
+        });
+        // If new tasks were added vs DB, save back
+        if (row.tasks.length < hubData.tasks.length) {
+          setTimeout(saveData, 500);
+        }
+      }
       if (row.ideas && row.ideas.length > 0) hubData.ideas = row.ideas;
       if (row.voted) hubData.voted = row.voted;
       if (row.notes) hubData.notes = row.notes;
