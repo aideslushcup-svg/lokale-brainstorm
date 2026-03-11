@@ -554,6 +554,37 @@ tailwind.config = {
       </div>
     </div>
 
+    <!-- Dev Commands -->
+    <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary">terminal</span> Commandes dev
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+      <div onclick="copyCmd(this, 'npx expo start --ios')" class="cursor-pointer bg-sidebar rounded-xl p-4 border border-white/5 hover:bg-dark transition group flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-sage text-lg">phone_iphone</span>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[10px] text-white/40 mb-0.5">Simulateur iOS</div>
+            <code class="text-xs text-sage font-mono">npx expo start --ios</code>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-white/30 group-hover:text-white/60 text-base flex-shrink-0 copy-icon">content_copy</span>
+      </div>
+      <div onclick="copyCmd(this, 'npx expo start --tunnel')" class="cursor-pointer bg-sidebar rounded-xl p-4 border border-white/5 hover:bg-dark transition group flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 bg-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-secondary text-lg">wifi_tethering</span>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[10px] text-white/40 mb-0.5">Device physique (tunnel)</div>
+            <code class="text-xs text-secondary font-mono">npx expo start --tunnel</code>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-white/30 group-hover:text-white/60 text-base flex-shrink-0 copy-icon">content_copy</span>
+      </div>
+    </div>
+
     <!-- Quick Links -->
     <h2 class="text-lg font-bold text-dark mb-4 flex items-center gap-2">
       <span class="material-symbols-outlined text-accent">link</span> Liens rapides
@@ -602,6 +633,14 @@ tailwind.config = {
 
 <script src="sync.js"></script>
 <script>
+function copyCmd(el, cmd) {
+  navigator.clipboard.writeText(cmd).catch(function() {});
+  var icon = el.querySelector('.copy-icon');
+  icon.textContent = 'check';
+  icon.style.color = '#95D5B2';
+  setTimeout(function() { icon.textContent = 'content_copy'; icon.style.color = ''; }, 1500);
+}
+
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('open');
