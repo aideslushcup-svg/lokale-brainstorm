@@ -559,6 +559,18 @@ tailwind.config = {
       <span class="material-symbols-outlined text-primary">terminal</span> Commandes dev
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+      <div onclick="copyCmd(this, 'cd ~/Desktop/app-orga')" class="cursor-pointer bg-sidebar rounded-xl p-4 border border-white/5 hover:bg-dark transition group flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-accent text-lg">folder_open</span>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[10px] text-white/40 mb-0.5">Aller dans le projet</div>
+            <code class="text-xs text-accent font-mono">cd ~/Desktop/app-orga</code>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-white/30 group-hover:text-white/60 text-base flex-shrink-0 copy-icon">content_copy</span>
+      </div>
       <div onclick="copyCmd(this, 'npx expo start --ios')" class="cursor-pointer bg-sidebar rounded-xl p-4 border border-white/5 hover:bg-dark transition group flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-9 h-9 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
